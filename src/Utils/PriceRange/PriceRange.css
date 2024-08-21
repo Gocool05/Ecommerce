@@ -1,0 +1,49 @@
+.price-range-picker {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+    z-index: 9999999;
+  }
+  
+  .range-values {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .range-values input {
+    width: 80px;
+    padding: 5px;
+    margin: 0 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color:#FFEEEE ;
+    color: #4e2a1b;
+    border-radius: 4px;
+  }
+  
+  .slider-container {
+    margin: 30px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8px;
+    background: black;
+    border-radius: 5px;
+  }
+  
+  .thumb {
+    height: auto;
+    width: fit-content;
+    background-color: #4e2a1b;
+    border-radius: 10px;
+    padding:5px;
+    cursor: pointer;
+  }
+  
+  .track {
+    background: #4e2a1b;
+  }
+  

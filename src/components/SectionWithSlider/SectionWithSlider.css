@@ -1,0 +1,40 @@
+.NextArrows{
+    display:block;
+    background-color: #4e2a1b;
+    border-radius: 50%;
+    right: -25px;
+    top: 50%;
+    transform: translate(0,-50%);
+    z-index: 2;
+    position: absolute;
+    padding: 10px;
+}
+.PrevArrow{
+    display:block;
+    background-color: #4e2a1b;
+    border-radius: 50%;
+    left: -25px;
+    top: 50%;
+    transform: translate(0,-50%);
+    z-index: 2;
+    position: absolute;
+    padding: 10px;
+}
+
+.NextArrows:hover, .PrevArrow:hover {
+    transform: translate(0, -50%) scale(1.1);
+    background-color: #560000; /* Slightly lighter shade */
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 450px) {
+    .PrevArrow{
+        left: -5px;
+        padding: 5px;
+    } 
+    .NextArrows{
+        right: -5px;
+        padding: 5px;
+    }
+}
