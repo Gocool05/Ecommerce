@@ -15,8 +15,6 @@ const HomeSlider = () => {
 
   const { data:Sliders,isLoading,isError} = useQuery('SliderImage',SetSliderImage);
 
-  console.log(Sliders,'slider Data');
-
   const baseUrl = api.defaults.baseURL;
   
   return (

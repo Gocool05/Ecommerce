@@ -4,8 +4,20 @@ import Card from '../Card/Card';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import './SectionWithSlider.css'
+import { useQuery } from 'react-query';
+import api from '../../Utils/api';
 
 const SectionWithSlider = ({ Title }) => {
+
+
+  const Products = async () => {
+    const res = await api.get('/api/Products?populate=*');
+    return res.data.data;
+  }
+
+  const { data: products, isLoading, isError } = useQuery('Products', Products);
+
+
 
   const NextArrow = (props) => {
     const { onClick } = props;
@@ -98,13 +110,13 @@ const SectionWithSlider = ({ Title }) => {
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-    <div className='sm:px-16 pt-10'>
+    <div className='sm:px-16 pt-10 '>
       <Slider {...settings}>
-        {Array.from({ length: 20 }).map((_, index) => (
-          <div key={index} className="p-2">
-            <Card />
-          </div>
-        ))}
+          {products?.map((product, index) => (
+        <div className='p-2' key={index}>
+            <Card  product={product} />
+        </div>
+          ))}
       </Slider>
     </div>
 

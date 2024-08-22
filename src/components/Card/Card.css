@@ -40,7 +40,6 @@
     color: #FFEEA9;
     z-index: 1;
     transition-duration: .5s;
-    font-size: 1.04em;
     font-weight: 600;
   }
   
@@ -96,6 +95,11 @@
   @media screen and (max-width: 768px) {
     .image-container {
       height: 150px;
+    }
+
+    .CartBtn {
+      height: 30px;
+      border-radius: 5px;
     }
     
     .CartBtn:hover .IconContainer {

@@ -15,8 +15,6 @@ const CategorySlider = () => {
   const { data, isLoading, isError} = useQuery('Categories',Category);
   const baseUrl = api.defaults.baseURL;
 
-  console.log('category',data);
-
   return (
     <div className=' py-10'>
 
@@ -35,7 +33,6 @@ const CategorySlider = () => {
           <div key={index} className='h-60 w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
             <img className='relative  object-cover' src={`${baseUrl}${cate.attributes?.Image?.data.attributes.url}`} alt={cate?.attributes?.CategoryName}/>
              <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.attributes?.CategoryName}</h1>
-             {console.log(cate?.attributes?.Image?.data.attributes.url,'URL')}
           </div>
          ))}
 
@@ -46,7 +43,6 @@ const CategorySlider = () => {
           <div key={index} className='h-60 w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
             <img className='relative  object-cover' src={`${baseUrl}${cate.attributes?.Image?.data.attributes.url}`} alt={cate?.attributes?.CategoryName}/>
              <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.attributes?.CategoryName}</h1>
-             {console.log(cate?.attributes?.Image?.data.attributes.url,'URL')}
           </div>
          ))}
         </Marquee>

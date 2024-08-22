@@ -13,7 +13,7 @@ const FactoryClips = () => {
 
 
   return (
-<div className='mb-10'>
+<div className='mb-10 px-2'>
 
 <h2 class="flex flex-row flex-nowrap py-10 items-center ">
           <span class="flex-grow block border-t border-red"></span>

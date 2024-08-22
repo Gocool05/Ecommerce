@@ -385,9 +385,9 @@ const TopNav = () => {
                 />
 
                 {/* Dropdown here */}
-                <Menu as="div" className="relative inline-block">
+                <Menu as="div" className="relative  ">
                   <div>
-                    <MenuButton className="flex border-l  border-yellow items-center w-full justify-center  shadow-sm bg-white p-3 text-sm font-semibold text-black ">
+                    <MenuButton className="flex border-l  border-yellow items-center w-max justify-center  shadow-sm bg-white p-3 text-sm font-semibold text-black ">
                      {selectedCategory}
                       <ChevronDownIcon
                         aria-hidden="true"
