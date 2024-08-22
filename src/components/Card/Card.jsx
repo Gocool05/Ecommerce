@@ -1,4 +1,6 @@
 import React, { lazy } from 'react';
+import { useQuery } from 'react-query';
+import api from '../../Utils/api';
 import './Card.css';
 
 const Card = () => {
@@ -12,8 +14,18 @@ const Card = () => {
     offer: '20',
   };
 
+  const Products = async () =>{
+    const res = await api.get('/api/Products?populate=*');
+    return res.data.data;
+  }
+  
+  const { data:Product, isLoading, isError} = useQuery('Products',Products);
+  const baseUrl = api.defaults.baseURL;
+
+  console.log('category',Product);
+
   return (
-    <div className="max-w-xs relative sm:max-w-sm bg-yellow hover:border hover:cursor-pointer hover:scale-105  transition-all duration-500 border-yellow  mx-1 rounded-lg overflow-hidden">
+    <div className="max-w-xs relative sm:max-w-sm bg-Pattern bg-cover shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-105  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
       <span className="text-yellow rotate-45  py-1 pl-7 pr-5 top-2 -right-6 rotat bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ml-1">{product.offer}% Off</span>
       <div className="image-container">
         <img
@@ -30,8 +42,8 @@ const Card = () => {
         />
       </div>
       <div className="p-2 lg:p-4">
-        <h3 className="text-black  shrink-0  text-sm sm:text-md font-bold">{product.name1}</h3>
-        <h4 className="text-red text-sm sm:text-md font-normal">{product.name2}</h4>
+        <h3 className="text-black  shrink-0  text-sm sm:text-lg font-bold">{product.name1}</h3>
+        <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product.name2}</h4>
         <div className="flex shrink-0  items-center mt-2">
           <span className="text-black line-through text-sm opacity-50 lg:text-lg">{product.oldPrice}</span>
           <span className="text-red text-md lg:text-xl ml-1 font-bold sm:ml-2">{product.newPrice}</span>

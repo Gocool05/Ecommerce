@@ -23,7 +23,7 @@ const FactoryClips = () => {
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-<div className="grid grid-cols-1 bg-black bg1 sm:rounded-xl sm:grid-cols-3 md:mx-5 lg:mx-40  gap-2 p-2">
+<div className="grid grid-cols-1 bg-red bg1 sm:rounded-xl sm:grid-cols-3 md:mx-5 lg:mx-40  gap-2 p-2">
 {/* First Column */}
 <div className="grid grid-rows-2  gap-2">
   {items[0] && (
@@ -36,7 +36,7 @@ const FactoryClips = () => {
 </div>
   )}
   {items[1] && (
-    <div className="bg-black h-72">
+    <div className="bg-red h-72">
       {items[1].type === 'image' ? (
         <img src={items[1].url} alt="item2" className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
       ) : (
@@ -48,7 +48,7 @@ const FactoryClips = () => {
 
 {/* Second Column */}
 {items[2] && (
-  <div className="bg-black h-auto">
+  <div className="bg-red h-auto">
     {items[2].type === 'image' ? (
       <img src={items[2].url} alt="item3" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
     ) : (
@@ -60,7 +60,7 @@ const FactoryClips = () => {
 {/* Third Column */}
 <div className="grid grid-rows-2 gap-2">
   {items[3] && (
-    <div className="bg-black h-72">
+    <div className="bg-red h-72">
       {items[3].type === 'image' ? (
         <img src={items[3].url} alt="item4" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       ) : (
@@ -69,7 +69,7 @@ const FactoryClips = () => {
     </div>
   )}
   {items[4] && (
-    <div className="bg-black h-72">
+    <div className="bg-red h-72">
       {items[4].type === 'image' ? (
         <img src={items[4].url} alt="item5" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       ) : (
