@@ -23,7 +23,7 @@ const FactoryClips = () => {
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-<div className="grid grid-cols-1 bg-red bg1 sm:rounded-xl sm:grid-cols-3 md:mx-5 lg:mx-40  gap-2 p-2">
+<div className="grid grid-cols-1 bg-red bg1 sm:rounded-xl sm:grid-cols-3 md:mx-5 lg:mx-40 p-15 sm:m-0 gap-2 p-2">
 {/* First Column */}
 <div className="grid grid-rows-2  gap-2">
   {items[0] && (
@@ -69,7 +69,7 @@ const FactoryClips = () => {
     </div>
   )}
   {items[4] && (
-    <div className="bg-red h-72">
+    <div className="bg-red h-72 ">
       {items[4].type === 'image' ? (
         <img src={items[4].url} alt="item5" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       ) : (

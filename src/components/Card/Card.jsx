@@ -35,9 +35,9 @@ const Card = ({product}) => {
   <div className="p-2 lg:p-4">
     <h3 className="text-black  shrink-0 flex text-[13px] sm:text-lg font-bold">{product.attributes.ProductName}</h3>
     <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product.attributes.SubTitle}</h4>
-    <div className="flex justify-center  items-center sm:mt-2">
-      <span className="text-black  line-through text-[12px] opacity-50 lg:text-lg">{product.attributes.OldPrice}</span>
-      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">{product.attributes.NewPrice}</span>
+    <div className="flex  items-center sm:mt-2">
+      <span className="text-black bottom-0 line-through text-[12px] opacity-50 lg:text-lg">&#8377;{product.attributes.OldPrice}</span>
+      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">&#8377;{product.attributes.NewPrice}</span>
     </div>
     <button className="CartBtn hidden hover:flex w-full">
       <span className="IconContainer"> 
