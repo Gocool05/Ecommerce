@@ -4,40 +4,34 @@ import api from '../../Utils/api';
 import './Card.css';
 
 const Card = ({product}) => {
-  // const Products = async () =>{
-  //   const res = await api.get('/api/Products?populate=*');
-  //   return res.data.data;
-  // }
-  
-  // const { data:products, isLoading, isError} = useQuery('Products',Products);
+
   const baseUrl = api.defaults.baseURL;
 
-  // console.log('List of Products',products);
 
   return (
 <>
 <div className="max-w-xs relative sm:max-w-sm bg-Pattern bg-cover shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-105  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
-  <span className="text-yellow   py-1 p-3 top-2  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">{product.attributes.Offer}% Off</span>
+  <span className="text-yellow   py-1 p-3 top-2  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">{product?.attributes.Offer}% Off</span>
   <div className="image-container">
     <img
-      src={`${baseUrl}${product.attributes.ProductImage.data[0].attributes.url}`}
-      alt={product.attributes.ProductImage.data[0].attributes.name}
+      src={`${baseUrl}${product?.attributes.ProductImage.data[0]?.attributes.url}`}
+      alt={product?.attributes.ProductImage.data[0]?.attributes.name}
       loading='lazy'
       className="w-full h-44 sm:h-64 object-cover main-image"
     />
     <img
-      src={`${baseUrl}${product.attributes.ProductImage.data[1].attributes.url}`}
-      alt={product.attributes.ProductImage.data[1].attributes.name}
+      src={`${baseUrl}${product?.attributes.ProductImage.data[1]?.attributes.url}`}
+      alt={product?.attributes.ProductImage.data[1]?.attributes.name}
       loading='lazy'
       className="w-full h-44 sm:h-64 object-cover hover-image"
     />
   </div>
   <div className="p-2 lg:p-4">
-    <h3 className="text-black  shrink-0 flex text-[13px] sm:text-lg font-bold">{product.attributes.ProductName}</h3>
-    <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product.attributes.SubTitle}</h4>
+    <h3 className="text-black  shrink-0 flex text-[13px] sm:text-lg font-bold">{product?.attributes.ProductName}</h3>
+    <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product?.attributes.SubTitle}</h4>
     <div className="flex  items-center sm:mt-2">
-      <span className="text-black bottom-0 line-through text-[12px] opacity-50 lg:text-lg">&#8377;{product.attributes.OldPrice}</span>
-      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">&#8377;{product.attributes.NewPrice}</span>
+      <span className="text-black bottom-0 line-through text-[12px] opacity-50 lg:text-lg">&#8377;{product?.attributes.OldPrice}</span>
+      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">&#8377;{product?.attributes.NewPrice}</span>
     </div>
     <button className="CartBtn hidden hover:flex w-full">
       <span className="IconContainer"> 
