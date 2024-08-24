@@ -5,6 +5,7 @@ import { Carousel } from "react-responsive-carousel";
 import axios from "axios";
 import { useQuery } from "react-query";
 import api from "../../Utils/api";
+import Loading from "../Loading/Loading";
 
 const HomeSlider = () => {
 
@@ -15,6 +16,8 @@ const HomeSlider = () => {
 
   const { data:Sliders,isLoading,isError} = useQuery('SliderImage',SetSliderImage);
 
+  if(isLoading) return <Loading/>
+  
   const baseUrl = api.defaults.baseURL;
   
   return (

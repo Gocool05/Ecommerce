@@ -26,10 +26,10 @@ const Navbar = () => {
               </svg>
               </PopoverButton>
               <PopoverPanel anchor="bottom" className="flex flex-col mt-2 z-50 text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg-yellow   rounded-xl">
-                <a className='hover:bg-red px-4 py-2 hover:text-yellow text-black' href="/Idols">Idols</a>
-                <a className='hover:bg-red px-4 py-2 hover:text-yellow text-black' href="/Vaahanam">Vaahanam</a>
-                <a className='hover:bg-red px-4 py-2 hover:text-yellow text-black' href="/Radham">Radham</a>
-                <a className='hover:bg-red px-4 py-2 hover:text-yellow text-black' href="/Greedam">Greedam</a>
+                <Link className='hover:bg-red px-4 py-2 hover:text-yellow text-black' to={"/Idols"}>Idols</Link>
+                <Link className='hover:bg-red px-4 py-2 hover:text-yellow text-black' to={"/Vaahanam"}>Vaahanam</Link>
+                <Link className='hover:bg-red px-4 py-2 hover:text-yellow text-black' to={"/Radham"}>Radham</Link>
+                <Link className='hover:bg-red px-4 py-2 hover:text-yellow text-black' to={"/Greedam"}>Greedam</Link>
               </PopoverPanel>
             </Popover>
               <Link
@@ -38,26 +38,27 @@ const Navbar = () => {
               >
                 Shop
               </Link>
-              <a
-                href="#"
+              <Link
+                to={'/about'}
                 className="text-yellow shrink-0 hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
               >
-                About Us
-              </a>
-              <a
-                href="#"
+                About
+              </Link>
+              <Link
+                to={'/blog'}
                 className="text-yellow shrink-0 hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
               >
                 Blog
-              </a>
-              <a
-                href="#"
-                className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
+              </Link>
+              <Link
+                to={'/contact'}
+                className="text-yellow shrink-0 hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
               >
-                Contact Us
-              </a>
+                Contact
+              </Link>
               <a
-                href="#"
+                href="https://www.shriworks.com/"
+                target='_blank'
                 className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
               >
                 Factory 

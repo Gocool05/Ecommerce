@@ -64,7 +64,7 @@ const SectionWithSlider = ({ Title }) => {
   const settings = {
     infinite: true,
     autoplay:true,
-    speed: 1000,
+    speed: 500,
     autoplaySpeed: 2500,
     slidesToShow: 5,  // 5 columns
     slidesToScroll: 1,

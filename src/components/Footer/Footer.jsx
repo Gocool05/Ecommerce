@@ -91,7 +91,7 @@ const Footer = () => {
       <div>
         <h6
           className="mb-4 flex sm:justify-center font-semibold uppercase md:justify-start">
-          Contact
+          Showroom
         </h6>
         <p className="mb-4 flex items-center sm:justify-center md:justify-start">
           <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">

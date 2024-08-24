@@ -4,6 +4,7 @@ import { Fragment } from 'react';
 import {  MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const TopNav = () => {
 
@@ -16,16 +17,15 @@ const TopNav = () => {
   };
 
 
-
   return (
     <>
-    <nav className=" shadow-lg py-2 items-center">
+    <nav className=" shadow-lg py-5 items-center">
       <div className="px-5 sm:px-10">
         <div className="flex justify-between items-center h-16">
           {/* Left section for the logo */}
           <div className="flex-shrink-0">
             <a href="/" className="text-xl font-bold text-red">
-              <img className='h-16' src='/Assests/logo.png' alt='Shriworks Logo'/>
+              <img className='h-28' src='/Assests/logo.png' alt='Shriworks Logo'/>
             </a>
           </div>
 
@@ -162,7 +162,7 @@ const TopNav = () => {
 
           {/* Right section for the search input, cart, and profile icon */}
           <div className="relative flex items-center space-x-4">
-            <button className="text-red relative hover:-translate-y-1 transition-all duration-300 ">
+            <Link to={'/cart'}  className="text-red relative hover:-translate-y-1 transition-all duration-300 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -178,7 +178,10 @@ const TopNav = () => {
                 />
               </svg>
               <span className='absolute -bottom-2 -right-2 bg-red   text-yellow rounded-full text-[13px] px-1.5 py-0 h-fit'>2</span>
-            </button>
+            </Link>
+
+
+
             <Menu as="div" className="relative">
               <div>
                 <Menu.Button className="flex items-center  text-red  hover:bg-red rounded-full p-2 hover:text-yellow">
@@ -291,12 +294,12 @@ const TopNav = () => {
           </button>
         </div>
         <div className="px-4 pt-2 pb-3  space-y-1">
-          <a
-            href="#"
+          <Link
+            to={'/'}
             className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
           >
             Home
-          </a>
+          </Link>
           <Popover className="relative text-red outline-none px-3 py-2 border-none">
             <Popover.Button className="flex outline-none gap-1 font-bold items-center">
               Categories
@@ -322,30 +325,37 @@ const TopNav = () => {
               <a className='hover:text-black ' href="/Greedam">Greedam</a>
             </Popover.Panel>
           </Popover>
-          <a
-            href="#"
-            className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
-          >
-            Best Selling
-          </a>
-          <a
-            href="#"
-            className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
-          >
-            Festival Offer
-          </a>
-          <a
-            href="#"
-            className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
-          >
-            New Arrivals
-          </a>
-          <a
-            href="#"
-            className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
-          >
-            Contact
-          </a>
+          <Link
+                to={'/shop'}
+                className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+              >
+                Shop
+              </Link>
+              <Link
+                to={'/about'}
+                className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+              >
+                About
+              </Link>
+              <Link
+                to={'/blog'}
+                className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+              >
+                Blog
+              </Link>
+              <Link
+                to={'/contact'}
+                className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+              >
+                Contact
+              </Link>
+              <a
+                href="https://www.shriworks.com/"
+                target='_blank'
+                className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
+              >
+                Factory 
+              </a>
         </div>
       </div>
 
@@ -357,8 +367,7 @@ const TopNav = () => {
         />
       )}
     </div>
-
-
+    
           </div>
         </div>
       </div>
