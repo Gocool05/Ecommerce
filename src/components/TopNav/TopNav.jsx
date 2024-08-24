@@ -25,7 +25,7 @@ const TopNav = () => {
           {/* Left section for the logo */}
           <div className="flex-shrink-0">
             <a href="/" className="text-xl font-bold text-red">
-              <img className='h-28' src='/Assests/logo.png' alt='Shriworks Logo'/>
+              <img className='h-16 sm:h-28' src='/Assests/logo.png' alt='Shriworks Logo'/>
             </a>
           </div>
 
