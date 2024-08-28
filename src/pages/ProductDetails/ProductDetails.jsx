@@ -6,16 +6,22 @@ import Card from '../../components/Card/Card';
 import api from '../../Utils/api';
 import { useQuery } from 'react-query';
 import Slider from 'react-slick';
+import { Link, useParams } from 'react-router-dom';
+import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 
 const ProductDetails = () => {
-
-  const Products = async () => {
-    const res = await api.get('/api/Products?populate=*');
-    return res.data.data;
+  const baseUrl = api.defaults.baseURL;
+  const Id = useParams();
+  window.scrollTo(0, 0);
+  const ProductId = Id.id;
+  const ProductDetails = async () => {
+      const res = await api.get(`/api/Products/${ProductId}?populate=*`);
+      return res.data.data;
   }
-
-  const { data: products, isLoading, isError } = useQuery('Products', Products);
-
+    const { data: products,isLoading, isError } = useQuery('Products', ProductDetails);
+    
+  console.log(products,'Details of the product')
+  
 
   const NextArrow = (props) => {
     const { onClick } = props;
@@ -56,49 +62,11 @@ const ProductDetails = () => {
       </div>
     );
   };
-  
 
-
-  const settings = {
-    infinite: true,
-    autoplay:true,
-    speed: 500,
-    autoplaySpeed: 2500,
-    slidesToShow: 5,  // 5 columns
-    slidesToScroll: 1,
-    rows: 1,  // 2 rows    
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024, // Tablet
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          rows: 2,
-        }
-      },
-      {
-        breakpoint: 768, // Mobile
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          rows: 2, // Reduce to 1 row for smaller screens
-        }
-      },
-      {
-        breakpoint: 480, // Small Mobile
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          rows: 2,
-        }
-      }
-    ]
-  };
 
   return (
     <section className="relative flex flex-col overflow-hidden">
+      <div>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
           <div className="slider-container1 ">
@@ -108,15 +76,12 @@ const ProductDetails = () => {
               swipeable={true}
               showIndicators={false}
             >
-              <div>
-                <img src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" />
+              {products?.attributes?.ProductImage?.data.map((Images, index)=>
+              <div key={index}>
+                <img src={`${baseUrl}${Images.attributes?.url}`} />
               </div>
-              <div>
-                <img src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" />
-              </div>
-              <div>
-                <img src="https://api.shriworkscraft.com/uploads/website_banner_11_e95e90137e.webp" />
-              </div>
+              )}
+
             </Carousel>
           </div>
 
@@ -126,20 +91,20 @@ const ProductDetails = () => {
                 Idols&nbsp; /&nbsp; Lord Muruga
               </p>
               <h2 className="font-bold text-3xl  text-gray-900 mb-2 capitalize">
-                Standing Murugan Idol
+              {products?.attributes?.ProductName}
               </h2>
               <h3 className="font-bold text-xl  text-gray-900 mb-2 capitalize">
-                Panchaloha 12" Height
+              {products?.attributes?.SubTitle}
               </h3>
 
               <div className="flex flex-row gap-2 sm:flex-row  sm:items-center mb-6">
                 <h6 className="font-manrope font-semibold text-3xl leading-9 text-green  sm:border-r border-gray-200 ">
-                  &#8377;25000.00
+                  &#8377;{products?.attributes?.NewPrice}
                 </h6>
                 <h6 className="font-manrope  font-semibold text-xl line-through leading-9 text-black  sm:border-r border-gray-200">
-                  &#8377;30000.00
+                  &#8377;{products?.attributes?.OldPrice}
                 </h6>
-                <span className="text-xl text-red font-bold"> 25% Off</span>
+                <span className="text-xl text-red font-bold"> {products?.attributes?.Offer}{" "}% Off</span>
               </div>
               <div className="flex flex-col gap-2   mb-6">
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
@@ -149,8 +114,7 @@ const ProductDetails = () => {
                   <span className="font-bold">Weight -</span> 8.150 Kg
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">Dimensions -</span> 7 x 9.5 x 12
-                  inches
+                  <span className="font-bold">Dimensions -</span> 7 x 9.5 x 12 Inches
                 </h6>
               </div>
 
@@ -242,20 +206,9 @@ const ProductDetails = () => {
           neque tempora.
         </p>
       </div>
+</div>
 
-      <div className='px-4 sm:px-16 pb-16'>
-        <h2 className="text-4xl pb-5 text-center text-red font-bold uppercase">
-          {" "}
-          Related Products
-        </h2>
-        <Slider {...settings}>
-          {products?.map((product, index) => (
-        <div className='p-2' key={index}>
-            <Card  product={product} />
-        </div>
-          ))}
-      </Slider>
-      </div>
+      <RelatedProducts/>
     </section>
   );
 }

@@ -6,17 +6,11 @@ import "slick-carousel/slick/slick-theme.css";
 import './SectionWithSlider.css'
 import { useQuery } from 'react-query';
 import api from '../../Utils/api';
+import { Link } from 'react-router-dom';
 
-const SectionWithSlider = ({ Title }) => {
-
-
-  const Products = async () => {
-    const res = await api.get('/api/Products?populate=*');
-    return res.data.data;
-  }
-
-  const { data: products, isLoading, isError } = useQuery('Products', Products);
-
+const SectionWithSlider = ({ SectionData }) => {
+const Section = SectionData;
+ console.log(Section,'Sectrion data')
 
 
   const NextArrow = (props) => {
@@ -100,27 +94,31 @@ const SectionWithSlider = ({ Title }) => {
   };
 
   return (
-    <div className="py-10 overflow-hidden">
+    <>
+    {Section?.map((section,index)=>(
+    <div className="py-10 overflow-hidden" key={index}>
 
           <h2 class="flex flex-row flex-nowrap items-center ">
           <span class="flex-grow block border-t border-red"></span>
           <span class="flex-none block mx-4 px-4 py-2.5  lg:text-xl rounded leading-none uppercase font-bold bg-red text-yellow">
-              {Title}
+              {section.Title}
           </span>
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-    <div className='sm:px-16 pt-10 '>
+      <div className='sm:px-16 pt-10 '>
       <Slider {...settings}>
-          {products?.map((product, index) => (
-        <div className='p-2' key={index}>
+          {section?.products?.data?.map((product, index) => (
+            <Link  to={`product/`+ product.id} className='p-2' key={index}>
             <Card  product={product} />
-        </div>
-          ))}
+            </Link >
+      ))}
       </Slider>
-    </div>
+      </div>
 
     </div>
+    ))}
+    </>
   );
 };
 

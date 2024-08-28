@@ -2,17 +2,19 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import Card from '../../components/Card/Card'
 import FilterBar from '../../components/FilterBar/FilterBar'
+import Loading from '../../components/Loading/Loading'
 import api from '../../Utils/api'
+import TechError from '../Error/TechError'
 
 const Shop = () => {
 
-  const Products = async () => {
+  const { data: products, isLoading, isError } = useQuery('Products', async () => {
     const res = await api.get('/api/Products?populate=*');
     return res.data.data;
-  }
+  });
 
-  const { data: products, isLoading, isError } = useQuery('Products', Products);
-
+  if(isLoading) return <Loading/>
+  if(isError) return <TechError/>
 
   return (
  <section>

@@ -5,14 +5,11 @@ import api from '../../Utils/api'
 import './CategorySlider.css'
 
 
-const CategorySlider = () => {
+const CategorySlider = ({CategoryData}) => {
   
-  const Category = async () =>{
-    const res = await api.get('/api/categories?populate=*');
-    return res.data.data;
-  }
-  
-  const { data, isLoading, isError} = useQuery('Categories',Category);
+  const category = CategoryData?.attributes?.Category;
+  // console.log(category,'Categorysliders')
+
   const baseUrl = api.defaults.baseURL;
 
   return (
@@ -29,19 +26,19 @@ const CategorySlider = () => {
 
         <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0} >
          
-         {data?.map((cate,index)=>(
+         {category?.map((cate,index)=>(
           <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 shadow-md shadow-black bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
-            <img className='relative  object-cover' src={`${baseUrl}${cate.attributes?.Image?.data.attributes.url}`} alt={cate?.attributes?.CategoryName}/>
-             <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.attributes?.CategoryName}</h1>
+            <img className='relative  object-cover' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
+             <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.CategoryName}</h1>
           </div>
          ))}
 
         </Marquee>
         <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
-        {data?.map((cate,index)=>(
+        {category?.map((cate,index)=>(
           <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
-            <img className='relative  object-cover' src={`${baseUrl}${cate.attributes?.Image?.data.attributes.url}`} alt={cate?.attributes?.CategoryName}/>
-             <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.attributes?.CategoryName}</h1>
+            <img className='relative  object-cover' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
+             <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.CategoryName}</h1>
           </div>
          ))}
         </Marquee>

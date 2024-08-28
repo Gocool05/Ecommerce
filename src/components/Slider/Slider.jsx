@@ -7,19 +7,10 @@ import { useQuery } from "react-query";
 import api from "../../Utils/api";
 import Loading from "../Loading/Loading";
 
-const HomeSlider = () => {
-
-  const SetSliderImage = async() =>{
-    const res = await api.get('/api/home-sliders?populate=*');
-    return res.data.data
-  }
-
-  const { data:Sliders,isLoading,isError} = useQuery('SliderImage',SetSliderImage);
-
-  if(isLoading) return <Loading/>
-  
+const HomeSlider = ({sliderData}) => {
+  const slider = sliderData?.attributes?.Slider
   const baseUrl = api.defaults.baseURL;
-  
+
   return (
 <>
     <Carousel
@@ -30,11 +21,11 @@ const HomeSlider = () => {
     swipeable={true}
     className="custom-slider bg1 bg-red"
   >
-    {Sliders?.map((images, index) => (
+    {slider?.map((images, index) => (
       <div className="" key={index}>
         <img
-          src={`${baseUrl}${images.attributes.Image.data.attributes.url}`}
-          alt={images.attributes.Image.data.attributes.name}
+          src={`${baseUrl}${images?.Image?.data?.attributes?.url}`}
+          alt={images?.Image?.data?.attributes?.name}
           loading='eager'
         />
       </div>
