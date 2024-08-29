@@ -6,6 +6,7 @@ import Card from '../../components/Card/Card';
 import api from '../../Utils/api';
 import { useQuery } from 'react-query';
 import Slider from 'react-slick';
+import './ProductDetails.css'
 import { Link, useParams } from 'react-router-dom';
 import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 
@@ -65,16 +66,17 @@ const ProductDetails = () => {
 
 
   return (
-    <section className="relative flex flex-col overflow-hidden">
+    <section className="relative flex flex-col  overflow-hidden">
       <div>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
-          <div className="slider-container1 ">
+          <div >
             <Carousel
               thumbWidth={100}
               showStatus={false}
               swipeable={true}
               showIndicators={false}
+              className="slider-container1"
             >
               {products?.attributes?.ProductImage?.data.map((Images, index)=>
               <div key={index}>
@@ -85,15 +87,15 @@ const ProductDetails = () => {
             </Carousel>
           </div>
 
-          <div className="data w-full lg:pr-8 pr-0 xl:justify-start lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
+          <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
             <div className="data sm:w-full max-w-xl">
               <p className="text-lg font-medium leading-8 text-red mb-4">
                 Idols&nbsp; /&nbsp; Lord Muruga
               </p>
-              <h2 className="font-bold text-3xl  text-gray-900 mb-2 capitalize">
+              <h2 className="font-bold text-3xl  text-red mb-2 capitalize">
               {products?.attributes?.ProductName}
               </h2>
-              <h3 className="font-bold text-xl  text-gray-900 mb-2 capitalize">
+              <h3 className="font-bold text-xl  text-black mb-2 capitalize">
               {products?.attributes?.SubTitle}
               </h3>
 
@@ -118,7 +120,7 @@ const ProductDetails = () => {
                 </h6>
               </div>
 
-              <div className="w-full pb-8  flex-wrap">
+              {/* <div className="w-full pb-8  flex-wrap">
                 <div className="grid  grid-cols-3 gap-3 max-w-sm ">
                   <button className="bg-[#A67C00] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
                     Gold
@@ -136,7 +138,7 @@ const ProductDetails = () => {
                     Panchalogan
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex  gap-3 py-2">
                 <div className="flex sm:items-center gap-3  ">
@@ -208,7 +210,7 @@ const ProductDetails = () => {
       </div>
 </div>
 
-      <RelatedProducts/>
+      <RelatedProducts />
     </section>
   );
 }

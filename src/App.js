@@ -13,13 +13,15 @@ import NotFound from './pages/Error/NotFound';
 import ProductDetails from './pages/ProductDetails/ProductDetails';
 import Shop from './pages/Shop/Shop';
 import Login from './pages/Auth/Login.jsx'
+import { ToastContainer } from 'react-toastify';
+import RelatedProducts from './components/RelatedProducts/RelatedProducts';
 const client = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={client}>
-      
       <Router>
+        <ToastContainer/>
         <TopNav />
         <Navbar />
         <Routes>
@@ -27,6 +29,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={< ProductDetails/>} />
+          <Route path="shop/product/:id" element={< ProductDetails/>} />
           <Route path="/about" element={< About/>} />
           <Route path="/contact" element={< ContactUs/>} />
           <Route path="/cart" element={< AddToCart/>} />

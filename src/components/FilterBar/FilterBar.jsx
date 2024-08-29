@@ -86,6 +86,24 @@ const FilterBar = () => {
               >
                 Silver
               </h6>
+              <h6
+                className="hover:bg-red hover:cursor-pointer px-4 py-2 hover:text-yellow text-black"
+                onClick={() => {handleFilterSelection("material", "Brass");close();}}
+              >
+                Brass
+              </h6>
+              <h6
+                className="hover:bg-red hover:cursor-pointer px-4 py-2 hover:text-yellow text-black"
+                onClick={() => {handleFilterSelection("material", "Copper");close();}}
+              >
+                Copper
+              </h6>
+              <h6
+                className="hover:bg-red hover:cursor-pointer px-4 py-2 hover:text-yellow text-black"
+                onClick={() => {handleFilterSelection("material", "Panchalogam");close();}}
+              >
+                Panchalogam
+              </h6>
             </PopoverPanel>
             </>
               )}

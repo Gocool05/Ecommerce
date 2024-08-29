@@ -109,9 +109,9 @@ const Section = SectionData;
       <div className='sm:px-16 pt-10 '>
       <Slider {...settings}>
           {section?.products?.data?.map((product, index) => (
-            <Link  to={`product/`+ product.id} className='p-2' key={index}>
+            <div  className='p-2' key={index}>
             <Card  product={product} />
-            </Link >
+            </div >
       ))}
       </Slider>
       </div>

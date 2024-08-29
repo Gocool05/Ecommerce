@@ -5,6 +5,7 @@ import {  MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const TopNav = () => {
 
@@ -15,7 +16,9 @@ const TopNav = () => {
   const handleMenuItemClick = (category) => {
     setSelectedCategory(category);
   };
-
+  
+  const login = true;
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   return (
     <>
@@ -169,7 +172,7 @@ const TopNav = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="sm:w-8 sm:h-8 w-6 h-6"
               >
                 <path
                   strokeLinecap="round"
@@ -177,21 +180,21 @@ const TopNav = () => {
                   d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                 />
               </svg>
-              <span className='absolute -bottom-2 -right-2 bg-red   text-yellow rounded-full text-[13px] px-1.5 py-0 h-fit'>2</span>
+              <span className='absolute -bottom-2 -right-2 bg-red   text-yellow rounded-full text-[13px] px-1.5 py-0 sm:px-2 sm:py-0.5 h-fit'>{totalQuantity}</span>
             </Link>
 
 
 
             <Menu as="div" className="relative">
               <div>
-                <Menu.Button className="flex items-center  text-red  hover:bg-red rounded-full p-2 hover:text-yellow">
+                <Menu.Button className="flex items-center  text-red hover:scale-105 duration-300  rounded-full p-2 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="sm:w-8 sm:h-8 w-6 h-6"
                   >
                     <path
                       strokeLinecap="round"
@@ -199,9 +202,11 @@ const TopNav = () => {
                       d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                     />
                   </svg>
+                 {login && <h4 className='flex text-[10px] sm:text-[12px] font-bold flex-col gap-0'>Hello?<span>Sign In</span></h4>} 
                 </Menu.Button>
               </div>
-              <Transition
+
+            { !login && <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
                 enterFrom="transform opacity-0 scale-95"
@@ -237,6 +242,8 @@ const TopNav = () => {
                   </Menu.Item>
                 </Menu.Items>
               </Transition>
+}
+              
             </Menu>
             {/* Hamburger menu for mobile screens */}
             <div className="relative">

@@ -1,63 +1,102 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, Navigate } from 'react-router-dom';
+import {
+    removeItem,
+    increaseQuantity,
+    decreaseQuantity,
+    clearCart,
+} from '../../Slice/cartSlice'
 
 const AddToCart = () => {
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.cartItems);
+    const totalAmount = useSelector((state) => state.cart.totalAmount);
+    const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
+    if (cartItems.length === 0) {
+        return (
+            <div className="flex sm:p-10 flex-col justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#4e2a1b" className="size-52">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                    <h1 className="text-2xl text-red font-bold"> Your Cart is Empty</h1>
+                    <Link to={'/shop'} className="mt-4 text-xl cursor-pointer bg-black text-yellow px-3 animate-pulse py-2 rounded-lg">Continue Shopping </Link>
+                    </div>
+        )
+      }
+
   return (
-    <div class="container mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-        <h1 class="text-2xl font-bold my-4">Shopping Cart</h1>
-        <button class="bg-red hover:bg-opacity-95 text-white font-bold py-2 px-4 rounded">
-      Checkout
-    </button>
-    </div>
-    <div class="mt-8">
-        <div class="flex flex-col md:flex-row border-b border-red py-4">
-            <div class="flex-shrink-0">
-                <img src="https://api.shriworkscraft.com/uploads/website_banner_11_e95e90137e.webp" alt="Product image" class="w-32 h-32 object-cover"/>
-            </div>
-
-            <div class="mt-4 md:mt-0 md:ml-6">
-                <h2 class="text-lg text-red font-bold">Product Title</h2>
-                <p class="mt-2 text-black">Product Description</p>
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="mr-2 text-red">Quantity:</span>
-                    <div class="flex items-center">
-                        <button class="bg-red text-yellow cursor-pointer rounded-l-lg px-2 py-1" disabled>-</button>
-                        <span class="mx-2 text-gray-600">1</span>
-                        <button class="bg-red text-yellow cursor-pointer rounded-r-lg px-2 py-1" disabled>+</button>
-                    </div>
-                    <div class="ml-auto sm:ml-5 font-bold">&#8377; 2000.00</div>
-                    
+     <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+      <ul>
+        {cartItems.map((item) => (
+          <li
+            key={item.id}
+            className="flex sm:flex-row gap-3 flex-col justify-between items-center mb-4 sm:p-4 border rounded-md shadow-sm"
+          >
+            <div className='flex justify-center items-center gap-2'>
+                <div className='bg-red sm:w-24 w-1/2 p-1 rounded-md'>
+                    <img className='h-20 w-full object-cover' src={item.image} alt="" />
                 </div>
-            </div>
-
-        </div>
-        <div class="flex flex-col md:flex-row border-b border-red py-4">
-            <div class="flex-shrink-0">
-                <img src="https://api.shriworkscraft.com/uploads/Deep_Lady_bf553fa870.jpg" alt="Product image" class="w-32 h-32 object-cover"/>
-            </div>
-
-            <div class="mt-4 md:mt-0 md:ml-6">
-                <h2 class="text-lg text-red font-bold">Product Title</h2>
-                <p class="mt-2 text-black">Product Description</p>
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="mr-2 text-red">Quantity:</span>
-                    <div class="flex items-center">
-                        <button class="bg-red text-yellow cursor-pointer rounded-l-lg px-2 py-1" disabled>-</button>
-                        <span class="mx-2 text-gray-600">2</span>
-                        <button class="bg-red text-yellow cursor-pointer rounded-r-lg px-2 py-1" disabled>+</button>
-                    </div>
-                    <div class="ml-auto sm:ml-5 font-bold">&#8377; 2000.00</div>
-                    
+                <div className=''>
+              <h3 className="text-sm lg:text-lg text-red font-semibold">{item.name}</h3>
+              <p className="text-black font-bold">
+              &#8377;{item.price.toFixed(2)} x {item.quantity} = &#8377;
+                {item.totalPrice.toFixed(2)}
+              </p>
                 </div>
-            </div>
 
+            </div>
+            <div className="flex items-center">
+              <button
+                onClick={() => dispatch(decreaseQuantity(item.id))}
+                className="px-3 py-1 bg-red border-red border-t border-b  text-white rounded-l-md hover:bg-red-600"
+              >
+                -
+              </button>
+              <span className="px-4 py-1 border-red border-t border-b">{item.quantity}</span>
+              <button
+                onClick={() => dispatch(increaseQuantity(item.id))}
+                className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600"
+              >
+                +
+              </button>
+              <button
+                onClick={() => dispatch(removeItem(item.id))}
+                className="ml-4 px-3 py-1 bg-black text-yellow rounded-md hover:bg-red"
+              >
+                Remove
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-6 flex justify-between items-center">
+        <div className='flex flex-col gap-1'>
+          <p className="text-lg text-black">
+            Total Items: <span className="font-semibold">{totalQuantity}</span>
+          </p>
+          <p className="text-lg text-black">
+            Total Amount: <span className="font-semibold">&#8377;{totalAmount.toFixed(2)}</span>
+          </p>
+          <button
+          onClick={() => dispatch(clearCart())}
+          className="px-6 py-2 bg-red text-yellow font-bold rounded-md hover:bg-black"
+        >
+          Clear Cart
+        </button>
         </div>
+        <div className='flex gap-2 justify-between items-center'>
+        <Link
+          to={'/checkout'}
+          className="px-6 py-2 bg-green text-white font-bold rounded-md hover:bg-opacity-80"
+        >
+          Proceed to Checkout
+        </Link>
+        </div>
+      </div>
     </div>
-    <div class="flex justify-end items-center mt-8">
-        <span class="text-red mr-4">Subtotal:</span>
-        <span class="text-xl font-bold">&#8377; 3500.00</span>
-    </div>
-</div>
   )
 }
 

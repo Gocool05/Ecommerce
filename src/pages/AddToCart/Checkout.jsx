@@ -1,7 +1,16 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const Checkout = () => {
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
+console.log(cartItems,'cart items')
   return (
     <div class="lg:p-10 p-5">
     <div class="flex max-sm:flex-col gap-12 max-lg:gap-4 ">
@@ -10,40 +19,28 @@ const Checkout = () => {
           <div class="px-4 py-8 sm:overflow-auto ">
             <div class="space-y-4">
 
-              <div class="flex items-start gap-4">
+            {cartItems.map((cart,index)=>(
+              <div class="flex items-start gap-4" key={index}>
                 <div class="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-yellow rounded-md">
-                  <img src='https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp' class="w-full object-cover" />
+                  <img src={cart.image} class="w-full object-cover" />
                 </div>
-                <div class="w-full">
-                  <h3 class="text-base text-yellow font-bold uppercase">Vinayagar Idols</h3>
+                <div class="w-full overflow-hidden">
+                  <h3 class="text-base text-yellow font-bold uppercase truncate">{cart.name}</h3>
                   <ul class="text-xs text-white space-y-2 mt-2">
-                    <li class="flex flex-wrap gap-4">Size <span class="ml-auto">37</span></li>
-                    <li class="flex flex-wrap gap-4">Quantity <span class="ml-auto">2</span></li>
-                    <li class="flex flex-wrap gap-4">Total Price <span class="ml-auto">&#8377; 40</span></li>
+                    <li class="flex flex-wrap gap-4">Material <span class="ml-auto">{cart.material}</span></li>
+                    <li class="flex flex-wrap gap-4">Quantity <span class="ml-auto">{cart.quantity}</span></li>
+                    <li class="flex flex-wrap gap-4">Total Price <span class="ml-auto">&#8377; {cart.totalPrice}</span></li>
                   </ul>
                 </div>
               </div>
+            ))}
 
-              <div class="flex items-start gap-4">
-                <div class="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-yellow rounded-md">
-                  <img src='https://api.shriworkscraft.com/uploads/Taajoo_df1916308c.png' class="w-full object-cover" />
-                </div>
-                <div class="w-full">
-                  <h3 class="text-base text-yellow font-bold uppercase">Buddha Idols</h3>
-                  <ul class="text-xs text-white space-y-2 mt-2">
-                    <li class="flex flex-wrap gap-4">Size <span class="ml-auto">37</span></li>
-                    <li class="flex flex-wrap gap-4">Quantity <span class="ml-auto">2</span></li>
-                    <li class="flex flex-wrap gap-4">Total Price <span class="ml-auto">&#8377; 40</span></li>
-                  </ul>
-                </div>
-              </div>
-            
 
             </div>
           </div>
 
           <div class=" border-red border-2 bg-yellow w-full p-4">
-            <h4 class="flex flex-wrap gap-4 text-base text-black">Total <span class="ml-auto">&#8377; 84.00</span></h4>
+            <h4 class="flex flex-wrap gap-4 text-base text-black">Total <span class="ml-auto">&#8377; {totalAmount}</span></h4>
           </div>
         </div>
       </div>
@@ -114,7 +111,7 @@ const Checkout = () => {
         </div>
 
             <div class="flex gap-4 max-md:flex-col mt-8">
-              <button type="button" class="rounded-md flex justify-center items-center gap-3 px-6 py-3 w-full text-sm tracking-wide bg-black hover:bg-red text-yellow"><span><LockClosedIcon height={20}/></span> Proceed to checkout</button>
+              <button type="button" class="rounded-md flex justify-center items-center gap-3 px-6 py-3 w-full text-sm tracking-wide bg-black hover:bg-red text-yellow"><span><LockClosedIcon height={20}/></span> Proceed to Pay</button>
             </div>
           </div>
         </form>

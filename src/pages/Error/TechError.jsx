@@ -8,7 +8,7 @@ const TechError = () => {
     <div className="animate-pulse items-center justify-center flex">
       <img  className='h-24 w-24  ' src='/favicon.png' alt='Shriworks Logo'/>
     </div>
-    <p className="mt-4 text-xl text-black">Let's get you back to the homepage <a href="/" className="text-red text-xl font-bold uppercase">home</a>.</p>
+    <p className="mt-4 text-xl text-black">Let's get you back to the  <a href="/" className="text-red animate-pulse text-xl font-bold uppercase">home</a>.</p>
   </div>
   )
 }
