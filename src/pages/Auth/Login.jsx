@@ -2,10 +2,9 @@ import React from 'react'
 import { useState } from 'react';
 import ReactModal from 'react-modal';
 
-const Login = () => {
+const Login = ({setIsOpen,modalIsOpen}) => {
 
     const [isLogin,setIsLogin] = useState(true);
-    const [modalIsOpen, setIsOpen] = useState(false);
     const [loginEmail,setLoginEmail] = useState("");
     const [loginPassword,setLoginPassword] = useState("");
   
@@ -27,86 +26,92 @@ const Login = () => {
           left: '50%',
           right: 'auto',
           bottom: 'auto',
-          marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
           padding:'0px',
           width:'fit-content',
+          margin:'auto',
+          zIndex:50,
         },
       };
 
     const LoginForm = () => {
         return(
-           <div className="bg-Pattern bg-cover rounded-2xl shadow-2xl flex flex-col w-full  items-center p-10 transition duration-1000 ease-out">
-                 <h2 className='p-3 text-3xl uppercase font-bold text-red'>Shriworks</h2>
-                 <div className="inline-block border-[1px] justify-center w-20 border-red border-solid"></div>
-                 <h3 className='text-xl font-semibold text-red pt-2'>Sign In!</h3>
-                 <div className='flex space-x-2 m-4 items-center justify-center'>
-                    <div className="socialIcon">
-                    {/* <Facebook/> */}
-                    </div>
-                    <div className="socialIcon">
-                    {/* <GitHub/> */}
-                    </div>
-                    <div className="socialIcon">
-                    {/* <Google/>   */}
-                    </div>
-                 </div>
+           <div className="bg-red bg3  shadow-2xl lg:grid grid-cols-2 w-full mx-auto   transition duration-1000 ease-out">
+                
+                <div className='lg:flex hidden justify-center relative  object-cover'>
+                 <img className='object-cover' src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" alt="" />
+                 {/* <div className='absolute  w-full h-full px-2 bg-[#000]/25 text-xl text-yellow uppercase font-bold'>
+                   <h3 className='text-center'>Welcome to Shriworks</h3>
+                   </div> */}
+                  </div> 
                  {/* Inputs */}
-                 <div className='flex flex-col items-center justify-center'>
-                  <input type='email' className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Email'></input>
-                  <input type="password" className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Password'></input>
-                  <button className='rounded-2xl m-2 text-white bg-red  px-4 py-2 shadow-md  hover:bg-black transition duration-200 ease-in'>
-                    Sign In
+                 <div className='flex flex-col gap-3 lg:my-5 mx-2 p-2'>
+                  <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Login to shriworks</h2>
+                   <p className='text-black text-center text-sm'></p>
+                 <div className='flex relative flex-col items-center justify-center'>
+                  <input type='email' className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0' placeholder='Email'></input>
+                  <input type="password" className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0' placeholder='Password'></input>
+                 </div>
+                   <div className='w-full'>
+                  <p className='text-white float-end mr-1 font-bold cursor-pointer text-sm'>Forgot Password?</p> 
+                   </div>
+                 <div className='flex flex-col '> 
+                  <button className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base  shadow-md uppercase  hover:bg-white transition duration-200 ease-in'>
+                    Login
+                  </button>
+                  <button  className='rounded-md my-2 text-red bg-white w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base  font-bold shadow-md uppercase hover:bg-red hover:text-yellow transition duration-200 ease-in' onClick={() => setIsLogin(false)}>
+                  New to Shriworks ?
                   </button>
                  </div>
-                 <div className="inline-block border-[1px] justify-center w-20 border-blue-400 border-solid"></div>
-                 <p className='text-black mt-4 text-sm'>Don't have an account?</p>
-                 <p className='text-black mb-4 text-sm font-medium cursor-pointer' onClick={() => setIsLogin(false)}>Create a New Account?</p>
               </div>
+
+                 </div>
         )
       }
       
       const  SignUpForm = () => {
          return(
-            <div className="bg-red text-yellow rounded-2xl shadow-2xl p-10 flex flex-col w-full  items-center max-w-4xl transition duration-1000 ease-in">
-                  <h2 className='p-3 text-3xl uppercase font-bold text-Red'>Shriworks</h2>
-                 <div className="inline-block border-[1px] justify-center w-20 border-yellow border-solid"></div>
-                 <h3 className='text-xl font-semibold text-yellow pt-2'>Create Account!</h3>
-                 <div className='flex space-x-2 m-4 items-center justify-center'>
-                    <div className="socialIcon border-white">
-                    {/* <Facebook className="text-white"/> */}
-                    </div>
-                    <div className="socialIcon border-white">
-                    {/* <GitHub className="text-white"/> */}
-                    </div>
-                    <div className="socialIcon border-white">
-                    {/* <Google className="text-white"/>   */}
-                    </div>
-                 </div>
+           <div className="bg-red bg3  shadow-2xl lg:grid grid-cols-2 w-full mx-auto   transition duration-1000 ease-out">
+                
+                <div className='lg:flex hidden justify-center relative  object-cover'>
+                 <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
+                 {/* <div className='absolute  w-full h-full px-2 bg-[#000]/25 text-xl text-yellow uppercase font-bold'>
+                   <h3 className='text-center'>Welcome to Shriworks</h3>
+                   </div> */}
+                  </div> 
                  {/* Inputs */}
-                 <div className='flex flex-col items-center justify-center mt-2'>
-                 <input type="password" className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Name'></input>
-                  <input type='email' className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Email'></input>
-                  <input type="password" className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Password'></input>
-                  <input type="password" className='rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0' placeholder='Avatar URL'></input>
-                  <button className='rounded-2xl m-4 text-red bg-yellow w-3/5 px-4 py-2 shadow-md  hover:bg-white transition duration-200 ease-in'>
-                    Sign Up
+                 <div className='flex flex-col gap-3 lg:my-5 mx-2 p-2'>
+                  <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Signup to shriworks</h2>
+                   <p className='text-black text-center text-sm'></p>
+                 <div className='flex relative flex-col items-center justify-center'>
+                  <input type='text' className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0' placeholder='Your Name'></input>
+                  <input type='email' className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0' placeholder='Email'></input>
+                  <input type="password" className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0' placeholder='Password'></input>
+                 </div>
+                 <div className='flex flex-col '> 
+                 <button className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base  shadow-md uppercase  hover:bg-white transition duration-200 ease-in'>
+                    Register
+                  </button>
+                  <button  className='rounded-md my-2 text-red bg-white w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base  font-bold shadow-md uppercase hover:bg-red hover:text-yellow transition duration-200 ease-in' onClick={() => setIsLogin(true)}>
+                  Existing user? Log in
                   </button>
                  </div>
-                 <div className="inline-block border-[1px] justify-center w-20 border-yellow border-solid"></div>
-                 <p className='text-yellow mt-4 text-sm'>Already have an account?</p>
-                 <p className='text-yellow mb-4 text-sm font-medium cursor-pointer' onClick={() => setIsLogin(true)}>Sign In to your Account?</p>
               </div>
+
+                 </div>
          )
       }
     
+      
+      
       return (
         <div>
-      <button onClick={openModal}>Open Modal</button>
+      {/* <button onClick={openModal}>Open Modal</button> */}
         <ReactModal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
+        overlayClassName="fixed inset-0 bg-red bg-opacity-70 z-[9999]" 
       >
           {
             isLogin? (

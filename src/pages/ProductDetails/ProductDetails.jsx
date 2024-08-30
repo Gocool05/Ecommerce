@@ -1,29 +1,37 @@
 import React from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
-import Marquee from 'react-fast-marquee';
-import Card from '../../components/Card/Card';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import api from '../../Utils/api';
 import { useQuery } from 'react-query';
 import Slider from 'react-slick';
 import './ProductDetails.css'
 import { Link, useParams } from 'react-router-dom';
 import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import ReactImageZoom from 'react-image-zoom';
 
 const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
-  window.scrollTo(0, 0);
+  
   const ProductId = Id.id;
-  const ProductDetails = async () => {
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [ProductId]);
+
+    const { data: products,isLoading, isError } = useQuery('Products', async () => {
       const res = await api.get(`/api/Products/${ProductId}?populate=*`);
       return res.data.data;
-  }
-    const { data: products,isLoading, isError } = useQuery('Products', ProductDetails);
+  });
     
   console.log(products,'Details of the product')
   
+const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
+    
   const NextArrow = (props) => {
     const { onClick } = props;
     return (
@@ -64,28 +72,78 @@ const ProductDetails = () => {
     );
   };
 
+  const [selectedImage, setSelectedImage] = useState(products?.attributes?.ProductImage?.data[0]?.attributes?.url || '');
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
+  const productImages = products?.attributes?.ProductImage?.data || [];
 
   return (
     <section className="relative flex flex-col  overflow-hidden">
       <div>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
-          <div >
-            <Carousel
-              thumbWidth={100}
-              showStatus={false}
-              swipeable={true}
-              showIndicators={false}
-              className="slider-container1"
-            >
-              {products?.attributes?.ProductImage?.data.map((Images, index)=>
-              <div key={index}>
-                <img src={`${baseUrl}${Images.attributes?.url}`} />
-              </div>
-              )}
 
-            </Carousel>
+        <div className="flex">
+      {/* Thumbnails Carousel */}
+      <div className="w-1/4">
+        {productImages.length > 0 ? (
+          <Carousel
+            responsive={responsive}
+            infinite={true}
+            showDots={true}
+            arrows={true}
+            autoPlay={false}
+            containerClass="carousel-container"
+          >
+            {productImages.map((image, index) => (
+              <div
+                key={index}
+                className="cursor-pointer"
+                onClick={() => setSelectedImage(image.attributes?.url)}
+              >
+                <img
+                  src={`${baseUrl}${image.attributes?.url}`}
+                  alt={`Thumbnail ${index}`}
+                  className="w-full h-auto border border-gray-300 rounded"
+                />
+              </div>
+            ))}
+          </Carousel>
+        ) : (
+          <p>No images available</p>
+        )}
+      </div>
+      
+      {/* Main Image with Zoom Effect */}
+      <div className="w-3/4 flex items-center justify-center">
+        {selectedImage ? (
+          <div className="relative">
+            <ReactImageZoom
+              img={`${baseUrl}${selectedImage}`}
+              zoomScale={2}
+              width={400} // Adjust as needed
+              height={400} // Adjust as needed
+              zoomWidth={800} // Adjust as needed
+            />
           </div>
+        ) : (
+          <p>No image selected</p>
+        )}
+      </div>
+    </div>
 
           <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
             <div className="data sm:w-full max-w-xl">
@@ -119,26 +177,6 @@ const ProductDetails = () => {
                   <span className="font-bold">Dimensions -</span> 7 x 9.5 x 12 Inches
                 </h6>
               </div>
-
-              {/* <div className="w-full pb-8  flex-wrap">
-                <div className="grid  grid-cols-3 gap-3 max-w-sm ">
-                  <button className="bg-[#A67C00] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
-                    Gold
-                  </button>
-                  <button className="bg-[#A8A9AD] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
-                    Silver
-                  </button>
-                  <button className="bg-[#b5a642] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
-                    Brass
-                  </button>
-                  <button className="bg-[#72331d] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
-                    Copper
-                  </button>
-                  <button className="bg-[#CD7F32] text-center py-1.5 px-6 w-full font-semibold text-lg  text-yellow border  flex items-center rounded-full justify-center transition-all duration-300  hover:shadow-sm hover:scale-105">
-                    Panchalogan
-                  </button>
-                </div>
-              </div> */}
 
               <div className="flex  gap-3 py-2">
                 <div className="flex sm:items-center gap-3  ">
@@ -210,7 +248,7 @@ const ProductDetails = () => {
       </div>
 </div>
 
-      <RelatedProducts />
+      <RelatedProducts category={category} id={products?.id} material={products?.attributes?.Material} />
     </section>
   );
 }

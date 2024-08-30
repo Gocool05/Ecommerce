@@ -3,15 +3,15 @@ import React from 'react'
 const About = () => {
   return (
     <>
-      <h1 className='text-center font-bold  text-red text-5xl uppercase py-10 sm:py-20'>
+      <h1 className='text-center font-bold  text-red text-5xl uppercase py-10 sm:py-15'>
         About us
       </h1>
     <section className="overflow-hidden px-4  pb-12  lg:pb-[90px]  ">
         <div className="container mx-auto">
-          <div className="flex flex-wrap items-center justify-between -mx-4">
-            <div className="w-full px-4 lg:w-6/12">
+          <div className="flex gap-10 items-center justify-between -mx-4">
+            <div className="w-full px-4 md:w-1/2">
               <div className="flex items-center -mx-3 sm:-mx-4">
-                <div className="w-full px-3 sm:px-4 xl:w-1/2">
+                <div className="w-full px-3 sm:px-4 ">
                   <div className="py-3 sm:py-4">
                     <img
                       src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp"
@@ -27,7 +27,7 @@ const About = () => {
                     />
                   </div>
                 </div>
-                <div className="w-full px-3 sm:px-4 xl:w-1/2">
+                <div className="w-full px-3 sm:px-4 ">
                   <div className="relative z-10 my-4">
                     <img
                       src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg"
@@ -609,10 +609,10 @@ const About = () => {
               </div>
             </div>
 
-            <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
+            <div className="w-full px-4 md:w-1/2 ">
               <div className="mt-10 lg:mt-0">
                 <h2 className="mb-5 text-3xl font-bold text-red  sm:text-[40px]/[48px]">
-                  Make our customers happy by giving quality products.
+                  Making our customers happy by giving quality products.
                 </h2>
                 <p className="mb-5 text-base text-black dark:text-dark-6">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, facilis dignissimos eveniet corrupti iste animi, labore reiciendis dolor fugiat officia veniam, quasi fugit! Accusantium ipsam cumque animi ab, tempore eveniet?

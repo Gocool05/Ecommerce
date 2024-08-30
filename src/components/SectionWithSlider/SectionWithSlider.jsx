@@ -67,9 +67,9 @@ const Section = SectionData;
     prevArrow: <PrevArrow />,
     responsive: [
       {
-        breakpoint: 1024, // Tablet
+        breakpoint: 1220, // Tablet
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 1,
           rows: 2,
         }

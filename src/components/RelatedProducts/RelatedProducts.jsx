@@ -1,11 +1,40 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import Slider from 'react-slick'
 import api from '../../Utils/api'
 import Card from '../Card/Card'
 
-const RelatedProducts = () => {
+const RelatedProducts = (props) => {
+  const baseUrl = api.defaults.baseURL;
+
+  const data = props;
+  const Id = props.id;
+
+  const { data: productsData } = useQuery('RelatedProducts', async () => {
+    const res = await api.get(`/api/Products?populate=* `);
+    return res.data.data;
+  },
+  );
+
+
+
+  const products = Array.isArray(productsData) ? productsData : [];
+ 
+  const relatedProduct = products.filter(product=>{
+    const {id,material,category} =data;
+    console.log(id,material,category,'ID Material Category')
+
+    if(id!==product.id){
+      const materialMatch = material ? product.attributes.Material === material : true;
+      const categoryMatch = category ? product.attributes.category.data.attributes.CategoryName === category : true;
+      return materialMatch && categoryMatch;
+    }
+  })
+  
+
+  console.log(relatedProduct,'Relatedd Product')
 
     const NextArrow = (props) => {
         const { onClick } = props;
@@ -47,17 +76,10 @@ const RelatedProducts = () => {
         );
       };
 
-    const RelatedProducts = async () => {
-        const res = await api.get('/api/Products?populate=*');
-        return res.data.data;
-      }
-      const { data: RelProducts } = useQuery('RelatedProducts', RelatedProducts);
-      console.log(RelProducts,'The Related product')
-
-
+    
       const settings = {
-        infinite: true,
-        autoplay:true,
+        infinite: false,
+        autoplay:false,
         speed: 500,
         autoplaySpeed: 2500,
         slidesToShow: 5,  // 5 columns
@@ -104,7 +126,7 @@ const RelatedProducts = () => {
       Related Products
     </h2>
     <Slider {...settings}>
-      {RelProducts?.map((product, index) => (
+      {relatedProduct?.map((product, index) => (
     <div  className='p-2' key={index}>
         <Card  product={product} />
     </div>

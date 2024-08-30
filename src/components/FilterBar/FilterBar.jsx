@@ -12,15 +12,7 @@ import PriceRange from "../../Utils/PriceRange/PriceRange";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 
-const FilterBar = () => {
-  const [selectedSort, setSortCategory] = useState("Default");
-  const [selectedCategory, setSelectedCategory] = useState("Default");
-  const [selectedFilters, setSelectedFilters] = useState({
-    material: "",
-    price: "",
-    category: "",
-  });
-
+const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCategory}) => {
 
   const handleMenuItemClick = (category) => {
     setSortCategory(category);

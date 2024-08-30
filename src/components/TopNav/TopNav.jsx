@@ -6,15 +6,37 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Login from '../../pages/Auth/Login';
 
 const TopNav = () => {
 
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  function openModal() {
+    setIsOpen(true);
+  }
+function closeModal() {
+    setIsOpen(false);
+  }
 
   const handleMenuItemClick = (category) => {
     setSelectedCategory(category);
+    if(category!=='All Categories'){
+      navigate(`/shop?category=${encodeURIComponent(category)}`);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchTerm) {
+      navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
+    }
   };
   
   const login = true;
@@ -49,8 +71,9 @@ const TopNav = () => {
                 <input
                   type="text"
                   className="w-[300px] bg-white text-black pl-2 text-base font-semibold outline-0"
-                  placeholder=""
+                  placeholder="Search for the product..."
                   id=""
+                  onChange={(e)=>setSearchTerm(e.target.value)}
                 />
 
                 {/* Dropdown here */}
@@ -158,6 +181,7 @@ const TopNav = () => {
                   type="button"
                   value="Search"
                   className="bg-red p-2 rounded-tr-lg rounded-br-lg text-yellow font-semibold hover:bg-red/85 transition-colors"
+                  onClick={handleSearch}
                 />
               </div>
             </div>
@@ -186,7 +210,7 @@ const TopNav = () => {
 
 
             <Menu as="div" className="relative">
-              <div>
+              <div onClick={openModal} >
                 <Menu.Button className="flex items-center  text-red hover:scale-105 duration-300  rounded-full p-2 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -509,6 +533,7 @@ const TopNav = () => {
               </div>
             </div>
           </div>
+          <Login setIsOpen={setIsOpen} modalIsOpen={modalIsOpen} />
     </>
   );
 }
