@@ -1,11 +1,67 @@
-.carousel-container {
-    display: flex;
-    flex-direction: column;
+
+  .react-multi-carousel-list .react-multi-carousel-item div img{
+height: 150px;
+width: 100px;
+object-fit: cover;
+  }
+
+  .vertical-carousel-container {
+    position: relative;
+    /* height: auto;
+    max-height: 500px; */
+    height: 500px;                
+    overflow: hidden;
   }
   
-  .react-multi-carousel-item {
+  .carousel-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; /* Stack items vertically */
+    height: 100%;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    margin: 20px 0px;
   }
   
+  .carousel-item {
+    flex: 0 0 auto; /* Prevent shrinking */
+    margin-bottom: 10px; /* Space between items */
+  }
+  
+  .custom-arrow {
+    position: absolute;
+    z-index: 1;
+    background: #4e2a1b;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .up-arrow {
+    top: 0;
+    color: #FFEEA9;
+    font-weight: bold;
+    font-size: large;
+  }
+  
+  .down-arrow {
+    bottom: 0;
+    color: #FFEEA9;
+    font-weight: bold;
+    font-size: large;
+  }
+  
+  .js-image-zoom__zoomed-image{
+    margin: 0px -30px;
+  }
+
+
+  @media screen and (max-width:400px) {
+
+    /* .carousel-content {
+      display: flex;
+      flex-direction: row; 
+      overflow:hidden; 
+    } */
+    
+  }

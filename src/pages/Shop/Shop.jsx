@@ -157,4 +157,4 @@ const handlePageChange = (pageNumber) => {
   )
 }
 
-export default Shop
+export default Shop;

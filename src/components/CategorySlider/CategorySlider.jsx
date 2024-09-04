@@ -25,7 +25,6 @@ const CategorySlider = ({CategoryData}) => {
 
 
         <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0} >
-         
          {category?.map((cate,index)=>(
           <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 shadow-md shadow-black bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
             <img className='relative  object-cover' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
@@ -34,6 +33,7 @@ const CategorySlider = ({CategoryData}) => {
          ))}
 
         </Marquee>
+        
         <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
         {category?.map((cate,index)=>(
           <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
@@ -46,4 +46,4 @@ const CategorySlider = ({CategoryData}) => {
   )
 }
 
-export default CategorySlider
+export default CategorySlider;

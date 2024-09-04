@@ -27,7 +27,7 @@ console.log(cartItems,'cart items')
                 <div class="w-full overflow-hidden">
                   <h3 class="text-base text-yellow font-bold uppercase truncate">{cart.name}</h3>
                   <ul class="text-xs text-white space-y-2 mt-2">
-                    <li class="flex flex-wrap gap-4">Material <span class="ml-auto">{cart.material}</span></li>
+                    {/* <li class="flex flex-wrap gap-4">Material <span class="ml-auto">{cart.Material}</span></li> */}
                     <li class="flex flex-wrap gap-4">Quantity <span class="ml-auto">{cart.quantity}</span></li>
                     <li class="flex flex-wrap gap-4">Total Price <span class="ml-auto">&#8377; {cart.totalPrice}</span></li>
                   </ul>

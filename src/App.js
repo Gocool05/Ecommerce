@@ -15,6 +15,7 @@ import Shop from './pages/Shop/Shop';
 import Login from './pages/Auth/Login.jsx'
 import { ToastContainer } from 'react-toastify';
 import RelatedProducts from './components/RelatedProducts/RelatedProducts';
+import Blog from './pages/Blog/Blog';
 const client = new QueryClient();
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/contact" element={< ContactUs/>} />
           <Route path="/cart" element={< AddToCart/>} />
           <Route path="/checkout" element={< Checkout/>} />
+          <Route path="/blog" element={< Blog/>} />
           <Route path="/auth" element={< Login/>} />
         </Routes>
         <Footer />

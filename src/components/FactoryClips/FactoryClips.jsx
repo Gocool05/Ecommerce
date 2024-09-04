@@ -31,7 +31,7 @@ const FactoryClips = () => {
   {items[0].type === 'image' ? (
     <img src={items[0].url} alt="item1" className="w-full transition-all duration-500 hover:scale-95 overflow-hidden  h-full object-cover" />
   ) : (
-    <video src={items[0].url} controls className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
+    <video src={items[0].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
   )}
 </div>
   )}
@@ -40,7 +40,7 @@ const FactoryClips = () => {
       {items[1].type === 'image' ? (
         <img src={items[1].url} alt="item2" className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
       ) : (
-        <video src={items[1].url} controls className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
+        <video src={items[1].url} loop autoPlay muted className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
       )}
     </div>
   )}
@@ -52,7 +52,7 @@ const FactoryClips = () => {
     {items[2].type === 'image' ? (
       <img src={items[2].url} alt="item3" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
     ) : (
-      <video src={items[2].url} controls className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
+      <video src={items[2].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
     )}
   </div>
 )}
@@ -64,7 +64,7 @@ const FactoryClips = () => {
       {items[3].type === 'image' ? (
         <img src={items[3].url} alt="item4" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       ) : (
-        <video src={items[3].url} controls className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
+        <video src={items[3].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       )}
     </div>
   )}
@@ -73,7 +73,7 @@ const FactoryClips = () => {
       {items[4].type === 'image' ? (
         <img src={items[4].url} alt="item5" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       ) : (
-        <video src={items[4].url} controls className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
+        <video src={items[4].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
       )}
     </div>
   )}

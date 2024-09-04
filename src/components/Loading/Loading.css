@@ -8,14 +8,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 20px;
     z-index: 9999; /* Ensure it covers everything */
   }
   
 
   /* From Uiverse.io by alexruix */ 
 .loader {
-    width: 112px;
-    height: 112px;
   }
   
   .box1,

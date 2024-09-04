@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -11,13 +11,18 @@ import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import ReactImageZoom from 'react-image-zoom';
+import { useDispatch } from 'react-redux';
+import { Bounce, toast } from 'react-toastify';
+import { addItem } from '../../Slice/cartSlice';
 
 const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
-  
   const ProductId = Id.id;
-  
+  const scrollRef = useRef(null);
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] =useState(1);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [ProductId]);
@@ -26,69 +31,67 @@ const ProductDetails = () => {
       const res = await api.get(`/api/Products/${ProductId}?populate=*`);
       return res.data.data;
   });
-    
+  
   console.log(products,'Details of the product')
   
 const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
-    
-  const NextArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <div
-        className='NextArrows'
-        onClick={onClick}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="#FFEEA9" // Icon color
-          width="24px"
-          height="24px"
-        >
-          <path d="M10 6l6 6-6 6V6z" />
-        </svg>
-      </div>
-    );
-  };
-
-  const PrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <div
-     className='PrevArrow'
-        onClick={onClick}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="#FFEEA9" // Icon color
-          width="24px"
-          height="24px"
-        >
-          <path d="M14 18l-6-6 6-6v12z" />
-        </svg>
-      </div>
-    );
-  };
-
   const [selectedImage, setSelectedImage] = useState(products?.attributes?.ProductImage?.data[0]?.attributes?.url || '');
+
+  const productImages = products?.attributes?.ProductImage?.data || [];
+
+  useEffect(() => {
+    if (productImages.length > 0) {
+      setSelectedImage(productImages[0]?.attributes?.url);
+    }
+  }, [productImages]);
+
+
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 1,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2,
+      items: 1,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
     },
   };
+  
 
-  const productImages = products?.attributes?.ProductImage?.data || [];
+
+  const handleScroll = (direction) => {
+    const scrollAmount = direction === 'up' ? -scrollRef.current.clientHeight : scrollRef.current.clientHeight;
+    scrollRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+  };
+
+
+  const addToCartHandler = () =>{
+    dispatch(
+      addItem({
+        id: products?.id,
+        name: products.attributes.ProductName,
+        price: products.attributes.NewPrice,
+        image: `${baseUrl}${products?.attributes.ProductImage.data[0]?.attributes.url}`,
+        quantity: Number(quantity),
+      })
+    );
+    toast.success('Product added to cart!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
+  }
 
   return (
     <section className="relative flex flex-col  overflow-hidden">
@@ -96,54 +99,53 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
 
-        <div className="flex">
-      {/* Thumbnails Carousel */}
-      <div className="w-1/4">
-        {productImages.length > 0 ? (
-          <Carousel
-            responsive={responsive}
-            infinite={true}
-            showDots={true}
-            arrows={true}
-            autoPlay={false}
-            containerClass="carousel-container"
-          >
-            {productImages.map((image, index) => (
-              <div
-                key={index}
-                className="cursor-pointer"
-                onClick={() => setSelectedImage(image.attributes?.url)}
-              >
-                <img
-                  src={`${baseUrl}${image.attributes?.url}`}
-                  alt={`Thumbnail ${index}`}
-                  className="w-full h-auto border border-gray-300 rounded"
-                />
-              </div>
-            ))}
-          </Carousel>
-        ) : (
-          <p>No images available</p>
-        )}
+        <div className="flex flex-col lg:flex-row gap-2 items-center justify-center">
+
+
+  {/* Thumbnails Carousel */}
+  <div className="w-full lg:w-1/4 lg:mb-0 ">
+    {productImages.length > 0 ? (
+        <div className="vertical-carousel-container">
+        <button className="custom-arrow up-arrow" onClick={() => handleScroll('up')}>↑</button>
+        <div className="carousel-content" ref={scrollRef}>
+          {productImages.map((image, index) => (
+            <div
+              key={index}
+              className="carousel-item cursor-pointer"
+              onClick={() => setSelectedImage(image.attributes?.url)}
+            >
+              <img
+                src={`${baseUrl}${image.attributes?.url}`}
+                alt={`Thumbnail ${index}`}
+                className="w-full h-auto border border-gray-300 rounded"
+              />
+            </div>
+          ))}
+        </div>
+        <button className="custom-arrow down-arrow" onClick={() => handleScroll('down')}>↓</button>
       </div>
-      
-      {/* Main Image with Zoom Effect */}
-      <div className="w-3/4 flex items-center justify-center">
-        {selectedImage ? (
-          <div className="relative">
-            <ReactImageZoom
-              img={`${baseUrl}${selectedImage}`}
-              zoomScale={2}
-              width={400} // Adjust as needed
-              height={400} // Adjust as needed
-              zoomWidth={800} // Adjust as needed
-            />
-          </div>
-        ) : (
-          <p>No image selected</p>
-        )}
+    ) : (
+      <p>No images available</p>
+    )}
+  </div>
+
+  
+  {/* Main Image with Zoom Effect */}
+  <div className="w-full lg:w-3/4 flex items-center justify-center">
+    {selectedImage ? (
+      <div className="relative h-4/4 cursor-zoom-in  w-4/4 z-50 object-cover">
+        <ReactImageZoom
+          img={`${baseUrl}${selectedImage}`}
+          zoomLensStyle={`opacity:1,background-color:#000`}
+        />
       </div>
-    </div>
+    ) : (
+      <p>No image selected</p>
+    )}
+  </div>
+
+</div>
+
 
           <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
             <div className="data sm:w-full max-w-xl">
@@ -183,15 +185,17 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   <select
                     aria-label="Select quantity"
                     class="py-2 px-3 bg-white rounded-md text-black mr-6 focus:outline-none "
+                    onChange={(e) => setQuantity(e.target.value)}
+                    value={quantity}
                   >
-                    <option>01</option>
-                    <option>02</option>
-                    <option>03</option>
-                    <option>04</option>
-                    <option>05</option>
+                     {Array.from({ length: 9 }, (_, i) => (
+                      <option key={i} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
                   </select>
                 </div>
-                <button className="group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 ">
+                <button className="group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={addToCartHandler}>
                   <svg
                     className="stroke-yellow font-bold "
                     width="24"
