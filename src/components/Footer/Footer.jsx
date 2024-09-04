@@ -19,7 +19,7 @@ const Footer = () => {
         </p>
       </div>
 
-      <div className='flex sm:justify-center flex-col  '>
+      <div className='flex  flex-col  '>
         <h6
           className="mb-4 flex  sm:justify-center font-semibold uppercase md:justify-start">
           Insights
