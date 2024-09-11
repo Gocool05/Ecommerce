@@ -1,0 +1,24 @@
+
+
+
+
+  
+  .cateSlider .slick-track {
+    display: flex !important;
+    gap: 35px; 
+  }
+
+
+@media screen and (max-width: 450px) {
+    .PrevArrow{
+        left: -5px;
+        padding: 5px;
+    } 
+    .NextArrows{
+        right: -5px;
+        padding: 5px;
+    }
+    .cateSlider .slick-track {
+        gap: 5px; 
+      }
+}

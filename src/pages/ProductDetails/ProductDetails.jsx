@@ -68,9 +68,26 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
     const scrollAmount = direction === 'up' ? -scrollRef.current.clientHeight : scrollRef.current.clientHeight;
     scrollRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   };
-
+  const sendCartToStrapi = async () => {
+    try {
+      const response = await api.post('/api/carts', {
+        data: {
+          product: {
+            connect: [products?.id],
+          },
+          user:9,
+          Quantity:quantity
+        },
+      });
+    } catch (error) {
+      // Handle error
+      toast.error('Error submitting cart to Strapi');
+      console.error('Error:', error);
+    }
+  };
 
   const addToCartHandler = () =>{
+    sendCartToStrapi()
     dispatch(
       addItem({
         id: products?.id,
@@ -99,11 +116,11 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
 
-        <div className="flex flex-col lg:flex-row gap-2 items-center justify-center">
+        <div className="flex flex-row  gap-2 items-center justify-center">
 
 
   {/* Thumbnails Carousel */}
-  <div className="w-full lg:w-1/4 lg:mb-0 ">
+  <div className=" w-1/4 lg:mb-0 ">
     {productImages.length > 0 ? (
         <div className="vertical-carousel-container">
         <button className="custom-arrow up-arrow" onClick={() => handleScroll('up')}>↑</button>
@@ -131,7 +148,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
   
   {/* Main Image with Zoom Effect */}
-  <div className="w-full lg:w-3/4 flex items-center justify-center">
+  <div className=" w-3/4 flex items-center justify-center">
     {selectedImage ? (
       <div className="relative h-4/4 cursor-zoom-in  w-4/4 z-50 object-cover">
         <ReactImageZoom

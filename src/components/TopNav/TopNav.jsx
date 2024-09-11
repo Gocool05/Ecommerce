@@ -8,8 +8,11 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Login from '../../pages/Auth/Login';
 
+const loggedIn = localStorage.getItem('loggedIn');
+
 const TopNav = () => {
 
+  console.log(loggedIn,'logged in successfully')
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,8 +75,9 @@ function closeModal() {
                   type="text"
                   className="w-[300px] bg-white text-black pl-2 text-base font-semibold outline-0"
                   placeholder="Search for the product..."
-                  id=""
+                  id="search-product"
                   onChange={(e)=>setSearchTerm(e.target.value)}
+                  autoComplete="off"
                 />
 
                 {/* Dropdown here */}
@@ -188,7 +192,7 @@ function closeModal() {
           </div>
 
           {/* Right section for the search input, cart, and profile icon */}
-          <div className="relative flex items-center space-x-4">
+          <div className="relative flex items-center space-x-1 sm:space-x-4">
             <Link to={'/cart'}  className="text-red relative hover:-translate-y-1 transition-all duration-300 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +215,7 @@ function closeModal() {
 
             <Menu as="div" className="relative">
               <div onClick={openModal} >
-                <Menu.Button className="flex items-center  text-red hover:scale-105 duration-300  rounded-full p-2 ">
+                <Menu.Button className="flex items-center  text-red hover:scale-105 duration-300 outline-none  rounded-full p-2 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -226,7 +230,7 @@ function closeModal() {
                       d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                     />
                   </svg>
-                 {login && <h4 className='flex text-[10px] sm:text-[12px] font-bold flex-col gap-0'>Hello?<span>Sign In</span></h4>} 
+                 {login && <h4 className='sm:flex hidden text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0'>Hello<span className='text-[10px] sm:text-[14px]  font-[900]'>Log In?</span></h4>} 
                 </Menu.Button>
               </div>
 

@@ -39,9 +39,9 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
     <>
     <section className="bg-red m-2 p-4">
       <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-10 items-center">
-        <div className="flex gap-6 ">
-          <h3 className="text-yellow  font-bold">Filter :</h3>
-          <div className="flex gap-6 ">
+        <div className="flex gap-2 sm:gap-6 ">
+          <h3 className="text-yellow flex-wrap font-bold">Filter :</h3>
+          <div className="flex gap-2 sm:gap-6 ">
           <Popover className="relative text-yellow outline-none border-none">
           {({ open, close }) => (
             <>

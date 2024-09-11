@@ -3,14 +3,70 @@ import Marquee from 'react-fast-marquee'
 import { useQuery } from 'react-query'
 import api from '../../Utils/api'
 import './CategorySlider.css'
+import Slider from 'react-slick'; 
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const CategorySlider = ({CategoryData}) => {
   
   const category = CategoryData?.attributes?.Category;
-  // console.log(category,'Categorysliders')
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = React.useState('All Categories');
 
   const baseUrl = api.defaults.baseURL;
+
+
+  const handleMenuItemClick = (category) => {
+    setSelectedCategory(category);
+    if(category!=='All Categories'){
+      navigate(`/shop?category=${encodeURIComponent(category)}`);
+    }
+  };
+
+
+  const settings = {
+    infinite: true,
+    autoplay:true,
+    speed: 500,
+    autoplaySpeed: 1000,
+    slidesToShow: 5,  // 5 columns
+    slidesToScroll: 1,
+    swipeToSlide:true,
+    arrows:false,
+    easing: 'easeOut',
+    rows: 1,   
+    centerMode:true,
+    responsive: [
+      {
+        breakpoint: 1220, // Tablet
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          rows: 1,
+        }
+      },
+      {
+        breakpoint: 768, // Mobile
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          centerMode:false,
+          rows: 1, // Reduce to 1 row for smaller screens
+        }
+      },
+      {
+        breakpoint: 480, // Small Mobile
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          rows: 1,
+          centerMode:false,
+        }
+      }
+    ]
+  };
+
+ 
 
   return (
     <div className=' py-10'>
@@ -24,19 +80,18 @@ const CategorySlider = ({CategoryData}) => {
       </h2>
 
 
-        <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0} >
-         {category?.map((cate,index)=>(
-          <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 shadow-md shadow-black bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
-            <img className='relative  object-cover' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
-             <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.CategoryName}</h1>
-          </div>
-         ))}
-
-        </Marquee>
+      <Slider className='cateSlider mt-10 ' {...settings}>
+          {category?.map((cate,index) => (
+           <div key={index} className='h-48 w-48 mx-4 relative sm:h-60 sm:w-60 flex justify-center   border-red border-4 bg-transparent rounded '  onClick={() => handleMenuItemClick(`${cate?.CategoryName}`)}>
+           <img className=' object-cover h-full w-full ' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
+            <h1 className='absolute font-bold bottom-0 sm:mx-[15%]  text-center  w-40  m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-[12px] sm:text-sm'>{cate?.CategoryName}</h1>
+         </div>
+      ))}
+      </Slider>
         
         <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
         {category?.map((cate,index)=>(
-          <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded '>
+          <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 bg-yellow  mt-10 mx-4 flex justify-center  rounded ' onClick={() => handleMenuItemClick(`${cate?.CategoryName}`)}>
             <img className='relative  object-cover' src={`${baseUrl}${cate?.Image?.data.attributes.url}`} alt={cate?.CategoryName}/>
              <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.CategoryName}</h1>
           </div>

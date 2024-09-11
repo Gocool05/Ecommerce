@@ -113,9 +113,9 @@ const handlePageChange = (pageNumber) => {
     />
     {sortedProducts.length!==0?(
       <>
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 p-3 lg:px-10'>
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 p-3 lg:px-10'>
     {currentProducts?.map((product, index) => (
-        <div className='p-2' key={index}>
+        <div className='sm:p-2' key={index}>
             <Card  product={product} />
         </div>
           ))}
@@ -150,7 +150,8 @@ const handlePageChange = (pageNumber) => {
        
     ):(
       <div className="text-center p-16">
-        <h2>No products found matching your filters</h2>
+        
+        <h2 className='text-red font-bold text-2xl'>No products found matching your filters</h2>
       </div> 
     )}
  </section>

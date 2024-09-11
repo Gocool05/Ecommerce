@@ -14,8 +14,30 @@ const Card = ({product}) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+  const sendCartToStrapi = async () => {
+    try {
+      const response = await api.post('/api/carts', {
+        data: {
+          product: {
+            connect: [product.id],
+          },
+          user:9,
+          Quantity:1
+        },
+      });
+    } catch (error) {
+      // Handle error
+      toast.error('Error submitting cart to Strapi');
+      console.error('Error:', error);
+    }
+  };
+
+
   const addToCartHandler = () =>{
+    sendCartToStrapi();
     dispatch(
+
       addItem({
         id: product.id,
         name: product.attributes.ProductName,
@@ -23,6 +45,7 @@ const Card = ({product}) => {
         image: `${baseUrl}${product?.attributes.ProductImage.data[0]?.attributes.url}`,
         quantity: 1,
       })
+
     );
 
     toast.success('Product added to cart!', {
@@ -49,7 +72,7 @@ const Card = ({product}) => {
   return (
 <>
 <div className="max-w-xs relative sm:max-w-sm bg-Pattern bg-cover shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-105  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
-  {product?.attributes.Offer && <span className="text-yellow   py-1 p-3 top-3  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">{product?.attributes.Offer}% Off</span>}
+  {product?.attributes.Offer && <span className="text-yellow   py-1 px-3 top-3  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">{product?.attributes.Offer}% Off</span>}
   {/* <Link to={`product/`+product.id}> */}
   <div className="image-container" onClick={handleProductClick}>
     <img
@@ -66,7 +89,7 @@ const Card = ({product}) => {
     />
   </div>
   {/* </Link> */}
-  <div className="p-2 lg:p-4 h-44 sm:h-52 flex flex-col justify-between" onClick={handleProductClick}>
+  <div className="p-2 lg:p-4 h-44 sm:h-52 flex flex-col justify-between" >
     {/* <Link to={`product/`+product.id}> */}
     <h3 className="text-black  shrink-0 flex text-[13px] s:text-sm font-bold">{product?.attributes.ProductName}</h3>
     <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product?.attributes.SubTitle}</h4>

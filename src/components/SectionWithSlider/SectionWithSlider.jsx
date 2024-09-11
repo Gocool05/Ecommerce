@@ -106,7 +106,7 @@ const Section = SectionData;
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-      <div className='sm:px-16 pt-10 '>
+      <div className='sm:px-16 pt-10 gap-4 '>
       <Slider {...settings}>
           {section?.products?.data?.map((product, index) => (
             <div  className='p-2' key={index}>
