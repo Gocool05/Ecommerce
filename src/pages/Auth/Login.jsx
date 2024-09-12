@@ -135,6 +135,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     }
   };
   
+    localStorage.setItem('loggedIn',loggedIn);
 
   const handleForgotPassword = () => {
     alert('Password reset link has been sent to your email');

@@ -4,8 +4,16 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { Fragment } from 'react';
 import TopNav from '../TopNav/TopNav';
 import { Link } from 'react-router-dom';
-
+import api from '../../Utils/api';
+import { useQuery } from 'react-query';
+const baseUrl = api.defaults.baseURL;
 const Navbar = () => {
+
+
+  const { data: Category } = useQuery('NavCategory', async () => {
+    const res = await api.get(`api/categories?populate=*`);
+    return res.data.data;
+  });
 
   return (
     <>
@@ -26,15 +34,34 @@ const Navbar = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
               </PopoverButton>
-              <PopoverPanel anchor="bottom" className="flex relative flex-col mt-2 z-50   text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg-Pattern bg-cover   rounded-xl">
+
+               
+              <PopoverPanel anchor="bottom"  className="flex relative flex-col mt-2 z-50   text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg-Pattern bg-cover   rounded-xl">
                 <div className='flex justify-center p-3 items-center bg-black w-full'> <h3 className='text-yellow uppercase '>All Categories</h3></div>
                 <div className='grid grid-cols-5 m-4'>
-                <Link className='relative  hover:scale-110 transition-all duration-200 px-4 py-2  text-black' onClick={close} to={`/shop?category=${encodeURIComponent('Idols')}`}><div className='flex flex-col justify-center items-center gap-2'><img className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover ' src='https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg'/> <span className='font-bold '>Idols</span></div> </Link>
-                <Link className='relative  hover:scale-110 transition-all duration-200 px-4 py-2  text-black' onClick={close} to={`/shop?category=${encodeURIComponent('Vaahanam')}`}><div className='flex flex-col justify-center items-center gap-2'><img className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover ' src='https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp'/> <span className='font-bold '>Vaahanam</span></div></Link>
-                <Link className='relative  hover:scale-110 transition-all duration-200 px-4 py-2  text-black' onClick={close} to={`/shop?category=${encodeURIComponent('Radham')}`}><div className='flex flex-col justify-center items-center gap-2'><img className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover ' src='https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg'/> <span className='font-bold '>Radham</span></div></Link>
-                <Link className='relative  hover:scale-110 transition-all duration-200 px-4 py-2  text-black' onClick={close} to={`/shop?category=${encodeURIComponent('Greedam')}`}><div className='flex flex-col justify-center items-center gap-2'><img className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover ' src='https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp'/> <span className='font-bold '>Greedam</span></div></Link>
-                <Link className='relative  hover:scale-110 transition-all duration-200 px-4 py-2  text-black' onClick={close}  to={`/shop?category=${encodeURIComponent('Kalasam')}`}><div className='flex flex-col justify-center items-center gap-2'><img className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover ' src='https://api.shriworkscraft.com/uploads/Taajoo_df1916308c.png'/> <span className='font-bold '>Kalasam</span></div></Link>
-                </div>
+                  
+                {Array.isArray(Category) ? (
+                  Category?.map((category, index) => (
+                    <Link
+                      key={index}
+                      className='relative hover:scale-110 transition-all duration-200 px-4 py-2 text-black'
+                      onClick={close}
+                      to={`/shop?category=${encodeURIComponent(category?.attributes?.CategoryName)}`}
+                    >
+                      <div className='flex flex-col justify-center items-center gap-2'>
+                        <img
+                          className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover'
+                          src={`${baseUrl}${category?.attributes?.Image?.data.attributes.url}`}
+                          alt={category?.attributes?.CategoryName}
+                        />
+                        <span className='font-bold'>{category?.attributes?.CategoryName}</span>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p>No categories available</p>
+                )}
+              </div>
               </PopoverPanel>
               </>
               )}

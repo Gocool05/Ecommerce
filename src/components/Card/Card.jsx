@@ -35,7 +35,7 @@ const Card = ({product}) => {
 
 
   const addToCartHandler = () =>{
-    sendCartToStrapi();
+    // sendCartToStrapi();
     dispatch(
 
       addItem({

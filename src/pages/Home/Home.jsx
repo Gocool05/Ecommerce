@@ -30,7 +30,7 @@ const Home = () => {
 
   // Fetch Category Data
   const { data: CategoryData } = useQuery('Home-Category', async () => {
-    const res = await api.get(`api/pages/1?populate[0]=Category&populate[1]=Category.Image`);
+    const res = await api.get(`api/pages/1?populate[0]=Category&populate[1]=Category.category&populate[2]=Category.category.Image`);
     return res.data.data;
   });
 

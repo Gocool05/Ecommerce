@@ -38,7 +38,7 @@ const Checkout = () => {
     if (!zip) tempErrors.zip = "Zip Code is required";
     
     setErrors(tempErrors);
-    // if(tempErrors)  toast.error('Fill All The Required Information')
+    // if(Object.keys(tempErrors).length >= 1)  toast.error('Fill All The Required Information')
     return Object.keys(tempErrors).length === 0;  // If no errors, return true
   };
 
