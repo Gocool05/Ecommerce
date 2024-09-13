@@ -39,7 +39,12 @@ const Home = () => {
     const res = await api.get(`api/pages/1?populate[0]=Section&populate[1]=Section.products&populate[2]=Section.products.ProductImage`);
     return res.data.data;
   });
-  console.log(SectionData,'SectionData')
+
+    // Fetch FactoryClips Data
+  const {data:Media} = useQuery('factoryClips', async()=>{
+    const res = await api.get('/api/pages/1?populate[0]=FactoryClips&populate[1]=FactoryClips.Media')
+    return res.data.data;
+  })
 
   if (isLoading) return <Loading/>;
   if (isError) return <TechError/>;
@@ -53,7 +58,7 @@ const Home = () => {
       <SectionWithSlider
       SectionData={SectionData?.attributes?.Section}
       />
-      <FactoryClips/>
+      <FactoryClips Media={Media?.attributes?.FactoryClips}/>
     </div>
     </>
     

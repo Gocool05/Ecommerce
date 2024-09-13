@@ -1,6 +1,16 @@
 import React from "react";
-
+import { useQuery } from "react-query";
+import api from "../../Utils/api";
+const baseUrl = api.defaults.baseURL;
 const Blog = () => {
+
+const getBlog = async() =>{
+  const res = await api.get('/api/blogs?populate=*')
+  return res.data.data;
+}
+
+const {data:blogData} = useQuery('GetBlog', getBlog);
+
   return (
     <>
       <section className="bg-Pattern bg-cover p-4 md:p-10 ">
@@ -17,41 +27,19 @@ const Blog = () => {
               </div>
             </div>
           </div>
+          <div  className="-mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  flex-wrap">
+          {blogData?.map((blog,index)=>(
+            <div key={index}>
+              <BlogCard
+                CardTitle={blog?.attributes?.Title}
+                CardDescription={blog?.attributes?.Description || []}
+                image={`${baseUrl}/${blog?.attributes?.Image?.data.attributes.url}`}
+              />
+              </div>
+              ))}
 
-          <div className="-mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  flex-wrap">
-            <BlogCard
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge"
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp"
-            />
-            <BlogCard
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge"
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/Taajoo_df1916308c.png"
-            />
-            <BlogCard
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge"
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/website_banner_11_e95e90137e.webp"
-            />
-            <BlogCard
-              date="Dec 22, 2023"
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge"
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/Taajoo_df1916308c.png"
-            />
-            <BlogCard
-              date="Dec 22, 2023"
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge "
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp"
-            />
-            <BlogCard
-              CardTitle="Shivan Idols Bronze Statue- hindu goddess of knowledge"
-              CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-              image="https://api.shriworkscraft.com/uploads/website_banner_11_e95e90137e.webp"
-            />
-          </div>
+            </div>
+
         </div>
       </section>
     </>
@@ -61,6 +49,15 @@ const Blog = () => {
 export default Blog;
 
 const BlogCard = ({ image, CardTitle, CardDescription }) => {
+
+  const extractText = (description) => {
+    return description
+      ?.map((paragraph) =>
+        paragraph?.children?.map((child) => child?.text).join(" ")
+      )
+      .join("\n"); // Join paragraphs with a newline or space
+  };
+
   return (
     <>
       <div className="w-full p-2 mx-2 ">
@@ -77,7 +74,7 @@ const BlogCard = ({ image, CardTitle, CardDescription }) => {
           </div>
           <div className="w-2/4">
             <p className=" bg-black rounded-md h-[26rem] bg3 text-yellow  shadow-md  p-2 overflow-y-auto" >
-              {CardDescription}
+              {extractText(CardDescription)}
             </p>
           </div>
         </div>

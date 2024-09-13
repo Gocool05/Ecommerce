@@ -10,9 +10,6 @@ import { Link } from 'react-router-dom';
 
 const SectionWithSlider = ({ SectionData }) => {
 const Section = SectionData;
- console.log(Section,'Sectrion data')
-
-
   const NextArrow = (props) => {
     const { onClick } = props;
     return (

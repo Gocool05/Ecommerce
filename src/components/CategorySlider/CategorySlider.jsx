@@ -10,7 +10,6 @@ import { Link, useNavigate } from 'react-router-dom'
 const CategorySlider = ({CategoryData}) => {
   
   const category = CategoryData?.attributes?.Category;
-  console.log(category,'HOme Category')
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = React.useState('All Categories');
 

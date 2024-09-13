@@ -29,7 +29,7 @@ const TopNav = () => {
     );
     return res.data.data;
   });
-  console.log(Cate,'categrory data')
+
 
   function openModal() {
     setIsOpen(true);
@@ -234,14 +234,14 @@ const TopNav = () => {
                     <Menu.Items className="absolute right-0 mt-4 w-48 bg-yellow border-solid border-t-0  border-b-4 border-red border-2 rounded-md shadow-lg z-20">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <Link
+                          to={'/profile'}
                             className={`block px-4 py-2 font-bold text-md  text-red ${
                               active ? "bg-red text-yellow" : ""
                             }`}
                           >
                             Profile
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item>
@@ -351,10 +351,10 @@ const TopNav = () => {
                               className="hover:text-black "
                               key={index}
                               onClick={() =>
-                                handleMenuItemClick(`${category?.CategoryName}`)
+                                handleMenuItemClick(`${category?.attributes?.CategoryName}`)
                               }
                             >
-                              {category?.CategoryName}
+                              {category?.attributes?.CategoryName}
                             </a>
                           ))
                         ) : (
@@ -471,10 +471,10 @@ const TopNav = () => {
                                 : ""
                             }`}
                             onClick={() =>
-                              handleMenuItemClick(`${category?.CategoryName}`)
+                              handleMenuItemClick(`${category?.attributes?.CategoryName}`)
                             }
                           >
-                            {category?.CategoryName}
+                            {category?.attributes?.CategoryName}
                           </a>
                         )}
                       </MenuItem>

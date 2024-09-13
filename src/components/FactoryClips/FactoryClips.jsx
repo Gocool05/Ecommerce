@@ -1,15 +1,11 @@
 import React from 'react'
+import Marquee from 'react-fast-marquee'
+import Slider from 'react-slick';
+import api from '../../Utils/api';
 import './FactoryClips.css'
-const FactoryClips = () => {
- 
+const baseUrl = api.defaults.baseURL;
+const FactoryClips = ({Media}) => {
 
-    const items = [
-        { type: 'image', url: 'https://api.moviemads.com/uploads/empty_image_dd70f20899.jpg' },
-        { type: 'video', url: 'https://api.moviemads.com/uploads/Trophy_09829cd62f.mp4' },
-        { type: 'image', url: 'https://api.moviemads.com/uploads/empty_image_dd70f20899.jpg' },
-        { type: 'video', url: 'https://api.moviemads.com/uploads/Trophy_09829cd62f.mp4' },
-        { type: 'image', url: 'https://api.moviemads.com/uploads/empty_image_dd70f20899.jpg' },
-      ];
 
 
   return (
@@ -23,62 +19,35 @@ const FactoryClips = () => {
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-<div className="grid grid-cols-1 bg-red bg1 sm:rounded-xl sm:grid-cols-3 md:mx-5 lg:mx-40 p-15 sm:m-0 gap-2 p-2">
-{/* First Column */}
-<div className="grid grid-rows-2  gap-2">
-  {items[0] && (
-    <div className="h-72 relative group ">
-  {items[0].type === 'image' ? (
-    <img src={items[0].url} alt="item1" className="w-full transition-all duration-500 hover:scale-95 overflow-hidden  h-full object-cover" />
-  ) : (
-    <video src={items[0].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-  )}
-</div>
-  )}
-  {items[1] && (
-    <div className="bg-red h-72">
-      {items[1].type === 'image' ? (
-        <img src={items[1].url} alt="item2" className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
-      ) : (
-        <video src={items[1].url} loop autoPlay muted className="w-full transition-all duration-500 hover:scale-95 overflow-hidden h-full object-cover" />
-      )}
+    <div className=' mb-10'>
+      <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
+      {Media.map((item, index) => (
+        <div className={`md:h-56 h-44  relative`}>
+          {item.Type ==='Image' && 
+          <a href={`${baseUrl}/${item.Media.data.attributes.url}`} target={'_blank'}>
+          <img src={`${baseUrl}/${item.Media.data.attributes.url}`} alt="item" className="mx-2 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
+        </a>
+          }
+            
+        </div>
+      ))}
+    </Marquee>
     </div>
-  )}
-</div>
-
-{/* Second Column */}
-{items[2] && (
-  <div className="bg-red h-auto">
-    {items[2].type === 'image' ? (
-      <img src={items[2].url} alt="item3" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-    ) : (
-      <video src={items[2].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-    )}
-  </div>
-)}
-
-{/* Third Column */}
-<div className="grid grid-rows-2 gap-2">
-  {items[3] && (
-    <div className="bg-red h-72">
-      {items[3].type === 'image' ? (
-        <img src={items[3].url} alt="item4" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-      ) : (
-        <video src={items[3].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-      )}
+    <div className=''>
+      <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0}>
+      {Media.map((item, index) => (
+        <div className={`h-72 relative  gap-5`}>
+             {item.Type ==='Video' && 
+          <a href={`${baseUrl}/${item.Media.data.attributes.url}`} target={'_blank'}>
+            <video loop autoPlay muted className="mx-2 md:mx-5 md:w-96 w-72 transition-all border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden object-cover">
+              <source src={`${baseUrl}/${item.Media.data.attributes.url}`} type="video/mp4" />
+            </video>
+            </a>
+            }
+        </div>
+      ))}
+    </Marquee>
     </div>
-  )}
-  {items[4] && (
-    <div className="bg-red h-72 ">
-      {items[4].type === 'image' ? (
-        <img src={items[4].url} alt="item5" className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-      ) : (
-        <video src={items[4].url} loop autoPlay muted className="w-full h-full transition-all duration-500 hover:scale-95 overflow-hidden object-cover" />
-      )}
-    </div>
-  )}
-</div>
-</div>
 
 </div>
   )

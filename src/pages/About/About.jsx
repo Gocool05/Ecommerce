@@ -6,10 +6,10 @@ const About = () => {
       <h1 className='text-center font-bold  text-red text-5xl uppercase py-10 sm:py-15'>
         About us
       </h1>
-    <section className="overflow-hidden px-4  pb-12  lg:pb-[90px]  ">
+    <section className="overflow-hidden px-10 lg:px-4   pb-12  lg:pb-[90px]  ">
         <div className="container mx-auto">
-          <div className="flex gap-10 items-center justify-between -mx-4">
-            <div className="w-full px-4 md:w-1/2">
+          <div className="flex gap-10 flex-col lg:flex-row items-center justify-between -mx-4">
+            <div className="w-full px-4 lg:w-1/2">
               <div className="flex items-center -mx-3 sm:-mx-4">
                 <div className="w-full px-3 sm:px-4 ">
                   <div className="py-3 sm:py-4">
@@ -609,7 +609,7 @@ const About = () => {
               </div>
             </div>
 
-            <div className="w-full px-4 md:w-1/2 ">
+            <div className="w-full px-4 lg:w-1/2 ">
               <div className="mt-10 lg:mt-0">
                 <h2 className="mb-5 text-3xl font-bold text-red  sm:text-[40px]/[48px]">
                   Making our customers happy by giving quality products.
@@ -622,10 +622,11 @@ const About = () => {
                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, quas. Excepturi dolorem, dolores quod minus debitis pariatur blanditiis? Nesciunt doloribus hic quia sint, doloremque sed pariatur dicta error magni modi!
                 </p>
                 <a
-                  href="#"
+                  href="https://www.shriworks.com/"
+                  target={'_blank'}
                   className="inline-flex items-center justify-center py-3 text-base font-medium text-center text-yellow border border-transparent rounded-md px-7 bg-black hover:bg-opacity-90"
                 >
-                  Get Started
+                  Know More
                 </a>
               </div>
             </div>

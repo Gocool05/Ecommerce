@@ -32,7 +32,6 @@ const UserProfile = () => {
     email: user?.email || '',
   });
   const [passwordData, setPasswordData] = useState({
-    oldPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
@@ -72,7 +71,8 @@ const UserProfile = () => {
       <h1 className="text-2xl font-bold mb-8">User Profile</h1>
       
       {/* Profile Info Section */}
-      <div className="profile-info mb-12">
+      <div className='flex justify-between gap-10'>
+      <div className="profile-info mb-12 md:w-1/2">
         <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
         <form onSubmit={handleUpdateUser} className="space-y-4">
           <div>
@@ -99,7 +99,7 @@ const UserProfile = () => {
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-red text-white rounded"
           >
             Save Changes
           </button>
@@ -107,10 +107,10 @@ const UserProfile = () => {
       </div>
 
       {/* Password Update Section */}
-      <div className="password-update mb-12">
+      <div className="password-update mb-12 md:w-1/2">
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
         <form onSubmit={handleUpdatePassword} className="space-y-4">
-          <div>
+          {/* <div>
             <label className="block text-gray-700">Old Password</label>
             <input
               type="password"
@@ -120,7 +120,7 @@ const UserProfile = () => {
               className="w-full border border-gray-300 p-2 rounded"
               required
             />
-          </div>
+          </div> */}
           <div>
             <label className="block text-gray-700">New Password</label>
             <input
@@ -145,11 +145,12 @@ const UserProfile = () => {
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-red text-white rounded"
           >
             Update Password
           </button>
         </form>
+      </div>
       </div>
 
       {/* Order History Section */}

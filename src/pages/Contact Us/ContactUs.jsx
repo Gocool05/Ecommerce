@@ -1,7 +1,41 @@
 import React from 'react'
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
+import api from '../../Utils/api';
 
+const baseUrl = api.defaults.baseURL;
+
+const useSendContact = () =>{
+  return useMutation(async(sendContact) =>{
+    const res = await api.post('/api/contact')
+    return res.data
+  })
+}
 
 const ContactUs = () => {
+
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+const {mutate} = useSendContact();
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if(name && email && message){
+    try {
+      mutate({
+        name:name,
+        email:email,
+        message:message,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }else{
+    toast.error('Please fill all the required fields')
+  }
+}
   return (
     <section className="Bg2 " id="contact">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -141,6 +175,7 @@ const ContactUs = () => {
                           placeholder="Your name"
                           className="mb-2 w-full bg-white rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md text-red sm:mb-0"
                           name="name"
+                          onChange={(e)=>setName(e.target.value)}
                         />
                       </div>
                       <div className="mx-0 mb-1 sm:mb-4">
@@ -155,6 +190,7 @@ const ContactUs = () => {
                           placeholder="Your email address"
                           className="mb-2 w-full rounded-md border bg-white border-gray-400 py-2 pl-2 pr-4 shadow-md text-red sm:mb-0"
                           name="email"
+                          onchange={(e)=>setEmail(e.target.value)}
                         />
                       </div>
                     </div>
@@ -170,11 +206,12 @@ const ContactUs = () => {
                         rows="5"
                         placeholder="Write your message..."
                         className="mb-2 w-full rounded-md border active:border-gold bg-white border-gray-400 py-2 pl-2 pr-4 shadow-md text-red sm:mb-0"
+                        onChange={(e)=>setMessage(e.target.value)}
                       ></textarea>
                     </div>
                   </div>
                   <div className="text-center">
-                    <button className="SliderButton w-full text-yellow cursor-pointer uppercase bg-red px-4 py-1 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#4e2a1b,-0.5rem_-0.5rem_#4e2a1b] hover:bg-yellow hover:text-red transition">
+                    <button onClick={handleSubmit} className="SliderButton w-full text-yellow cursor-pointer uppercase bg-red px-4 py-1 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#4e2a1b,-0.5rem_-0.5rem_#4e2a1b] hover:bg-yellow hover:text-red transition">
                       Send message
                     </button>
                   </div>
