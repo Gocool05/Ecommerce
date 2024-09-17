@@ -15,6 +15,8 @@ import Shop from './pages/Shop/Shop';
 import { ToastContainer } from 'react-toastify';
 import Blog from './pages/Blog/Blog';
 import UserProfile from './pages/ProfilePage/UserProfile';
+import Login from './pages/Auth/Login';
+import LoginPage from './pages/Auth/LoginPage';
 const client = new QueryClient();
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/login" element={< LoginPage/>} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={< ProductDetails/>} />
           <Route path="shop/product/:id" element={< ProductDetails/>} />

@@ -7,6 +7,7 @@ import {
   increaseQuantity,
   decreaseQuantity,
   clearCart,
+  setCartItems,
 } from "../../Slice/cartSlice";
 import api from "../../Utils/api";
 
@@ -16,15 +17,19 @@ const AddToCart = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   
-  const userId = 9;
+  const userId = localStorage.getItem('UserId');
 
     const {data:cart} = useQuery('getCart',async() =>{
-      const res = await api.get(`/api/users/${userId}?populate=Carts`)
+      const res = await api.get(`/api/users/${userId}?populate=carts.product`)
       return res.data
+    },{
+      onSuccess:(data) =>{
+        dispatch(setCartItems(data.cartItems))
+      }
     })
-    console.log(cart,'List of items inb cart');
+    console.log(cart,'List of items in the cart');
 
-  if (cartItems.length === 0) {
+  if (cart?.carts?.length === 0) {
     return (
       <div className="flex p-5 sm:p-10 flex-col justify-center items-center">
         <svg
@@ -56,7 +61,7 @@ const AddToCart = () => {
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
       <ul>
-        {cartItems.map((item) => (
+        {cart?.carts?.map((item) => (
           <li
             key={item.id}
             className="flex sm:flex-row gap-3 flex-col justify-between items-center mb-4 p-2 sm:p-4 border-b  border-black  rounded-md shadow-md"
@@ -65,29 +70,29 @@ const AddToCart = () => {
               <div className="bg-red sm:w-24 w-1/2 p-1 rounded-md">
                 <img
                   className="h-20 w-full object-cover"
-                  src={item.image}
-                  alt=""
+                  src={item.product?.image} // Adjust for nested product data
+                  alt={item.product?.name}
                 />
               </div>
               <div className="">
                 <h3 className="text-sm lg:text-lg text-red font-semibold">
-                  {item.name}
+                  {item.product?.name}
                 </h3>
                 <p className="text-black font-bold">
-                  &#8377;{item.price.toFixed(2)} x {item.quantity} = &#8377;
-                  {item.totalPrice.toFixed(2)}
+                  &#8377;{item.product?.price?.toFixed(2)} x {item.Quantity} = &#8377;
+                  {(item.product?.price * item.Quantity).toFixed(2)}
                 </p>
               </div>
             </div>
             <div className="flex items-center">
               <button
                 onClick={() => dispatch(decreaseQuantity(item.id))}
-                className="px-3 py-1 bg-red border-red border-t border-b  text-white rounded-l-md hover:bg-red-600"
+                className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-l-md hover:bg-red-600"
               >
                 -
               </button>
               <span className="px-4 py-1 border-red border-t border-b">
-                {item.quantity}
+                {item.Quantity}
               </span>
               <button
                 onClick={() => dispatch(increaseQuantity(item.id))}

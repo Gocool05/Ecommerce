@@ -4,6 +4,8 @@ const initialState = {
   cartItems: [],
   totalQuantity: 0,
   totalAmount: 0,
+  loading: false,
+  error: null,
 };
 
 const cartSlice = createSlice({
@@ -26,6 +28,18 @@ const cartSlice = createSlice({
       }
       state.totalQuantity += newItem.quantity;
       state.totalAmount += newItem.price * newItem.quantity;
+    },
+    setCartItems: (state, action) => {
+      // Set cart items from the action payload
+      state.cartItems = action.payload || [];
+      
+      // Calculate total amount and quantity safely
+      state.totalAmount = state.cartItems.reduce(
+        (total, item) => total + (item.totalPrice || 0), 0
+      );
+      state.totalQuantity = state.cartItems.reduce(
+        (total, item) => total + (item.quantity || 0), 0
+      );
     },
     removeItem(state, action) {
       const id = action.payload;
@@ -70,6 +84,7 @@ const cartSlice = createSlice({
 
 export const {
   addItem,
+  setCartItems,
   removeItem,
   increaseQuantity,
   decreaseQuantity,

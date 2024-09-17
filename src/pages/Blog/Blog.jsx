@@ -21,8 +21,8 @@ const {data:blogData} = useQuery('GetBlog', getBlog);
                 <h2 className="mb-4 text-3xl font-bold text-dark  sm:text-4xl md:text-[40px]">
                   Our Blogs
                 </h2>
-                <p className="text-base text-body-color dark:text-dark-6">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam sit, odio, numquam ipsa eaque quos vero eum dolores nemo temporibus maiores amet velit quia atque quae iure nesciunt tempore autem!
+                <p className="text-base sm:flex hidden text-body-color dark:text-dark-6">
+                Shriworks' blog showcases a wide range of content, including idols, pooja items, and temple-related products, reflecting the essence of traditional spiritual practices. It's a space where devotees can explore and learn about various sacred offerings and artifacts.
                 </p>
               </div>
             </div>

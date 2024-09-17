@@ -41,7 +41,7 @@ const Home = () => {
   });
 
     // Fetch FactoryClips Data
-  const {data:Media} = useQuery('factoryClips', async()=>{
+  const {data:Media,  } = useQuery('factoryClips', async()=>{
     const res = await api.get('/api/pages/1?populate[0]=FactoryClips&populate[1]=FactoryClips.Media')
     return res.data.data;
   })
@@ -58,7 +58,7 @@ const Home = () => {
       <SectionWithSlider
       SectionData={SectionData?.attributes?.Section}
       />
-      <FactoryClips Media={Media?.attributes?.FactoryClips}/>
+      <FactoryClips Media={Media?.attributes?.FactoryClips} isLoading={isLoading}/>
     </div>
     </>
     

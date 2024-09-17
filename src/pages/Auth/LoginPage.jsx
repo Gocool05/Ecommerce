@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import Modal from 'react-modal';
 import { useMutation, useQuery } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loginSuccess } from '../../Slice/authSlice';
-import { loginUser, registerUser, verifyOtp } from '../../Slice/authThunk';
-import { setCartItems } from '../../Slice/cartSlice';
+import {setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api'
 
 const useRegisterQuery = () => {
@@ -20,23 +18,11 @@ const useRegisterQuery = () => {
 
 
 
-
-const Login = ({ setIsOpen, modalIsOpen }) => {
-
+const LoginPage = () => {
   const dispatch = useDispatch();
-  const [isLogin, setIsLogin] = useState(true);
-  const [isOtpSent, setIsOtpSent] = useState(false);
-  const [loginMobile, setLoginMobile] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpMessage, setOtpMessage] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerMobile, setRegisterMobile] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerName, setRegisterName] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  const useLoginQuery = () => useMutation(
+
+  const LoginMutation = () => useMutation(
     async (loginData) => {
       const res = await api.post('/api/auth/local', loginData);
       return res.data;
@@ -53,30 +39,15 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   );
 
   const fetchCartData = async (userId) => {
-    try {
-      // Fetch the user's cart from Strapi backend (ensure the API endpoint and structure are correct)
-      const { data } = await api.get(`/api/users/33?populate=cart`);
-      console.log('33 users cart fetched',data);
-      // Assuming the cart data is in 'cart' field in response
-      dispatch(setCartItems(data?.cart || [])); // Set cart items in Redux
-    } catch (error) {
-      console.error("Failed to fetch cart data:", error);
-    }
+    const { data } = await api.get(`/api/carts?user=${userId}`);
+    dispatch(setCartItems(data)); // Set cart items in Redux
   };
-
-  useEffect(()=>{
-    fetchCartData();
-  },[])
-
 
 
   const {data:auth} = useQuery("Auth", async ()=>{
     const res = await api.get(`/api/users/33`)
     return res.data;
   })
-
-// console.log('Login Deatils',auth);
-
 localStorage.setItem('User', auth);
 localStorage.setItem('UserId', auth?.id);
 localStorage.setItem('EmailId', auth?.email);
@@ -96,6 +67,19 @@ localStorage.getItem('JwtToken');
       zIndex: 50,
     },
   };
+
+  const [isLogin, setIsLogin] = useState(true);
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [loginMobile, setLoginMobile] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerMobile, setRegisterMobile] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [registerName, setRegisterName] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const useOtpQuery = () => {
     return useMutation(
       async (otpData) => {
@@ -108,77 +92,86 @@ localStorage.getItem('JwtToken');
   const SentOtp = otpMessage;
 
   const {mutate:mutateRegister} = useRegisterQuery();
-  const {mutate:mutateLogin } = useLoginQuery();
+  const {mutate:mutateLogin } = LoginMutation();
   const {mutate:mutateOtp } = useOtpQuery();
 
-  const closeModal = () => {
-    setIsOpen(false);
+
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+  if(loginMobile  && loginPassword){
+    // Call the mutation function from useRegisterQuery
+    mutateLogin({ 
+      identifier: loginMobile,
+      password: loginPassword, 
+      });
+}else {
+    alert('Invalid credentials');
+  }
   };
 
-  const handleLogin = async (e) => {
+  
+  const handleRegister = async(e) => {
     e.preventDefault();
-    if (loginMobile && loginPassword) {
+     if (registerMobile && registerEmail && registerPassword && registerName) {
       try {
-        await dispatch(loginUser({ identifier: loginMobile, password: loginPassword })).unwrap();
-        setIsOpen(false);
-      } catch (error) {
-        toast.error('Login failed. Please try again.');
-      }
-    } else {
-      toast.error('Invalid credentials');
-    }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (registerMobile && registerEmail && registerPassword && registerName) {
-      try {
-        await dispatch(registerUser({
-          PhoneNumber: registerMobile,
-          email: registerEmail,
-          password: registerPassword,
-          username: registerName
-        })).unwrap();
+        // Call the mutation function from useRegisterQuery
+        mutateRegister({ 
+           PhoneNumber: registerMobile,
+           email:registerEmail,
+           password: registerPassword, 
+           username: registerName,
+          });
+        
+        // Simulate OTP being sent to new users
         toast.success('OTP has been sent to you.');
-        setIsOtpSent(true);
+          setIsOtpSent(true);
       } catch (error) {
-        toast.error('Registration failed. Please try again.');
+        console.error('Registration failed:', error);
+        alert('Registration failed. Please try again.');
       }
     } else {
-      toast.error('Please fill in all fields');
+      alert('Please fill in all fields');
     }
   };
+
 
   const handleVerifyOtp = async () => {
     try {
-      await dispatch(verifyOtp({
+      // Trigger the OTP mutation and verify the OTP
+      mutateOtp({
         phoneNumber: registerMobile,
-        otp: otp
-      })).unwrap();
-      toast.success("OTP Verification Successful");
-      setIsOpen(false);
+        otp: otp,
+      }, {
+        onSuccess: (data) => {
+          // Use the response data to check if OTP verification was successful
+          if (data.message) {
+            toast.success("OTP Verification Successful");
+            setLoggedIn(true);
+          } else {
+            toast.error("Invalid OTP");
+          }
+        },
+        onError: (error) => {
+          console.error("OTP verification failed:", error);
+          toast.error("Invalid OTP.");
+        }
+      });
     } catch (error) {
-      toast.error("Invalid OTP.");
+      console.error("Error in OTP verification:", error);
+      toast.error("OTP verification failed. Please try again.");
     }
   };
+  
+    localStorage.setItem('loggedIn',loggedIn);
 
   const handleForgotPassword = () => {
     alert('Password reset link has been sent to your email');
-    closeModal();
   };
-
-console.log(modalIsOpen,'sidugfisajdofjdjf');
-
   return (
-      <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      style={customStyles}
-      contentLabel="Login Modal"
-      overlayClassName="fixed inset-0 bg-red bg-opacity-70 z-[9999]"
-    >
+    <div className={`my-20 mx-10 sm:mx-[20%]`}>
       {isLogin ? (
-      <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
+      <div className="bg-red bg3 shadow-2xl  lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
       <div className='lg:flex hidden justify-center relative object-cover'>
         <img className='object-cover' src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" alt="" />
       </div>
@@ -230,7 +223,7 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
     </div>
       
       ) : (
-        <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
+        <div className="bg-red bg3 shadow-2xl lg:grid  grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
         <div className='lg:flex hidden justify-center relative object-cover'>
           <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
         </div>
@@ -314,8 +307,8 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
         </form>
       </div>
       )}
-    </Modal>
-  );
-};
+      </div>
+  )
+}
 
-export default Login;
+export default LoginPage

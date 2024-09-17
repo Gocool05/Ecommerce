@@ -7,6 +7,9 @@ import api from '../../Utils/api';
 import 'react-toastify/dist/ReactToastify.css';
 import './Card.css';
 import { Link, useNavigate } from 'react-router-dom';
+const userId = localStorage.getItem('UserId');
+const JWT = localStorage.getItem('JwtToken');
+
 
 const Card = ({product}) => {
 
@@ -16,26 +19,31 @@ const Card = ({product}) => {
   const dispatch = useDispatch();
 
   const sendCartToStrapi = async () => {
-    try {
-      const response = await api.post('/api/carts', {
-        data: {
-          product: {
-            connect: [product.id],
+    if(JWT){
+      try {
+        const response = await api.post('/api/carts', {
+          data: {
+            product: {
+              connect: [product.id],
+            },
+            user:userId,
+            Quantity:1
           },
-          user:9,
-          Quantity:1
-        },
-      });
-    } catch (error) {
-      // Handle error
-      toast.error('Error submitting cart to Strapi');
-      console.error('Error:', error);
+        });
+      } catch (error) {
+        // Handle error
+        toast.error('Error submitting cart to Strapi');
+        console.error('Error:', error);
+      }
+    }else{
+      toast.error('Please login to add product to cart');
+      navigate('/login', { replace: true }); // Use `replace: false` to push instead
     }
   };
 
 
   const addToCartHandler = () =>{
-    // sendCartToStrapi();
+    sendCartToStrapi();
     dispatch(
 
       addItem({
