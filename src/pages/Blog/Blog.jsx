@@ -13,7 +13,7 @@ const {data:blogData} = useQuery('GetBlog', getBlog);
 
   return (
     <>
-      <section className="bg-Pattern bg-cover p-4 md:p-10 ">
+      <section className=" bg-cover p-4 md:p-10 ">
         <div className=" ">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4 pt-10">
@@ -61,7 +61,7 @@ const BlogCard = ({ image, CardTitle, CardDescription }) => {
   return (
     <>
       <div className="w-full p-2 mx-2 ">
-        <div className="mb-10 flex flex-row gap-2 w-full hover:shadow-xl shadow-md cursor-pointer rounded-md transition-all bg-yellow  duration-300 p-4 hover:shadow-red">
+        <div className="mb-10 flex flex-row gap-2 w-full hover:shadow-xl shadow-md cursor-pointer rounded-md transition-all bg-[#fceecf]  duration-300 p-4 hover:shadow-red">
           <div className=" overflow-hidden w-2/4 rounded">
             <img src={image} alt="" className="w-full h-72 object-cover" />
             <h3>
