@@ -9,32 +9,32 @@ const Footer = () => {
   <div className="mx-6 py-10 sm:text-center text-yellow md:text-left">
     <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 
-      <div className="">
+      <div className="text-justify">
         <h6
           className="mb-4 flex sm:items-center sm:justify-center font-semibold uppercase md:justify-start">
           ShriWorks
         </h6>
         <p>
-     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos nisi nobis molestias nam dolorem eligendi libero cupiditate ea, suscipit tempore ipsam quam ratione aliquid modi odio quis fugit. Rem, quos?
+        At Shriworks, we specialize in creating exquisite handcrafted temple jewelry and artifacts that embody the essence of South Indian temple traditions. Our skilled artisans, with years of experience, use time-honored techniques to craft each piece, ensuring authenticity and excellence in every creation.
         </p>
       </div>
 
-      <div className='flex  flex-col  '>
+      <div className='flex  flex-col lg:ml-20 '>
         <h6
           className="mb-4 flex  sm:justify-center font-semibold uppercase md:justify-start">
           Insights
         </h6>
         <p className="mb-4">
-          <a href="#!">Return Policy</a>
+          <a href="ReplacementPolicy">Replacement Policy</a>
         </p>
         <p className="mb-4">
-          <a href="#!">Shipping Policy</a>
+          <a href="ShippingPolicy">Shipping Policy</a>
         </p>
         <p className="mb-4">
-          <a href="#!">Cancellation Policy</a>
+          <a href="CancellationPolicy">Cancellation Policy</a>
         </p>
         <p>
-          <a href="#!">Terms and Condition</a>
+          <a href="StrategicVision">Strategic Vision</a>
         </p>
     
       </div>
@@ -146,7 +146,7 @@ const Footer = () => {
         </p>
 
         <div className="flex p-2 bg-yellow w-fit rounded-lg ">
-      <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1 ">
+      <a href="https://www.instagram.com/shriworks/" target={'_blank'} className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="#4e2a1b"
@@ -155,7 +155,7 @@ const Footer = () => {
             d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
         </svg>
       </a>
-      <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1  ">
+      {/* <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1  ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="#4e2a1b"
@@ -163,8 +163,8 @@ const Footer = () => {
           <path
             d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
         </svg>
-      </a>
-      <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1 ">
+      </a> */}
+      <a href="https://www.instagram.com/shriworks/" target={'_blank'} className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="#4e2a1b"
@@ -173,7 +173,7 @@ const Footer = () => {
             d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
         </svg>
       </a>
-      <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1">
+      <a href="https://wa.me/919988776655" target={'_blank'} className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="#4e2a1b"
@@ -182,7 +182,7 @@ const Footer = () => {
           d="M380.9 97.1C339 55.2 285.1 32 228.6 32 102.8 32 0 134.8 0 260.6c0 45.9 12.2 90.8 35.4 129.6L1 480l92.4-32.4c36.5 19.8 77.7 30.3 119.7 30.3 125.9 0 228.6-102.7 228.6-228.5 0-56.6-22.1-110.4-61.8-150.3zm-158 317c-36.8 0-72.8-9.8-104.1-28.3l-7.4-4.4-55.1 19.3 18.6-53.4-4.8-7.9c-21.9-35.8-33.4-77.3-33.4-119.6 0-120.4 98-218.5 218.6-218.5 58.4 0 113.3 22.8 154.5 64 41.2 41.2 63.9 96.1 63.9 154.4 0 120.6-98.1 218.8-218.7 218.8zm121.2-163.3l-41.7-12.3c-5.5-1.6-11.3-.1-15.3 3.9l-14.8 14.8c-3.7 3.7-9.5 4.9-14.5 3-11.7-4.1-45.5-17.4-64.9-53.3-3.2-6.1-2.4-13.7 2.2-18.7l13.6-13.9c3.4-3.5 4.8-8.6 3.5-13.5l-13.2-48.9c-1.5-5.6-6.3-9.6-12-10.1-32.7-3-59.4 6.9-79.6 29.2-16.4 18.3-25.4 41.4-25.4 66 0 40.2 20.9 80.4 57.1 118.4 36.6 38.5 81.1 64.4 125.8 74.3 8.4 1.8 16.9 2.7 25.3 2.7 22.3 0 42.6-7.4 59.8-21.7 18.7-15.5 31.7-37.6 36.8-62.1 1.3-6.3-2.2-12.7-8.4-14.5z" />
       </svg>
     </a>
-    <a href="#!" className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1">
+    <a href="https://www.youtube.com/@shriworks" target={'_blank'} className="mx-2 [&>svg]:h-4 [&>svg]:w-4 vibrate-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="#4e2a1b"

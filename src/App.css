@@ -1,6 +1,7 @@
 body{
     font-family: "Cabin", serif;
-    background-image: url('/public/Assests/homeBg.jpg');
+    /* background-image: url('/public/Assests/homeBg.jpg'); */
+    background-color: #fceecf;
     background-size: cover ;
     background-position: center;
     height: 100vh;

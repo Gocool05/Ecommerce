@@ -79,7 +79,7 @@ const Card = ({product}) => {
 
   return (
 <>
-<div className="max-w-xs relative sm:max-w-sm bg-Pattern bg-cover shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-105  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
+<div className="max-w-xs relative sm:max-w-sm  bg-[#fceecf]  shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-105  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
   {product?.attributes.Offer && <span className="text-yellow   py-1 px-3 top-3  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">{product?.attributes.Offer}% Off</span>}
   {/* <Link to={`product/`+product.id}> */}
   <div className="image-container" onClick={handleProductClick}>

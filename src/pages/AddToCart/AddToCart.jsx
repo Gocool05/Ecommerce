@@ -76,11 +76,11 @@ const AddToCart = () => {
               </div>
               <div className="">
                 <h3 className="text-sm lg:text-lg text-red font-semibold">
-                  {item.product?.name}
+                  {item.product?.ProductName}
                 </h3>
                 <p className="text-black font-bold">
-                  &#8377;{item.product?.price?.toFixed(2)} x {item.Quantity} = &#8377;
-                  {(item.product?.price * item.Quantity).toFixed(2)}
+                  &#8377;{item.product?.NewPrice?.toFixed(2)} x {item.Quantity} = &#8377;
+                  {(item.product?.NewPrice * item.Quantity).toFixed(2)}
                 </p>
               </div>
             </div>

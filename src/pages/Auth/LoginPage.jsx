@@ -48,11 +48,7 @@ const LoginPage = () => {
     const res = await api.get(`/api/users/33`)
     return res.data;
   })
-localStorage.setItem('User', auth);
-localStorage.setItem('UserId', auth?.id);
-localStorage.setItem('EmailId', auth?.email);
-localStorage.setItem('JwtToken','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImlhdCI6MTcyNjU1NjM5MSwiZXhwIjoxNzI5MTQ4MzkxfQ.IJyBOWaN_7YtEJvbUibEs3IIcXxtAfqmEz8O8TK0q3k');
-localStorage.getItem('JwtToken');
+
 
   const customStyles = {
     content: {

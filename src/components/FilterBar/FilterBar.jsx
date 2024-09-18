@@ -11,6 +11,8 @@ import {
 import PriceRange from "../../Utils/PriceRange/PriceRange";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import api from "../../Utils/api";
 
 const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCategory}) => {
 
@@ -34,6 +36,10 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
     });
   };
   
+  const { data: Category } = useQuery('NavCategory', async () => {
+    const res = await api.get(`api/categories?populate=*`);
+    return res.data.data;
+  });
 
   return (
     <>
@@ -161,45 +167,32 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
                 />
               </svg>
             </PopoverButton>
+
             <PopoverPanel
               anchor="bottom"
-              className="flex flex-col mt-2 z-50 text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg-yellow   rounded-xl"
+              className="flex flex-col mt-2 z-50 h-96 w-fit  text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg-yellow   rounded-xl"
             >
-              <h6
-                className="hover:bg-red px-4 py-2 hover:text-yellow text-black"
-                onClick={() => {handleFilterSelection("category", "Idols");close();}}
-              >
-                Idols
-              </h6>
-              <h6
-                className="hover:bg-red px-4 py-2 hover:text-yellow text-black"
-                onClick={() => {handleFilterSelection("category", "Radham");close();}}
-              >
-                Radham
-              </h6>
-              <h6
-                className="hover:bg-red px-4 py-2 hover:text-yellow text-black"
-                onClick={() => {handleFilterSelection("category", "Vahanam");close();}}
-              >
-                Vahanam
-              </h6>
-              <h6
-                className="hover:bg-red px-4 py-2 hover:text-yellow text-black"
-                onClick={() => {handleFilterSelection("category", "Kelasam");close();}}
-              >
-                Kelasam
-              </h6>
-              <h6
-                className="hover:bg-red px-4 py-2 hover:text-yellow text-black"
-                onClick={() => {handleFilterSelection("category", "Kodimaram");close();}}
-              >
-                Kodimaram
-              </h6>
-              
+             {Array.isArray(Category) ? (
+                  Category?.map((category, index) => (
+                    <Link
+                      key={index}
+                      className='relative hover:scale-110 transition-all duration-200 px-4 py-2 text-black'
+                      onClick={close}
+                      to={`/shop?category=${encodeURIComponent(category?.attributes?.CategoryName)}`}
+                    >
+                      <div className='flex flex-col justify-center items-center gap-2'>
+                        <span className='font-bold'>{category?.attributes?.CategoryName}</span>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p>No categories available</p>
+                )}
             </PopoverPanel>
             </>
               )}
           </Popover>
+
           </div>
         </div>
 

@@ -5,9 +5,22 @@ import { useMutation, useQuery } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loginSuccess } from '../../Slice/authSlice';
-import { loginUser, registerUser, verifyOtp } from '../../Slice/authThunk';
+import { loginUser, registerUser, resendOtp, verifyOtp } from '../../Slice/authThunk';
 import { setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api'
+
+const LoginUserId = localStorage.getItem('LoginUserId');
+const RegUserId = localStorage.getItem('RegUserId');
+
+let UserId;
+
+if(LoginUserId){
+  UserId = LoginUserId;
+}else if(RegUserId){
+  UserId = RegUserId;
+}else{
+  UserId = null;
+}
 
 const useRegisterQuery = () => {
   return useMutation(
@@ -26,7 +39,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(true);
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [loginMobile, setLoginMobile] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpMessage, setOtpMessage] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -35,6 +48,8 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60); // Timer countdown (60 seconds)
+
 
   const useLoginQuery = () => useMutation(
     async (loginData) => {
@@ -64,24 +79,12 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     }
   };
 
-  useEffect(()=>{
-    fetchCartData();
-  },[])
-
-
 
   const {data:auth} = useQuery("Auth", async ()=>{
-    const res = await api.get(`/api/users/33`)
+    const res = await api.get(`/api/users/${LoginUserId}`)
     return res.data;
-  })
-
-// console.log('Login Deatils',auth);
-
-localStorage.setItem('User', auth);
-localStorage.setItem('UserId', auth?.id);
-localStorage.setItem('EmailId', auth?.email);
-localStorage.setItem('JwtToken','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImlhdCI6MTcyNjU1NjM5MSwiZXhwIjoxNzI5MTQ4MzkxfQ.IJyBOWaN_7YtEJvbUibEs3IIcXxtAfqmEz8O8TK0q3k');
-localStorage.getItem('JwtToken');
+  },{enabled:!UserId})
+  console.log(auth,'AUth Details')
 
   const customStyles = {
     content: {
@@ -117,9 +120,9 @@ localStorage.getItem('JwtToken');
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (loginMobile && loginPassword) {
+    if (loginEmail && loginPassword) {
       try {
-        await dispatch(loginUser({ identifier: loginMobile, password: loginPassword })).unwrap();
+        await dispatch(loginUser({ identifier: loginEmail, password: loginPassword })).unwrap();
         setIsOpen(false);
       } catch (error) {
         toast.error('Login failed. Please try again.');
@@ -128,6 +131,15 @@ localStorage.getItem('JwtToken');
       toast.error('Invalid credentials');
     }
   };
+
+    // Timer effect
+    useEffect(() => {
+      if (isOtpSent && timeLeft > 0) {
+        const timerId = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+        return () => clearTimeout(timerId);
+      }
+    }, [timeLeft, isOtpSent]);
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -152,7 +164,7 @@ localStorage.getItem('JwtToken');
   const handleVerifyOtp = async () => {
     try {
       await dispatch(verifyOtp({
-        phoneNumber: registerMobile,
+        emailId: registerEmail,
         otp: otp
       })).unwrap();
       toast.success("OTP Verification Successful");
@@ -162,12 +174,23 @@ localStorage.getItem('JwtToken');
     }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      await resendOtp({ emailId: registerEmail });
+      toast.success("New OTP has been sent.");
+      setTimeLeft(60); // Reset the timer
+    } catch (error) {
+      toast.error("Failed to resend OTP. Please try again.");
+    }
+  };
+
+
   const handleForgotPassword = () => {
     alert('Password reset link has been sent to your email');
     closeModal();
   };
 
-console.log(modalIsOpen,'sidugfisajdofjdjf');
+
 
   return (
       <Modal
@@ -177,7 +200,7 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
       contentLabel="Login Modal"
       overlayClassName="fixed inset-0 bg-red bg-opacity-70 z-[9999]"
     >
-      {isLogin ? (
+      {!isLogin ? (
       <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
       <div className='lg:flex hidden justify-center relative object-cover'>
         <img className='object-cover' src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" alt="" />
@@ -186,13 +209,12 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
         <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Login to Shriworks</h2>
         <div className='flex relative flex-col items-center justify-center'>
           <input
-            type='tel'
+            type='email'
             className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
-            placeholder='Phone Number'
-            value={loginMobile}
-            onChange={(e) => setLoginMobile(e.target.value)}
+            placeholder='Email Address'
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)}
             autoComplete='Email'
-            maxLength={10}
           />
           <input
             type="password"
@@ -221,7 +243,7 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
           <button
             type="button"
             className='rounded-md my-2 text-red bg-white w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base font-bold shadow-md uppercase hover:bg-red hover:text-yellow transition duration-200 ease-in'
-            onClick={() => setIsLogin(false)}
+            onClick={() => setIsLogin(true)}
           >
             New to Shriworks?
           </button>
@@ -273,6 +295,7 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
             />
     
         {isOtpSent && (
+          <>
           <input
             type='text'
             className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
@@ -283,6 +306,12 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
             onChange={(e)=>{setOtp(e.target.value)}}
             required={true}
           />
+          <p className='text-center py-2 text-yellow '>
+                  {timeLeft > 0
+                    ? `You can resend OTP in ${timeLeft}s`
+                    : <button onClick={handleResendOtp} disabled={timeLeft > 0}>Resend OTP</button>}
+                </p>
+          </>
         )}
           </div>
           <div className='flex flex-col'>
@@ -292,7 +321,8 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
             type="button"
             className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base shadow-md uppercase hover:bg-white transition duration-200 ease-in'
             onClick={handleVerifyOtp}
-          >
+            disabled={otp.length < 6}
+            >
             Verify OTP
           </button>
         ) : (
@@ -306,7 +336,7 @@ console.log(modalIsOpen,'sidugfisajdofjdjf');
             <button
               type="button"
               className='rounded-md my-2 text-red bg-white w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base font-bold shadow-md uppercase hover:bg-red hover:text-yellow transition duration-200 ease-in'
-              onClick={() => setIsLogin(true)}
+              onClick={() => setIsLogin(false)}
             >
               Existing user? Log in
             </button>

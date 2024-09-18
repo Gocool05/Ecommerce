@@ -80,7 +80,7 @@ const CategorySlider = ({CategoryData}) => {
       </h2>
 
 
-      <Slider className='cateSlider mt-10 ' {...settings}>
+      <Slider className='cateSlider mt-20 ' {...settings}>
           {category?.map((cate,index) => (
            <div key={index} className='h-48 w-48 mx-4 relative sm:h-60 sm:w-60 flex justify-center cursor-pointer  border-red border-4 bg-transparent rounded '  onClick={() => handleMenuItemClick(`${cate?.category?.data?.attributes?.CategoryName}`)}>
            <img className=' object-cover h-full w-full ' src={`${baseUrl}${cate?.category?.data?.attributes?.Image?.data?.attributes.url}`} alt={cate?.category?.data?.attributes?.CategoryName}/>
@@ -89,14 +89,14 @@ const CategorySlider = ({CategoryData}) => {
       ))}
       </Slider>
         
-        <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
+        {/* <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
         {category?.map((cate,index)=>(
           <div key={index} className='h-48 w-48 sm:h-60 sm:w-60 border-red border-4 cursor-pointer bg-yellow  mt-10 mx-4 flex justify-center  rounded ' onClick={() => handleMenuItemClick(`${cate?.category?.data?.attributes?.CategoryName}`)}>
             <img className='relative  object-cover' src={`${baseUrl}${cate?.category?.data?.attributes?.Image?.data?.attributes.url}`} alt={cate?.category?.data?.attributes?.CategoryName}/>
              <h1 className='absolute font-bold bottom-0 w-40 text-center m-2 bg-red py-1 px-2  text-yellow border-2 rounded-lg border-yellow text-sm'>{cate?.category?.data?.attributes?.CategoryName}</h1>
           </div>
          ))}
-        </Marquee>
+        </Marquee> */}
     </div>
   )
 }

@@ -194,7 +194,7 @@ const TopNav = () => {
               </Link>
 
               <Menu as="div" className="relative">
-                <div onClick={openModal}>
+                <div>
                   <Menu.Button className="flex items-center  text-red hover:scale-105 duration-300 outline-none  rounded-full p-2 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +211,7 @@ const TopNav = () => {
                       />
                     </svg>
                     {login && (
-                      <h4 className="sm:flex hidden text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0">
+                      <h4  onClick={openModal} className="sm:flex hidden text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0">
                         Hello
                         <span className="text-[10px] sm:text-[14px]  font-[900]">
                           Log In?

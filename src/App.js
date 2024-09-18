@@ -17,6 +17,10 @@ import Blog from './pages/Blog/Blog';
 import UserProfile from './pages/ProfilePage/UserProfile';
 import Login from './pages/Auth/Login';
 import LoginPage from './pages/Auth/LoginPage';
+import CancellationPolicy from './pages/Insights/CancellationPolicy';
+import ReplacementPolicy from './pages/Insights/ReplacementPolicy';
+import ShippingPolicy from './pages/Insights/ShippingPolicy';
+import StrategicVision from './pages/Insights/StrategicVision';
 const client = new QueryClient();
 
 function App() {
@@ -39,6 +43,10 @@ function App() {
           <Route path="/checkout" element={< Checkout/>} />
           <Route path="/blog" element={< Blog/>} />
           <Route path="/profile" element={< UserProfile/>} />
+          <Route path="/CancellationPolicy" element={< CancellationPolicy/>} />
+          <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
+          <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />
+          <Route path="/StrategicVision" element={< StrategicVision/>} />
         </Routes>
         <Footer />
       </Router>
