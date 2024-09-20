@@ -11,6 +11,10 @@ import api from '../../Utils/api'
 
 const LoginUserId = localStorage.getItem('LoginUserId');
 const RegUserId = localStorage.getItem('RegUserId');
+const RegName = localStorage.getItem('RegName');
+const RegEmail = localStorage.getItem('RegEmail');
+const RegNumber = localStorage.getItem('RegNumber');
+const RegConfirmed = localStorage.getItem('RegConfirmed');
 
 let UserId;
 
@@ -48,7 +52,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60); // Timer countdown (60 seconds)
+  const [timeLeft, setTimeLeft] = useState(30); // Timer countdown (30 seconds)
 
 
   const useLoginQuery = () => useMutation(
@@ -134,7 +138,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
 
     // Timer effect
     useEffect(() => {
-      if (isOtpSent && timeLeft > 0) {
+      if (isOtpSent || !RegConfirmed && timeLeft > 0) {
         const timerId = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         return () => clearTimeout(timerId);
       }
@@ -164,19 +168,22 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const handleVerifyOtp = async () => {
     try {
       await dispatch(verifyOtp({
-        emailId: registerEmail,
+        emailId: RegEmail,
         otp: otp
       })).unwrap();
       toast.success("OTP Verification Successful");
       setIsOpen(false);
+
     } catch (error) {
-      toast.error("Invalid OTP.");
+      toast.error("Invalid / Expired OTP.");
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      await resendOtp({ emailId: registerEmail });
+      await dispatch(resendOtp(
+        { emailId: RegEmail  }
+        )).unwrap();
       toast.success("New OTP has been sent.");
       setTimeLeft(60); // Reset the timer
     } catch (error) {
@@ -256,9 +263,12 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
         <div className='lg:flex hidden justify-center relative object-cover'>
           <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
         </div>
+        
         <form onSubmit={handleRegister} className='flex flex-col gap-3 lg:my-5 mx-2 p-2'>
           <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Signup to Shriworks</h2>
           <div className='flex relative flex-col items-center justify-center'>
+          {RegConfirmed &&
+          <div>
             <input
               type='text'
               className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
@@ -293,8 +303,10 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
               onChange={(e) => setRegisterPassword(e.target.value)}
               required={true}
             />
+            </div>
+          }
     
-        {isOtpSent && (
+        {isOtpSent || !RegConfirmed && (
           <>
           <input
             type='text'
@@ -306,7 +318,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             onChange={(e)=>{setOtp(e.target.value)}}
             required={true}
           />
-          <p className='text-center py-2 text-yellow '>
+          <p className='text-center py-2 text-yellow'>
                   {timeLeft > 0
                     ? `You can resend OTP in ${timeLeft}s`
                     : <button onClick={handleResendOtp} disabled={timeLeft > 0}>Resend OTP</button>}
@@ -316,7 +328,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
           </div>
           <div className='flex flex-col'>
              
-          {isOtpSent ? (
+          {isOtpSent || RegUserId ? (
           <button
             type="button"
             className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base shadow-md uppercase hover:bg-white transition duration-200 ease-in'

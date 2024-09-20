@@ -29,7 +29,7 @@ const AddToCart = () => {
     })
     console.log(cart,'List of items in the cart');
 
-  if (cart?.carts?.length === 0) {
+  if (cart?.length === 0 || cart == undefined) {
     return (
       <div className="flex p-5 sm:p-10 flex-col justify-center items-center">
         <svg
