@@ -15,15 +15,17 @@ import Shop from './pages/Shop/Shop';
 import { ToastContainer } from 'react-toastify';
 import Blog from './pages/Blog/Blog';
 import UserProfile from './pages/ProfilePage/UserProfile';
-import Login from './pages/Auth/Login';
-import LoginPage from './pages/Auth/LoginPage';
 import CancellationPolicy from './pages/Insights/CancellationPolicy';
 import ReplacementPolicy from './pages/Insights/ReplacementPolicy';
 import ShippingPolicy from './pages/Insights/ShippingPolicy';
 import StrategicVision from './pages/Insights/StrategicVision';
+import Login from './pages/Auth/Login';
+import { useState } from 'react';
+import { useEffect } from 'react';
 const client = new QueryClient();
 
 function App() {
+  const [modalIsOpen, setIsOpen] = useState(false);
   return (
     <QueryClientProvider client={client}>
       <Router>
@@ -33,7 +35,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/login" element={< LoginPage/>} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={< ProductDetails/>} />
           <Route path="shop/product/:id" element={< ProductDetails/>} />
@@ -43,6 +44,7 @@ function App() {
           <Route path="/checkout" element={< Checkout/>} />
           <Route path="/blog" element={< Blog/>} />
           <Route path="/profile" element={< UserProfile/>} />
+          {/* <Route path="/login" element={< Login setIsOpen={setIsOpen} modalIsOpen={modalIsOpen}/>} /> */}
           <Route path="/CancellationPolicy" element={< CancellationPolicy/>} />
           <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
           <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />

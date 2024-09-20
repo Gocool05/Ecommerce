@@ -14,8 +14,7 @@ const RegUserId = localStorage.getItem('RegUserId');
 const RegName = localStorage.getItem('RegName');
 const RegEmail = localStorage.getItem('RegEmail');
 const RegNumber = localStorage.getItem('RegNumber');
-const RegConfirmed = localStorage.getItem('RegConfirmed');
-
+let RegConfirmed = localStorage.getItem('RegConfirmed')==="true";
 let UserId;
 
 if(LoginUserId){
@@ -39,7 +38,6 @@ const useRegisterQuery = () => {
 
 
 const Login = ({ setIsOpen, modalIsOpen }) => {
-
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(true);
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -51,8 +49,9 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [registerMobile, setRegisterMobile] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30); // Timer countdown (30 seconds)
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [Error, setError] = useState("");
 
 
   const useLoginQuery = () => useMutation(
@@ -128,11 +127,18 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       try {
         await dispatch(loginUser({ identifier: loginEmail, password: loginPassword })).unwrap();
         setIsOpen(false);
+        localStorage.setItem('LoginConfirmed', true);
+        toast.success('Logged in successfully');
+        window.location.reload();
       } catch (error) {
         toast.error('Login failed. Please try again.');
+        setTimeout(setError,3000);
+        setError('Login failed. Please try again.');
       }
     } else {
       toast.error('Invalid credentials');
+      setTimeout(setError,3000);
+      setError('Invalid credentials');
     }
   };
 
@@ -142,12 +148,12 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
         const timerId = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         return () => clearTimeout(timerId);
       }
-    }, [timeLeft, isOtpSent]);
-
+    }, [timeLeft, isOtpSent,RegEmail]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     if (registerMobile && registerEmail && registerPassword && registerName) {
+      setIsDisabled(true);
       try {
         await dispatch(registerUser({
           PhoneNumber: registerMobile,
@@ -158,35 +164,62 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
         toast.success('OTP has been sent to you.');
         setIsOtpSent(true);
       } catch (error) {
-        toast.error('Registration failed. Please try again.');
+        setError("Registration failed. Please try again");
+        setTimeout(setError,3000);
+        toast.error('Registration failed. Please try again');
       }
     } else {
+      setError("Please fill in all fields");
+      setTimeout(setError,3000);
       toast.error('Please fill in all fields');
     }
   };
 
   const handleVerifyOtp = async () => {
+    let Email;
+      if( registerEmail){
+        Email = registerEmail;
+        }else if(RegEmail){
+          Email = RegEmail;
+        }
     try {
       await dispatch(verifyOtp({
-        emailId: RegEmail,
-        otp: otp
+          emailId: Email,
+          otp: otp,
       })).unwrap();
       toast.success("OTP Verification Successful");
+      localStorage.setItem('userConfirmed', true);
       setIsOpen(false);
-
+      window.location.reload();
     } catch (error) {
+      setError("Invalid / Expired OTP.");
+      setTimeout(setError,3000);
       toast.error("Invalid / Expired OTP.");
     }
   };
+  const userConfirmed = localStorage.getItem('userConfirmed')==="true";
+  console.log(userConfirmed,'userConfirmed')
 
   const handleResendOtp = async () => {
+    let Email;
+    if( registerEmail){
+      Email = registerEmail;
+      }else if(RegEmail){
+        Email = RegEmail;
+      }
     try {
       await dispatch(resendOtp(
-        { emailId: RegEmail  }
+        {emailId: Email }
         )).unwrap();
+        setTimeout(()=>{
+          setIsDisabled(true);
+        },1000)
+        setIsDisabled(false);
       toast.success("New OTP has been sent.");
       setTimeLeft(60); // Reset the timer
     } catch (error) {
+      setError("Failed to resend OTP. Please try again.");
+      setTimeout(setError,3000);
       toast.error("Failed to resend OTP. Please try again.");
     }
   };
@@ -260,18 +293,21 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       
       ) : (
         <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
+
         <div className='lg:flex hidden justify-center relative object-cover'>
           <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
         </div>
-        
-        <form onSubmit={handleRegister} className='flex flex-col gap-3 lg:my-5 mx-2 p-2'>
+
+            <div className='flex flex-col justify-center'>
+
+        {!userConfirmed ? (<form  className='flex flex-col gap-3 lg:my-5 mx-2 p-2 justify-center '>
           <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Signup to Shriworks</h2>
           <div className='flex relative flex-col items-center justify-center'>
-          {RegConfirmed &&
+          {!RegEmail &&
           <div>
             <input
               type='text'
-              className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
+              className='rounded-sm px-2 py-2 w-full border-[1px]  bg-white border-red my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
               placeholder='Your Name'
               value={registerName}
               onChange={(e) => setRegisterName(e.target.value)}
@@ -279,7 +315,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             />
             <input
               type='email'
-              className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
+              className='rounded-sm px-2 py-2 w-full border-[1px]  bg-white border-red my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
               placeholder='Email address'
               value={registerEmail}
               onChange={(e) => setRegisterEmail(e.target.value)}
@@ -287,7 +323,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             />
             <input
               type='tel'
-              className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
+              className='rounded-sm px-2 py-2 w-full border-[1px]  bg-white border-red my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
               placeholder='Phone Number'
               value={registerMobile}
               onChange={(e) => setRegisterMobile(e.target.value)}
@@ -297,7 +333,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             />
             <input
               type="password"
-              className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
+              className='rounded-sm px-2 py-2 w-full border-[1px]  bg-white border-red my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
               placeholder='Password'
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
@@ -305,30 +341,27 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             />
             </div>
           }
-    
-        {isOtpSent || !RegConfirmed && (
-          <>
-          <input
+          </div>
+          <div className='flex flex-col'>
+             
+          {isOtpSent || RegEmail? (
+            <>
+            <input 
             type='text'
-            className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red lg:m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
+            className='rounded-sm p-2 w-full border-[1px]  bg-white border-red  my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
             placeholder='Enter OTP'
             value={otp}
             maxLength={6}
             minLength={6}
             onChange={(e)=>{setOtp(e.target.value)}}
-            required={true}
+            required
           />
+          {Error && <p className='text-center text-[#FF0000] font-bold uppercase animate-pulse'>{Error}</p>}
           <p className='text-center py-2 text-yellow'>
                   {timeLeft > 0
                     ? `You can resend OTP in ${timeLeft}s`
                     : <button onClick={handleResendOtp} disabled={timeLeft > 0}>Resend OTP</button>}
                 </p>
-          </>
-        )}
-          </div>
-          <div className='flex flex-col'>
-             
-          {isOtpSent || RegUserId ? (
           <button
             type="button"
             className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base shadow-md uppercase hover:bg-white transition duration-200 ease-in'
@@ -337,13 +370,20 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             >
             Verify OTP
           </button>
+            </>
+
         ) : (
+          <>
+          {Error && <p className='text-center text-[#FF0000] font-bold uppercase animate-pulse'>{Error}</p>}
           <button
             type="submit"
             className='rounded-md my-2 text-red font-bold bg-yellow w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base shadow-md uppercase hover:bg-white transition duration-200 ease-in'
+            onClick={handleRegister}
+            disabled={isDisabled}
           >
             Register
           </button>
+          </>
         )}
             <button
               type="button"
@@ -354,6 +394,20 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             </button>
           </div>
         </form>
+        ):(
+          <div className='flex flex-col justify-center mx-2 px-2  items-center text-center '>
+            <h2 className='text-2xl text-yellow uppercase mb-2 text-center font-bold'>User Already Registered</h2>
+            <button
+              type="button"
+              className='rounded-md my-2 text-red bg-white w-full lg:px-2 lg:py-2 py-1 px-1 text-[12px] md:text-base font-bold shadow-md uppercase hover:bg-red hover:text-yellow transition duration-200 ease-in'
+              onClick={() => setIsLogin(false)}
+            >
+              Click here to Log in
+            </button>
+          </div>
+          )
+        }
+            </div>
       </div>
       )}
     </Modal>

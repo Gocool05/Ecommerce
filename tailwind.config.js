@@ -9,6 +9,7 @@ module.exports = {
         white: '#FFEEEE',
         black: '#560000',
         green: '#399918',
+        liteYellow:'#fceecf',
       },
       backgroundImage:{
         'Pattern':"url('/public/Assests/homeBg.jpg')",

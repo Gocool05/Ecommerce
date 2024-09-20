@@ -10,8 +10,20 @@ import Login from "../../pages/Auth/Login";
 import { useQuery } from "react-query";
 import api from "../../Utils/api";
 // 
-const loggedIn = localStorage.getItem("loggedIn");
+let isLogin;
+const userConfirmed = localStorage.getItem('userConfirmed')==="true";
+const LoginConfirmed = localStorage.getItem('LoginConfirmed')==="true";
+
+if(userConfirmed){
+  isLogin = true;
+}else if(LoginConfirmed){
+  isLogin = true;
+}else{
+  isLogin = false;
+}
+
 // console.log(loggedIn, "logged in successfully");
+
 
 const TopNav = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
@@ -22,6 +34,26 @@ const TopNav = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const handleLogout = () =>{
+    localStorage.removeItem('userConfirmed');
+    localStorage.removeItem('LoginConfirmed');
+    localStorage.removeItem('RegUserId');
+    localStorage.removeItem('RegJWT');
+    localStorage.removeItem('RegConfirmed');
+    localStorage.removeItem('RegUserId');
+    localStorage.removeItem('RegName');
+    localStorage.removeItem('RegEmail');
+    localStorage.removeItem('RegNumber');
+    localStorage.removeItem('LoginJWT');
+    localStorage.removeItem('LoginUserId');
+    localStorage.removeItem('UserName');
+    localStorage.removeItem('UserEmail');
+    localStorage.removeItem('UserNumber');
+    localStorage.removeItem('User');
+    window.location.href ='/'
+    window.location.reload();
+  }
   
   const { data: Cate } = useQuery("TopNavCategory", async () => {
     const res = await api.get(
@@ -54,8 +86,6 @@ const TopNav = () => {
   };
 
 
-
-  const login = true;
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   return (
@@ -210,7 +240,7 @@ const TopNav = () => {
                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                       />
                     </svg>
-                    {login && (
+                    {!isLogin  && (
                       <h4  onClick={openModal} className="sm:flex hidden text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0">
                         Hello
                         <span className="text-[10px] sm:text-[14px]  font-[900]">
@@ -221,7 +251,7 @@ const TopNav = () => {
                   </Menu.Button>
                 </div>
 
-                {!login && (
+                {isLogin && (
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -231,7 +261,7 @@ const TopNav = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 mt-4 w-48 bg-yellow border-solid border-t-0  border-b-4 border-red border-2 rounded-md shadow-lg z-20">
+                    <Menu.Items className="absolute right-0 mt-4 w-48 bg-liteYellow border-solid border-t-0  border-b-4 border-red border-2 rounded-md shadow-lg z-20">
                       <Menu.Item>
                         {({ active }) => (
                           <Link
@@ -251,6 +281,7 @@ const TopNav = () => {
                             className={`block px-4 py-2 font-bold text-md text-red ${
                               active ? "bg-red text-yellow" : ""
                             }`}
+                            onClick={handleLogout}
                           >
                             Logout
                           </a>
