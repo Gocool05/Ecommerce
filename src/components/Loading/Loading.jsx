@@ -13,7 +13,7 @@ const Loading = () => {
     </div>
     <div  style={{animationDirection:'reverse'}} className='absolute -z-10 animate-spin-slow    border-[25px] h-64 w-64 object-cover border-black border-double rounded-full'> 
     </div> */}
-    <img className='relative  h-44' src="/favicon.png" alt="" />
+    <img className='relative  h-44' loading='eager' src="/favicon.png" alt="" />
   </div>
     {/* <h2 className='text-yellow font-bold animate-pulse text-2xl uppercase'>loading . . .</h2> */}
   </div>
