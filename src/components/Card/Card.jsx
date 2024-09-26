@@ -7,13 +7,30 @@ import api from '../../Utils/api';
 import 'react-toastify/dist/ReactToastify.css';
 import './Card.css';
 import { Link, useNavigate } from 'react-router-dom';
-const userId = localStorage.getItem('UserId');
-const JWT = localStorage.getItem('JwtToken');
+import Login from '../../pages/Auth/Login';
+import { useState } from 'react';
+import Modal from 'react-modal';
+// const JWT = localStorage.getItem('JwtToken');
+let JWT;
 
+if(localStorage.getItem('RegJWT')){
+  JWT = localStorage.getItem('RegJWT');
+}else if(localStorage.getItem('LoginJWT')){
+  JWT = localStorage.getItem('LoginJWT');
+}else {
+  JWT = null;
+}
+
+let UserId;
+if(localStorage.getItem("RegUserId")){
+UserId = localStorage.getItem("RegUserId");
+}else if(localStorage.getItem("LoginUserId")){
+  UserId = localStorage.getItem("LoginUserId");
+}
 
 const Card = ({product}) => {
-
   const baseUrl = api.defaults.baseURL;
+  const [modalIsOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -26,7 +43,7 @@ const Card = ({product}) => {
             product: {
               connect: [product.id],
             },
-            user:userId,
+            user:UserId,
             Quantity:1
           },
         });
@@ -36,8 +53,8 @@ const Card = ({product}) => {
         console.error('Error:', error);
       }
     }else{
-      toast.error('Please login to add product to cart');
-      navigate('/login', { replace: true }); // Use `replace: false` to push instead
+      setIsOpen(true);
+      toast.error('Please login to add your product to cart');
     }
   };
 
@@ -45,7 +62,6 @@ const Card = ({product}) => {
   const addToCartHandler = () =>{
     sendCartToStrapi();
     dispatch(
-
       addItem({
         id: product.id,
         name: product.attributes.ProductName,
@@ -74,7 +90,9 @@ const Card = ({product}) => {
     const newPath = `/shop/product/${productId}`;
     navigate(newPath, { replace: true }); // Use `replace: false` to push instead
   }
-
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
 
   return (
@@ -114,6 +132,10 @@ const Card = ({product}) => {
     </button>
   </div>
 </div>
+
+<Modal isOpen={modalIsOpen} onRequestClose={closeModal} ariaHideApp={false}>
+        <Login setIsOpen={setIsOpen} modalIsOpen={modalIsOpen} />
+      </Modal>
 </>
 
   );

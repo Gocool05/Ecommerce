@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import Slider from 'react-slick'
 import api from '../../Utils/api'
 import Card from '../Card/Card'
@@ -34,7 +34,9 @@ const RelatedProducts = (props) => {
   })
   
 
-  console.log(relatedProduct,'Relatedd Product')
+  // console.log(relatedProduct,'Relatedd Product')
+
+
 
     const NextArrow = (props) => {
         const { onClick } = props;

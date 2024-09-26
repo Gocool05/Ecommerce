@@ -26,6 +26,17 @@ const client = new QueryClient();
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
+
+  // Function to open the login modal
+  const openLoginModal = () => {
+    setIsOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <QueryClientProvider client={client}>
       <Router>
@@ -44,13 +55,14 @@ function App() {
           <Route path="/checkout" element={< Checkout/>} />
           <Route path="/blog" element={< Blog/>} />
           <Route path="/profile" element={< UserProfile/>} />
-          {/* <Route path="/login" element={< Login setIsOpen={setIsOpen} modalIsOpen={modalIsOpen}/>} /> */}
           <Route path="/CancellationPolicy" element={< CancellationPolicy/>} />
           <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
           <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />
           <Route path="/StrategicVision" element={< StrategicVision/>} />
         </Routes>
         <Footer />
+
+        <Login modalIsOpen={modalIsOpen} closeModal={closeModal} />
       </Router>
     </QueryClientProvider>
 

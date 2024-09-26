@@ -109,7 +109,7 @@ const TopNav = () => {
             <div className="lg:flex hidden items-center justify-center ">
               <div className="rounded-lg  p-5">
                 <div className="flex">
-                  <div className="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-yellow bg-white p-5">
+                  <div className="flex w-10 shadow-lg items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-yellow bg-white p-5">
                     <svg
                       viewBox="0 0 20 20"
                       aria-hidden="true"
@@ -120,7 +120,7 @@ const TopNav = () => {
                   </div>
                   <input
                     type="text"
-                    className="w-[300px] bg-white text-black pl-2 text-base font-semibold outline-0"
+                    className="w-[300px] bg-white shadow-lg text-black pl-2 text-base font-semibold outline-0"
                     placeholder="Search for the product..."
                     id="search-product"
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -128,7 +128,7 @@ const TopNav = () => {
                   />
 
                   {/* Dropdown here */}
-                  <Menu as="div" className="relative inline-block">
+                  <Menu as="div" className="relative inline-block shadow-lg">
                     <div>
                       <MenuButton className="inline-flex border-l  border-yellow items-center w-full justify-center  shadow-sm bg-white p-3 text-sm font-semibold text-black ">
                         {selectedCategory}
@@ -191,7 +191,7 @@ const TopNav = () => {
                   <input
                     type="button"
                     value="Search"
-                    className="bg-red p-2 rounded-tr-lg rounded-br-lg text-yellow font-semibold hover:bg-red/85 transition-colors"
+                    className="bg-red p-2 rounded-tr-lg shadow-2xl rounded-br-lg text-yellow font-semibold hover:bg-red/85 transition-colors"
                     onClick={handleSearch}
                   />
                 </div>
@@ -318,7 +318,7 @@ const TopNav = () => {
 
                 {/* Drawer Sidebar */}
                 <div
-                  className={`fixed top-0 right-0 h-full w-64 z-[9999] bg-cover bg-Pattern shadow-lg transform ${
+                  className={`fixed top-0 right-0 h-full w-64 z-[9999] bg-cover bg-liteYellow bg5 shadow-lg transform ${
                     isMenuOpen ? "translate-x-0" : "translate-x-full"
                   } transition-transform duration-300 ease-in-out z-50`}
                 >
@@ -375,7 +375,7 @@ const TopNav = () => {
                           />
                         </svg>
                       </Popover.Button>
-                      <Popover.Panel className="flex flex-col mt-2 text-red border-red border-solid border-2 border-t-0 border-b-4 bg-yellow px-4 py-2 rounded-xl">
+                      <Popover.Panel className="flex flex-col mt-2 text-red border-red border-solid border-2 border-t-0 border-b-4  px-4 py-2 rounded-xl">
                         {Array.isArray(Cate) ? (
                           Cate.map((category, index) => (
                             <a
@@ -443,7 +443,7 @@ const TopNav = () => {
       <div className=" lg:hidden items-center justify-center ">
         <div className="rounded-lg  p-5">
           <div className="flex">
-            <div className="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-yellow bg-white p-5">
+            <div className="flex w-10 items-center shadow-lg justify-center rounded-tl-lg rounded-bl-lg border-r border-yellow bg-white p-5">
               <svg
                 viewBox="0 0 20 20"
                 aria-hidden="true"
@@ -454,7 +454,7 @@ const TopNav = () => {
             </div>
             <input
               type="text"
-              className="w-full bg-white text-black pl-2 text-base font-semibold outline-0"
+              className="w-full bg-white text-black shadow-lg pl-2 text-base font-semibold outline-0"
               placeholder=""
               id=""
             />
@@ -462,7 +462,7 @@ const TopNav = () => {
             {/* Dropdown here */}
             <Menu as="div" className="relative  ">
               <div>
-                <MenuButton className="flex border-l  border-yellow items-center w-max justify-center  shadow-sm bg-white p-3 text-sm font-semibold text-black ">
+                <MenuButton className="flex border-l  border-yellow  items-center w-max justify-center  shadow-lg bg-white p-3 text-sm font-semibold text-black ">
                   {selectedCategory}
                   <ChevronDownIcon
                     aria-hidden="true"

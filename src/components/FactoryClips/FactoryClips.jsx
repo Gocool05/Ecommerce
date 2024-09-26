@@ -24,10 +24,10 @@ const FactoryClips = ({Media,isLoading}) => {
     <div className=' mb-10'>
       <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
       {Media?.map((item, index) => (
-        <div className={`md:h-56 h-44  relative`} key={index}>
+        <div className={`md:h-56 h-44  relative `} key={index}>
           {item.Type ==='Image' && 
           <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
-          <img src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} alt="item" className="mx-2 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
+          <img src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} alt="item" className="mx-2 bg-red bg1 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
         </a>
           }
             
@@ -38,10 +38,10 @@ const FactoryClips = ({Media,isLoading}) => {
     <div className=''>
       <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0}>
       {Media.map((item, index) => (
-        <div className={`h-72 relative  gap-5`} key={index}>
+        <div className={`h-72 relative   gap-5`} key={index}>
              {item.Type ==='Video' && 
           <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
-            <video loop autoPlay muted className="mx-2 md:mx-5 md:w-96 w-72 transition-all border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden object-cover">
+            <video loop autoPlay muted className="mx-2 md:mx-5 md:w-96 w-72 transition-all bg-red bg1 border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden object-cover">
               <source src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} type="video/mp4" />
             </video>
             </a>

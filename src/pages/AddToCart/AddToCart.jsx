@@ -11,25 +11,34 @@ import {
 } from "../../Slice/cartSlice";
 import api from "../../Utils/api";
 
+const baseUrl = api.defaults.baseURL;
+let UserId;
+if(localStorage.getItem("RegUserId")){
+UserId = localStorage.getItem("RegUserId");
+}else if(localStorage.getItem("LoginUserId")){
+  UserId = localStorage.getItem("LoginUserId");
+}
+
+console.log(UserId,'USer Id')
 const AddToCart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-  
-  const userId = localStorage.getItem('UserId');
+
 
     const {data:cart} = useQuery('getCart',async() =>{
-      const res = await api.get(`/api/users/${userId}?populate=carts.product`)
+      const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
       return res.data
     },{
       onSuccess:(data) =>{
-        dispatch(setCartItems(data.cartItems))
+        console.log(data,'SetCartItems')
+        dispatch(setCartItems(data.carts))
       }
     })
     console.log(cart,'List of items in the cart');
 
-  if (cart?.length === 0 || cart == undefined) {
+  if (cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null) {
     return (
       <div className="flex p-5 sm:p-10 flex-col justify-center items-center">
         <svg
@@ -70,8 +79,8 @@ const AddToCart = () => {
               <div className="bg-red sm:w-24 w-1/2 p-1 rounded-md">
                 <img
                   className="h-20 w-full object-cover"
-                  src={item.product?.image} // Adjust for nested product data
-                  alt={item.product?.name}
+                  src={`${baseUrl}${item.product?.ProductImage[0]?.url}`} // Adjust for nested product data
+                  alt={item.product?.ProductName}
                 />
               </div>
               <div className="">

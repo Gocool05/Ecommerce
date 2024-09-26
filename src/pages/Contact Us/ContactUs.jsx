@@ -86,7 +86,7 @@ const handleSubmit = (e) => {
                         Our Address
                       </h3>
                       <p className="text-red opacity-90">
-                         Arcot Rd, Vadapalani,
+                        242A, Arcot Rd, Vadapalani,
                       </p>
                       <p className="text-red opacity-90">
                         Chennai, Tamil Nadu 600026.
@@ -117,7 +117,7 @@ const handleSubmit = (e) => {
                         Contact
                       </h3>
                       <p className="text-red opacity-90 ">
-                        Mobile:(+91) 9988787500
+                        Mobile: (+91) 91765 54626
                       </p>
                       <p className="text-red opacity-90 ">
                         Mail: Info@shriworks.com

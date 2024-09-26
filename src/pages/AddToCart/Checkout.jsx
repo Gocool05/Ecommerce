@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { clearCart } from '../../Slice/cartSlice';
 import api from '../../Utils/api';
-
+const baseUrl = api.defaults.baseURL;
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
-
+  console.log(cartItems,'proceed to checkout');
   // Form State
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -84,13 +84,13 @@ const Checkout = () => {
             {cartItems.map((cart, index) => (
               <div className="flex items-start gap-4 border-b-2 rounded-md  border-yellow " key={index}>
                 <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-2 bg3 mb-2 shrink-0 bg-yellow rounded-md">
-                  <img src={cart.image} className="w-full object-cover" />
+                  <img src={`${baseUrl}${cart.product?.ProductImage[0]?.url}`} className="w-full object-cover" />
                 </div>
                 <div className="w-full overflow-hidden">
-                  <h3 className="text-base text-yellow font-bold uppercase truncate">{cart.name}</h3>
+                  <h3 className="text-base text-yellow font-bold uppercase truncate">{cart?.product?.ProductName}</h3>
                   <ul className="text-xs text-yellow space-y-2 mt-2">
-                    <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart.quantity}</span></li>
-                    <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {cart.totalPrice}</span></li>
+                    <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
+                    <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {cart?.product?.NewPrice}</span></li>
                   </ul>
                 </div>
               </div>

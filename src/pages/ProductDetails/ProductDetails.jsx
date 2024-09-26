@@ -6,7 +6,7 @@ import api from '../../Utils/api';
 import { useQuery } from 'react-query';
 import Slider from 'react-slick';
 import './ProductDetails.css'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -18,6 +18,18 @@ import { addItem } from '../../Slice/cartSlice';
 const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
+  const location = useLocation();
+  const [prevPath, setPrevPath] = useState(location.pathname);
+
+  useEffect(() => {
+    // Check if the path has changed before triggering the reload
+    if (prevPath !== location.pathname) {
+      setPrevPath(location.pathname);
+      // Use window.location.replace to reload without adding an entry in the browser history
+      window.location.replace(location.pathname);
+    }
+  }, [location.pathname, prevPath]);
+  
   const ProductId = Id.id;
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
@@ -109,6 +121,11 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       transition: Bounce,
       });
   }
+
+  // useEffect(()=>{
+  //   window.location.reload();
+  // },[location.pathname])
+
 
   return (
     <section className="relative flex flex-col  overflow-hidden">

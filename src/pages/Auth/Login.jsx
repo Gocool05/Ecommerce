@@ -239,6 +239,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       style={customStyles}
       contentLabel="Login Modal"
       overlayClassName="fixed inset-0 bg-red bg-opacity-70 z-[9999]"
+      ariaHideApp={false}
     >
       {!isLogin ? (
       <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">

@@ -32,13 +32,13 @@ const cartSlice = createSlice({
     setCartItems: (state, action) => {
       // Set cart items from the action payload
       state.cartItems = action.payload || [];
-      
+        console.log(state.cartItems,'State cartItems')
       // Calculate total amount and quantity safely
       state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + (item.totalPrice || 0), 0
+        (total, item) => total + (item.product.NewPrice || 0), 0
       );
       state.totalQuantity = state.cartItems.reduce(
-        (total, item) => total + (item.quantity || 0), 0
+        (total, item) => total + (item.Quantity || 0), 0
       );
     },
     removeItem(state, action) {
