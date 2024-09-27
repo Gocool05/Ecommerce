@@ -15,12 +15,29 @@ import { useDispatch } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import { addItem } from '../../Slice/cartSlice';
 
+let JWT;
+
+if(localStorage.getItem('RegJWT')){
+  JWT = localStorage.getItem('RegJWT');
+}else if(localStorage.getItem('LoginJWT')){
+  JWT = localStorage.getItem('LoginJWT');
+}else {
+  JWT = null;
+}
+
+let UserId;
+if(localStorage.getItem("RegUserId")){
+  UserId = localStorage.getItem("RegUserId");
+}else if(localStorage.getItem("LoginUserId")){
+  UserId = localStorage.getItem("LoginUserId");
+}
+
 const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
   const location = useLocation();
   const [prevPath, setPrevPath] = useState(location.pathname);
-
+  const [modalIsOpen, setIsOpen] = useState(false);
   useEffect(() => {
     // Check if the path has changed before triggering the reload
     if (prevPath !== location.pathname) {
@@ -80,21 +97,26 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
     const scrollAmount = direction === 'up' ? -scrollRef.current.clientHeight : scrollRef.current.clientHeight;
     scrollRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   };
+  
   const sendCartToStrapi = async () => {
-    try {
-      const response = await api.post('/api/carts', {
-        data: {
-          product: {
-            connect: [products?.id],
+    if(JWT){
+      try {
+        const response = await api.post('/api/carts', {
+          data: {
+            product:
+            products?.id,
+            user:UserId,
+            Quantity:quantity,
           },
-          user:9,
-          Quantity:quantity
-        },
-      });
-    } catch (error) {
-      // Handle error
-      toast.error('Error submitting cart to Strapi');
-      console.error('Error:', error);
+        });
+      } catch (error) {
+        // Handle error
+        // toast.error('Product ');
+        // console.error('Error:', error);
+      }
+    }else{
+      setIsOpen(true);
+      toast.error('Please login to add your product to cart');
     }
   };
 

@@ -1,5 +1,5 @@
 .custom-slider .carousel img{
-    height:70vh;
+    height:auto;
     object-fit: cover;
 }
 .custom-slider{
@@ -15,11 +15,11 @@
 
 @media screen and (max-width: 900px) {
     .custom-slider .carousel img{
-        height: 400px;
+        height: auto;
     }
 }
 @media screen and (max-width: 575px) {
     .custom-slider .carousel img{
-        height: 200px;
+        height: auto;
     }
 }

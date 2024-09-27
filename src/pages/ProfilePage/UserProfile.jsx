@@ -1,3 +1,4 @@
+import { FaceFrownIcon } from '@heroicons/react/20/solid';
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'react-query';
 import api from '../../Utils/api';
@@ -71,7 +72,7 @@ const UserProfile = () => {
       <h1 className="text-2xl font-bold mb-8">User Profile</h1>
       
       {/* Profile Info Section */}
-      <div className='flex justify-between gap-10'>
+      <div className='flex justify-between sm:flex-row flex-col gap-10'>
       <div className="profile-info mb-12 md:w-1/2">
         <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
         <form onSubmit={handleUpdateUser} className="space-y-4">
@@ -156,6 +157,12 @@ const UserProfile = () => {
       {/* Order History Section */}
       <div className="order-history">
         <h2 className="text-xl font-semibold mb-4">Order History</h2>
+        {orders?.length<0 || orders === null || orders === undefined?(
+          <div className='flex flex-col items-center justify-center'>
+            <FaceFrownIcon color='#4e2a1b' height={80}  />
+          <h3 className="text-black text-2xl text-center ">No orders Found</h3>
+          </div>
+        ):(
         <ul className="space-y-4">
           {orders?.map((order) => (
             <li key={order.id} className="border p-4 rounded-lg">
@@ -179,6 +186,8 @@ const UserProfile = () => {
             </li>
           ))}
         </ul>
+        )
+        }
       </div>
     </div>
   );

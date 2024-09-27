@@ -2,9 +2,17 @@ import { LockClosedIcon } from '@heroicons/react/20/solid'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import { clearCart } from '../../Slice/cartSlice';
+import { ClearCart, clearCart } from '../../Slice/cartSlice';
 import api from '../../Utils/api';
 const baseUrl = api.defaults.baseURL;
+
+let UserId;
+if(localStorage.getItem("RegUserId")){
+  UserId = localStorage.getItem("RegUserId");
+}else if(localStorage.getItem("LoginUserId")){
+  UserId = localStorage.getItem("LoginUserId");
+}
+
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
@@ -38,13 +46,17 @@ const Checkout = () => {
     if (!zip) tempErrors.zip = "Zip Code is required";
     
     setErrors(tempErrors);
-    // if(Object.keys(tempErrors).length >= 1)  toast.error('Fill All The Required Information')
+    if(Object.keys(tempErrors).length >= 1)  toast.error('Fill All The Required Information')
     return Object.keys(tempErrors).length === 0;  // If no errors, return true
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
+    // dispatch(ClearCart(UserId));
 
+    //           setTimeout(() => {
+    //               window.location.href = '/';
+    //             }, 1000);
     if (validateForm()) {
       try {
         const response = await api.get(`/api/razorpay`);
@@ -59,12 +71,16 @@ const Checkout = () => {
           currency: "INR",
           // order_id: order.id,
           name: "Shriworks",
-          handler: async function (Paymentresponse) {
-            dispatch(clearCart());
-            toast.success('Order added successfully');
-            setTimeout(()=>{
-              window.location.href ='/'
-            },1000)
+          handler: async(Paymentresponse) => {
+            try {
+              toast.success('Order added successfully');
+              dispatch(ClearCart(UserId));
+              setTimeout(() => {
+                window.location.href = '/';
+              }, 1000);
+            } catch (error) {
+              console.error("Error processing payment: ", error);
+            }
             // await api.post(`/api/contests/${Paymentresponse.razorpay_payment_id}/payment`, {});
           },
         };
@@ -90,7 +106,7 @@ const Checkout = () => {
                   <h3 className="text-base text-yellow font-bold uppercase truncate">{cart?.product?.ProductName}</h3>
                   <ul className="text-xs text-yellow space-y-2 mt-2">
                     <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
-                    <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {cart?.product?.NewPrice}</span></li>
+                    <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.NewPrice)*(cart?.Quantity)}</span></li>
                   </ul>
                 </div>
               </div>

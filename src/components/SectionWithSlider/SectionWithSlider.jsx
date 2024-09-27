@@ -57,12 +57,20 @@ const Section = SectionData;
     autoplay:true,
     speed: 500,
     autoplaySpeed: 2500,
-    slidesToShow: 5,  // 5 columns
+    slidesToShow: 6,  // 5 columns
     slidesToScroll: 1,
     rows: 2,  // 2 rows    
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
+      {
+        breakpoint: 1600, // desktop
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+          rows: 2,
+        }
+      },
       {
         breakpoint: 1220, // Tablet
         settings: {

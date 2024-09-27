@@ -113,7 +113,7 @@ const handlePageChange = (pageNumber) => {
     />
     {sortedProducts.length!==0?(
       <>
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 p-3 lg:px-10'>
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6 gap-2 sm:gap-3 p-3 lg:px-10'>
     {currentProducts?.map((product, index) => (
         <div className='sm:p-2' key={index}>
             <Card  product={product} />

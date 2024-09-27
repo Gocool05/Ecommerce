@@ -1,42 +1,84 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   removeItem,
   increaseQuantity,
   decreaseQuantity,
   clearCart,
   setCartItems,
+  RemoveCartItem,
+  AddCartItem,
+  DeleteCartItem,
 } from "../../Slice/cartSlice";
 import api from "../../Utils/api";
 
 const baseUrl = api.defaults.baseURL;
 let UserId;
 if(localStorage.getItem("RegUserId")){
-UserId = localStorage.getItem("RegUserId");
+  UserId = localStorage.getItem("RegUserId");
 }else if(localStorage.getItem("LoginUserId")){
   UserId = localStorage.getItem("LoginUserId");
 }
-
-console.log(UserId,'USer Id')
 const AddToCart = () => {
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
-
     const {data:cart} = useQuery('getCart',async() =>{
-      const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
+    const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
+    // console.log(cart,'USSER"S CART')
       return res.data
     },{
       onSuccess:(data) =>{
-        console.log(data,'SetCartItems')
+        // console.log(data,'SetCartItems')
         dispatch(setCartItems(data.carts))
       }
     })
-    console.log(cart,'List of items in the cart');
+    // console.log(cart,'List of items in the cart');
+
+    const RemoveItem = async(cartId) =>{
+      try {
+        await dispatch(RemoveCartItem({
+          cartId,
+        })).unwrap();
+        toast.success("Item Removed Successfully");
+        queryClient.invalidateQueries('getCart');
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const AddItem = async(cartId) =>{
+      try {
+        await dispatch(AddCartItem({ 
+          product:cartId,
+              user:UserId,
+              Quantity:1
+        }))
+        toast.success("Item Added Successfully");
+        queryClient.invalidateQueries('getCart');
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const RemoveCart = async(cartId) =>{
+      try {
+        await dispatch(DeleteCartItem({
+          cartId,
+        })).unwrap();
+        toast.success("Item Removed from the Cart");
+        queryClient.invalidateQueries('getCart');
+      } catch (error) {
+        console.log(error)
+      }
+    }
+ 
 
   if (cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null) {
     return (
@@ -95,7 +137,8 @@ const AddToCart = () => {
             </div>
             <div className="flex items-center">
               <button
-                onClick={() => dispatch(decreaseQuantity(item.id))}
+                // onClick={() => dispatch(decreaseQuantity(item.product.id))}
+                onClick={()=>RemoveItem(item.id)}
                 className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-l-md hover:bg-red-600"
               >
                 -
@@ -104,13 +147,13 @@ const AddToCart = () => {
                 {item.Quantity}
               </span>
               <button
-                onClick={() => dispatch(increaseQuantity(item.id))}
+                onClick={() => AddItem(item.product.id)}
                 className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600"
               >
                 +
               </button>
               <button
-                onClick={() => dispatch(removeItem(item.id))}
+                onClick={() => RemoveCart(item.id)}
                 className="ml-4 px-3 py-1 bg-black text-yellow rounded-md hover:bg-red"
               >
                 Remove

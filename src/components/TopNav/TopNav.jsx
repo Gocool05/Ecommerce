@@ -32,7 +32,6 @@ const TopNav = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const handleLogout = () =>{
@@ -51,7 +50,7 @@ const TopNav = () => {
     localStorage.removeItem('UserEmail');
     localStorage.removeItem('UserNumber');
     localStorage.removeItem('User');
-    window.location.href ='/'
+    navigate('/')
     window.location.reload();
   }
   
@@ -162,7 +161,7 @@ const TopNav = () => {
                         </MenuItem>
                         {Array.isArray(Cate) ? (
                           Cate.map((category, index) => (
-                            <MenuItem>
+                            <MenuItem key={index}>
                               {({ active }) => (
                                 <a
                                   className={`block px-4 py-2 cursor-pointer text-sm text-black ${
@@ -241,7 +240,7 @@ const TopNav = () => {
                       />
                     </svg>
                     {!isLogin  && (
-                      <h4  onClick={openModal} className="sm:flex hidden text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0">
+                      <h4  onClick={openModal} className="flex  text-[10px] sm:text-[14px]  font-bold items-start flex-col gap-0">
                         Hello
                         <span className="text-[10px] sm:text-[14px]  font-[900]">
                           Log In?
@@ -354,6 +353,7 @@ const TopNav = () => {
                     <Link
                       to={"/"}
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Home
                     </Link>
@@ -381,9 +381,10 @@ const TopNav = () => {
                             <a
                               className="hover:text-black "
                               key={index}
-                              onClick={() =>
-                                handleMenuItemClick(`${category?.attributes?.CategoryName}`)
-                              }
+                              onClick={() => {
+                                handleMenuItemClick(category?.attributes?.CategoryName);
+                                setIsMenuOpen(false); // Close the drawer when a category is clicked
+                              }}
                             >
                               {category?.attributes?.CategoryName}
                             </a>
@@ -396,24 +397,28 @@ const TopNav = () => {
                     <Link
                       to={"/shop"}
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Shop
                     </Link>
                     <Link
                       to={"/about"}
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       About
                     </Link>
                     <Link
                       to={"/blog"}
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Blog
                     </Link>
                     <Link
                       to={"/contact"}
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Contact
                     </Link>
@@ -421,6 +426,7 @@ const TopNav = () => {
                       href="https://www.shriworks.com/"
                       target="_blank"
                       className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Factory
                     </a>
@@ -493,7 +499,7 @@ const TopNav = () => {
                   </MenuItem>
                   {Array.isArray(Cate) ? (
                     Cate.map((category, index) => (
-                      <MenuItem>
+                      <MenuItem key={index}>
                         {({ active }) => (
                           <a
                             className={`block px-4 py-2 cursor-pointer text-sm text-black ${

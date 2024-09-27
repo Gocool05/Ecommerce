@@ -87,7 +87,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     const res = await api.get(`/api/users/${LoginUserId}`)
     return res.data;
   },{enabled:!UserId})
-  console.log(auth,'AUth Details')
+  // console.log(auth,'AUth Details')
 
   const customStyles = {
     content: {
@@ -198,7 +198,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     }
   };
   const userConfirmed = localStorage.getItem('userConfirmed')==="true";
-  console.log(userConfirmed,'userConfirmed')
+  // console.log(userConfirmed,'userConfirmed')
 
   const handleResendOtp = async () => {
     let Email;
