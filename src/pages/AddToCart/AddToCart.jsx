@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../../components/Loading/Loading";
 import {
   removeItem,
   increaseQuantity,
@@ -29,7 +30,7 @@ const AddToCart = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
-    const {data:cart} = useQuery('getCart',async() =>{
+    const {data:cart, isError, isLoading} = useQuery('getCart',async() =>{
     const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
     // console.log(cart,'USSER"S CART')
       return res.data
@@ -79,6 +80,7 @@ const AddToCart = () => {
       }
     }
  
+    if(isLoading) return <Loading/>;
 
   if (cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null) {
     return (
@@ -100,7 +102,7 @@ const AddToCart = () => {
         <h1 className="text-2xl text-red font-bold"> Your Cart is Empty</h1>
         <Link
           to={"/shop"}
-          className="mt-4 text-xl cursor-pointer bg-black text-yellow px-3 animate-pulse py-2 rounded-lg"
+          className="mt-4 text-sm sm:text-xl cursor-pointer bg-black text-yellow px-3  py-2 rounded-lg"
         >
           Continue Shopping{" "}
         </Link>
@@ -129,10 +131,17 @@ const AddToCart = () => {
                 <h3 className="text-sm lg:text-lg text-red font-semibold">
                   {item.product?.ProductName}
                 </h3>
-                <p className="text-black font-bold">
-                  &#8377;{item.product?.NewPrice?.toFixed(2)} x {item.Quantity} = &#8377;
-                  {(item.product?.NewPrice * item.Quantity).toFixed(2)}
-                </p>
+                  {item.product?.Offer ? (
+                      <p className="text-black font-bold">
+                      &#8377;{(item?.product?.OldPrice - ((item.product?.Offer/100) * item.product?.OldPrice))} x {item.Quantity} = &#8377;
+                      {( (item?.product?.OldPrice - ((item.product?.Offer/100) * item.product?.OldPrice)) * item.Quantity)}
+                    </p>
+                  ):(
+                    <p className="text-black font-bold">
+                    &#8377;{item.product?.OldPrice?.toFixed(2)} x {item.Quantity} = &#8377;
+                    {(item.product?.OldPrice * item.Quantity).toFixed(2)}
+                  </p>
+                  )}
               </div>
             </div>
             <div className="flex items-center">
@@ -164,13 +173,13 @@ const AddToCart = () => {
       </ul>
       <div className="mt-6 flex sm:flex-row flex-col gap-2 justify-between items-center">
         <div className="flex flex-col font-bold bg-red rounded-xl p-3 gap-1">
-          <p className="text-lg text-yellow">
+          <p className="text-lg flex justify-between text-yellow">
             Total Items: <span className="font-semibold">{totalQuantity}</span>
           </p>
-          <p className="text-lg text-yellow">
-            Total Amount:{" "}
-            <span className="font-semibold">
-              &#8377;{totalAmount.toFixed(2)}
+          <p className="text-lg flex justify-between text-yellow">
+            Total Amout:{" "}
+            <span className="ml-1 font-semibold">
+            &nbsp; &#8377;{" "}{totalAmount}
             </span>
           </p>
         </div>

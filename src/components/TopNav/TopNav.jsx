@@ -7,7 +7,7 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Login from "../../pages/Auth/Login";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import api from "../../Utils/api";
 // 
 let isLogin;
@@ -30,7 +30,7 @@ const TopNav = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -86,6 +86,7 @@ const TopNav = () => {
 
 
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  // queryClient.invalidateQueries(totalQuantity);
 
   return (
     <>

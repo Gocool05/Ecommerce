@@ -89,7 +89,7 @@ const handleSubmit = (e) => {
                         242A, Arcot Rd, Vadapalani,
                       </p>
                       <p className="text-red opacity-90">
-                        Chennai, Tamil Nadu 600026.
+                        Chennai, Tamil Nadu 600026.<br/>(Near Vadapalani Post Office)
                       </p>
                     </div>
                   </li>

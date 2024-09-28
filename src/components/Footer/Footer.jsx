@@ -70,7 +70,9 @@ const Footer = () => {
                 d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
             </svg>
           </span>
+          <a href="mailto:info@shriworks.com" className="hover:underline">
           info@shriworks.com
+          </a>
         </p>
         <p className="mb-4 flex items-center sm:justify-center md:justify-start">
           <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -84,9 +86,11 @@ const Footer = () => {
                 clip-rule="evenodd" />
             </svg>
           </span>
+          <a href="tel:+919942844005" className="hover:underline">
           (+ 91) 99428 44005
+          </a>
         </p>
-        <a href='https://www.shriworks.com/' target='_blank' className="mb-4 flex items-center sm:justify-center md:justify-start">
+        <a href='https://www.shriworks.com/' target='_blank' className="mb-4 flex items-center hover:underline sm:justify-center md:justify-start">
           <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
@@ -114,7 +118,7 @@ const Footer = () => {
             </svg>
           </span>
           242A, Arcot Rd, Vadapalani,
-          Chennai - 600026
+          Chennai - 600026 (Near Vadapalani Post Office)
         </p>
         <p className="mb-4 flex items-center sm:justify-center md:justify-start">
           <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -128,7 +132,9 @@ const Footer = () => {
                 d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
             </svg>
           </span>
+          <a href="mailto:info@shriworks.com" className="hover:underline">
           info@shriworks.com
+  </a>
         </p>
         <p className="mb-4 flex items-center sm:justify-center md:justify-start">
           <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -142,7 +148,9 @@ const Footer = () => {
                 clip-rule="evenodd" />
             </svg>
           </span>
-          (+ 91) 91765 54626
+          <a href="tel:+919176554626" className="hover:underline">
+          (+91) 91765 54626
+        </a>
         </p>
 
         <div className="flex p-2 bg-yellow w-fit rounded-lg ">

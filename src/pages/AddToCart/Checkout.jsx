@@ -13,6 +13,8 @@ if(localStorage.getItem("RegUserId")){
   UserId = localStorage.getItem("LoginUserId");
 }
 
+const GST = 18;
+const Delivery = 100;
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
@@ -31,6 +33,38 @@ const Checkout = () => {
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState({});
 
+
+const indianStates = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jammu and Kashmir",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal"
+];
   // Validate form inputs
   const validateForm = () => {
     let tempErrors = {};
@@ -50,6 +84,15 @@ const Checkout = () => {
     return Object.keys(tempErrors).length === 0;  // If no errors, return true
   };
 
+  const handleStateChange = (e) => {
+    setState(e.target.value);
+    if (!e.target.value) {
+      setErrors((prev) => ({ ...prev, state: 'State is required' }));
+    } else {
+      setErrors((prev) => ({ ...prev, state: '' }));
+    }
+  };
+
   const handlePayment = async (e) => {
     e.preventDefault();
     // dispatch(ClearCart(UserId));
@@ -60,7 +103,7 @@ const Checkout = () => {
     if (validateForm()) {
       try {
         const response = await api.get(`/api/razorpay`);
-        const amount = totalAmount;
+        const amount =(totalAmount + (GST/100)*totalAmount+Delivery);
         console.log(response,'Razorpay rsponse');
         // const { data: order } = await api.post(`/api/contests/${amount}/create-order`, {});
 
@@ -106,14 +149,22 @@ const Checkout = () => {
                   <h3 className="text-base text-yellow font-bold uppercase truncate">{cart?.product?.ProductName}</h3>
                   <ul className="text-xs text-yellow space-y-2 mt-2">
                     <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
-                    <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.NewPrice)*(cart?.Quantity)}</span></li>
+                    {cart?.product?.Offer ? (
+                      <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number((cart?.product?.OldPrice - ((cart.product?.Offer/100) * cart.product?.OldPrice)))*(cart?.Quantity)}</span></li>
+                      ):(
+                        <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.OldPrice)*(cart?.Quantity)}</span></li>
+                    )}
                   </ul>
                 </div>
               </div>
             ))}
           </div>
           <div className="border-red border-2 bg-yellow w-full p-4">
-            <h4 className="flex flex-wrap gap-4 text-base text-red">Total <span className="ml-auto font-bold">&#8377; {totalAmount}</span></h4>
+            <h4 className="flex flex-wrap gap-4 text-base text-red">Total <span className="ml-auto ">&#8377; {totalAmount.toFixed(2)}</span></h4>
+            <h4 className="flex flex-wrap gap-4 text-base text-red">GST ({GST})% <span className="ml-auto ">+ &#8377; {((GST/100)*totalAmount).toFixed(2)}</span></h4>
+            <h4 className="flex flex-wrap gap-4 text-base text-red">Delivery Fee<span className="ml-auto ">+ &#8377; {Delivery.toFixed(2)}</span></h4>
+            <hr className='border-red'/>
+            <h4 className="flex flex-wrap gap-4 font-bold text-base text-red">Grand Total <span className="ml-auto font-bold">&#8377; {(totalAmount + (GST/100)*totalAmount+Delivery).toFixed(2)}</span></h4>
           </div>
         </div>
 
@@ -159,12 +210,23 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <input type="text" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
-                  {errors.state && <p className="text-white text-xs mt-1">{errors.state}</p>}
+                <select
+                  value={state}
+                  onChange={handleStateChange}
+                  className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black"
+                >
+                  <option value="" disabled>Select a state</option>
+                  {indianStates.map((stateName) => (
+                    <option key={stateName} value={stateName}>
+                      {stateName}
+                    </option>
+                  ))}
+                </select>
+                {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
                 </div>
 
                 <div>
-                  <input type="number" placeholder="Zip Code" value={zip} onChange={(e) => setZip(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
+                  <input type="number" placeholder="Pin Code" value={zip} onChange={(e) => setZip(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
                   {errors.zip && <p className="text-white text-xs mt-1">{errors.zip}</p>}
                 </div>
 

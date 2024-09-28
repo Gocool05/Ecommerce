@@ -6,7 +6,7 @@ import api from '../../Utils/api';
 import { useQuery } from 'react-query';
 import Slider from 'react-slick';
 import './ProductDetails.css'
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -36,6 +36,7 @@ const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const [modalIsOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -142,12 +143,17 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       theme: "light",
       transition: Bounce,
       });
+      navigate('/cart')
+      window.scrollTo(0, 0);
+      window.location.reload();
   }
 
   // useEffect(()=>{
   //   window.location.reload();
   // },[location.pathname])
 
+  const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.OldPrice;
+  const OfferPrice = products?.attributes?.OldPrice - discountedPrice;
 
   return (
     <section className="relative flex flex-col  overflow-hidden">
@@ -206,7 +212,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
           <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
             <div className="data sm:w-full max-w-xl">
               <p className="text-lg font-medium leading-8 text-red mb-4">
-                Idols&nbsp; /&nbsp; Lord Muruga
+                Category&nbsp; /&nbsp; {products?.attributes?.category?.data?.attributes?.CategoryName}
               </p>
               <h2 className="font-bold text-3xl  text-red mb-2 capitalize">
               {products?.attributes?.ProductName}
@@ -216,23 +222,31 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
               </h3>
 
               <div className="flex flex-row gap-2 sm:flex-row  sm:items-center mb-6">
+                {products?.attributes?.Offer ? (
+                  <>
                 <h6 className="font-manrope font-semibold text-3xl leading-9 text-green  sm:border-r border-gray-200 ">
-                  &#8377;{products?.attributes?.NewPrice}
+                  &#8377;{OfferPrice}
                 </h6>
                 <h6 className="font-manrope  font-semibold text-xl line-through leading-9 text-black  sm:border-r border-gray-200">
                   &#8377;{products?.attributes?.OldPrice}
                 </h6>
                 <span className="text-xl text-red font-bold"> {products?.attributes?.Offer}{" "}% Off</span>
+                  </>
+                ):(
+                  <h6 className="font-manrope font-semibold text-3xl leading-9 text-green  sm:border-r border-gray-200">
+                  &#8377;{products?.attributes?.OldPrice}
+                </h6>
+                )}
               </div>
               <div className="flex flex-col gap-2   mb-6">
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">SKU -</span> VPL0012
+                  <span className="font-bold">SKU -</span> {products?.attributes?.SKU}
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">Weight -</span> 8.150 Kg
+                  <span className="font-bold">Weight -</span> {products?.attributes?.Weight} Kg
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">Dimensions -</span> 7 x 9.5 x 12 Inches
+                  <span className="font-bold">Dimensions -</span> {products?.attributes?.Dimensions} Inches
                 </h6>
               </div>
 
@@ -293,18 +307,22 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
       <div className="pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
         <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2> 
-        <p className='text-lg text-black font-bold text-justify  '>
+
+        <ul className='text-lg list-disc  list-inside text-black font-bold text-justify '>
+          <li className='mb-2'>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
           repellat unde accusantium veritatis ipsa id, atque ipsum ea pariatur
           saepe omnis dolor ducimus repudiandae provident nisi quae aperiam
           neque tempora.
-        </p>
-        <p className='text-lg text-black font-bold text-justify '>
+          </li>
+          <li className='mb-2'>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
           repellat unde accusantium veritatis ipsa id, atque ipsum ea pariatur
           saepe omnis dolor ducimus repudiandae provident nisi quae aperiam
           neque tempora.
-        </p>
+          </li>
+        </ul>
+     
       </div>
 </div>
 

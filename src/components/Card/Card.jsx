@@ -64,16 +64,15 @@ const Card = ({product}) => {
       addItem({
         id: product.id,
         name: product.attributes.ProductName,
-        price: product.attributes.NewPrice,
+        price: product.attributes.OldPrice,
         image: `${baseUrl}${product?.attributes.ProductImage.data[0]?.attributes.url}`,
         quantity: 1,
       })
-
-    );
-
-    toast.success('Product added to cart!', {
-      position: "top-right",
-      autoClose: 5000,
+      );
+      
+      toast.success('Product added to cart!', {
+        position: "top-right",
+        autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -81,7 +80,10 @@ const Card = ({product}) => {
       progress: undefined,
       theme: "light",
       transition: Bounce,
-      });
+    });
+    navigate('/cart')
+    window.scrollTo(0, 0);
+    window.location.reload();
   }
 
   const handleProductClick = () =>{
@@ -93,6 +95,8 @@ const Card = ({product}) => {
     setIsOpen(false);
   };
 
+  const discountedPrice = (product.attributes.Offer / 100) * product.attributes.OldPrice;
+  const OfferPrice = product.attributes.OldPrice - discountedPrice;
 
   return (
 <>
@@ -118,10 +122,16 @@ const Card = ({product}) => {
     <Link to={`product/`+product.id} className=''>
     <h3 className="text-black  flex text-[12px]  h-16 truncate sm:text-sm font-bold text-wrap">{product?.attributes.ProductName}</h3>
     {/* <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product?.attributes.SubTitle}</h4> */}
+    {product?.attributes.Offer ? (
     <div className="flex  items-center sm:mt-2">
       <span className="text-black bottom-0 line-through text-[12px] opacity-50 lg:text-lg">&#8377;{product?.attributes.OldPrice}</span>
-      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">&#8377;{product?.attributes.NewPrice}</span>
+      <span className="text-red text-sm  lg:text-xl ml-1 font-bold sm:ml-2">&#8377;{OfferPrice}</span>
     </div>
+    ):(
+      <div className="flex  items-center sm:mt-2">
+      <span className="text-black bottom-0 font-bold text-[12px]  lg:text-lg">&#8377;{product?.attributes.OldPrice}</span>
+      </div>
+    )}
     </Link>
     <button className="CartBtn  hidden hover:flex w-full">
       <span className="IconContainer"> 

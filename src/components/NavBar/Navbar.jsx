@@ -54,7 +54,7 @@ const Navbar = () => {
                           src={`${baseUrl}${category?.attributes?.Image?.data.attributes.url}`}
                           alt={category?.attributes?.CategoryName}
                         />
-                        <span className='font-bold'>{category?.attributes?.CategoryName}</span>
+                        <span className='font-bold w-24 text-center'>{category?.attributes?.CategoryName}</span>
                       </div>
                     </Link>
                   ))

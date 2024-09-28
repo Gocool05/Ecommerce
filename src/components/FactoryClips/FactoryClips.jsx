@@ -40,11 +40,18 @@ const FactoryClips = ({Media,isLoading}) => {
       {Media.map((item, index) => (
         <div className={`h-72 relative   gap-5`} key={index}>
              {item.Type ==='Video' && 
-          <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
-            <video loop autoPlay muted className="mx-2 md:mx-5 md:w-96 w-72 transition-all bg-red bg1 border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden object-cover">
-              <source src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} type="video/mp4" />
-            </video>
-            </a>
+         <div className="mx-2 md:mx-5 md:w-96 w-72 h-48 md:h-60 transition-all bg-red  bg1 border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden">
+         <iframe
+            key ={item}
+           width="100%"
+           height="100%"
+           src={`https://www.youtube.com/embed/${item.EmbedCode}`}
+           title="YouTube video"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+           className="w-full h-full rounded-md "
+           loading='lazy'
+         ></iframe>
+     </div>
             }
         </div>
       ))}

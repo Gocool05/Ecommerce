@@ -43,7 +43,7 @@ export const DeleteCartItem = createAsyncThunk(
   'DeleteCartItem',
   async (cartId, { rejectWithValue }) => {
     try {
-      const res = await api.post('/api/remove/carts', {"cartId":cartId.cartId}
+      const res = await api.post('/api/delete/carts', {"cartId":cartId.cartId}
       );
       return res.data;
     } catch (error) {
@@ -89,14 +89,23 @@ const cartSlice = createSlice({
     setCartItems: (state, action) => {
       // Set cart items from the action payload
       state.cartItems = action.payload || [];
-        console.log(state.cartItems,'State cartItems')
-      // Calculate total amount and quantity safely
-      state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + (item.product.NewPrice *item.Quantity || 0), 0
-      );
-      state.totalQuantity = state.cartItems.reduce(
-        (total, item) => total + (item.Quantity || 0), 0
-        );
+      console.log(state.cartItems, 'State cartItems');
+      
+      const GST_RATE = 0.18; // Example GST rate (18%)
+    
+      // Calculate total amount with GST and offer price
+      state.totalAmount = state.cartItems.reduce((total, item) => {
+        const product = item.product;
+        const basePrice = product.OldPrice || 0; // Old price as base price
+        const offerPrice = (basePrice-(product.Offer/100*basePrice)) || basePrice; // Use offer price if available
+        const itemPrice = offerPrice * item.Quantity || 0; // Calculate price based on quantity
+        return total + itemPrice;
+      }, 0);
+    
+      // Calculate total quantity
+      state.totalQuantity = state.cartItems.reduce((total, item) => {
+        return total + (item.Quantity || 0);
+      }, 0);
     },
     removeItem(state, action) {
       const id = action.payload;

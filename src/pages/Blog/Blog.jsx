@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import api from "../../Utils/api";
+import Loading from "../../components/Loading/Loading"
 const baseUrl = api.defaults.baseURL;
 const Blog = () => {
 
@@ -9,8 +10,9 @@ const getBlog = async() =>{
   return res.data.data;
 }
 
-const {data:blogData} = useQuery('GetBlog', getBlog);
+const {data:blogData,isLoading} = useQuery('GetBlog', getBlog);
 
+  if(isLoading)return <Loading/>;
   return (
     <>
       <section className=" bg-cover p-4 md:p-10 ">
