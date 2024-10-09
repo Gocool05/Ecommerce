@@ -90,7 +90,7 @@ const TopNav = () => {
 
   return (
     <>
-      <nav className=" shadow-lg py-5 items-center">
+      <nav className=" shadow-lg sm:py-5 py-2 items-center">
         <div className="px-5 sm:px-10">
           <div className="flex justify-between items-center h-16">
             {/* Left section for the logo */}
@@ -448,7 +448,7 @@ const TopNav = () => {
       </nav>
 
       <div className=" lg:hidden items-center justify-center ">
-        <div className="rounded-lg  p-5">
+        <div className="rounded-lg  p-2">
           <div className="flex">
             <div className="flex w-10 items-center shadow-lg justify-center rounded-tl-lg rounded-bl-lg border-r border-yellow bg-white p-5">
               <svg
@@ -462,8 +462,10 @@ const TopNav = () => {
             <input
               type="text"
               className="w-full bg-white text-black shadow-lg pl-2 text-base font-semibold outline-0"
-              placeholder=""
-              id=""
+              placeholder="Search product..."
+              onChange={(e) => setSearchTerm(e.target.value)}
+              id="search-product"
+              autoComplete="off"
             />
 
             {/* Dropdown here */}
@@ -528,6 +530,7 @@ const TopNav = () => {
               type="button"
               value="Search"
               className="bg-red p-2 rounded-tr-lg rounded-br-lg text-yellow font-semibold hover:bg-red/85 transition-colors"
+              onClick={handleSearch}
             />
           </div>
         </div>

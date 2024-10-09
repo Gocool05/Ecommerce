@@ -13,7 +13,7 @@ const FactoryClips = ({Media,isLoading}) => {
   return (
 <div className='mb-10 px-2'>
 
-<h2 class="flex flex-row flex-nowrap py-10 items-center ">
+<h2 class="flex flex-row flex-nowrap py-3 md:py-10 items-center ">
           <span class="flex-grow block border-t border-red"></span>
           <span class="flex-none block mx-4 px-4 py-2.5 lg:text-xl rounded leading-none uppercase font-bold bg-red text-yellow">
               FACTORY CLIPS AND IMAGES
@@ -21,7 +21,7 @@ const FactoryClips = ({Media,isLoading}) => {
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-    <div className=' mb-10'>
+    <div className='md:mt-0 mt-3 mb-10'>
       <Marquee play={true} direction={'right'} pauseOnHover={true} loop={0}>
       {Media?.map((item, index) => (
         <div className={`md:h-56 h-44  relative `} key={index}>

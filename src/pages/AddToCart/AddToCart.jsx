@@ -32,7 +32,7 @@ const AddToCart = () => {
 
     const {data:cart, isError, isLoading} = useQuery('getCart',async() =>{
     const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
-    // console.log(cart,'USSER"S CART')
+    console.log(cart,'USSER"S CART')
       return res.data
     },{
       onSuccess:(data) =>{
@@ -65,6 +65,7 @@ const AddToCart = () => {
         queryClient.invalidateQueries('getCart');
       } catch (error) {
         console.log(error)
+        toast.error('Failed to add item to cart');
       }
     }
 
@@ -109,7 +110,7 @@ const AddToCart = () => {
       </div>
     );
   }
-
+  
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
@@ -131,43 +132,55 @@ const AddToCart = () => {
                 <h3 className="text-sm lg:text-lg text-red font-semibold">
                   {item.product?.ProductName}
                 </h3>
+                {item?.product?.AvailableQuantity ? (
+                <>
                   {item.product?.Offer ? (
                       <p className="text-black font-bold">
-                      &#8377;{(item?.product?.OldPrice - ((item.product?.Offer/100) * item.product?.OldPrice))} x {item.Quantity} = &#8377;
-                      {( (item?.product?.OldPrice - ((item.product?.Offer/100) * item.product?.OldPrice)) * item.Quantity)}
+                      &#8377;{(item?.product?.Price - ((item.product?.Offer/100) * item.product?.Price))} x {item.Quantity} = &#8377;
+                      {( (item?.product?.Price - ((item.product?.Offer/100) * item.product?.Price)) * item.Quantity)}
                     </p>
                   ):(
                     <p className="text-black font-bold">
-                    &#8377;{item.product?.OldPrice?.toFixed(2)} x {item.Quantity} = &#8377;
-                    {(item.product?.OldPrice * item.Quantity).toFixed(2)}
+                    &#8377;{item.product?.Price?.toFixed(2)} x {item.Quantity} = &#8377;
+                    {(item.product?.Price * item.Quantity).toFixed(2)}
                   </p>
                   )}
+                </> 
+                )
+                : (null)  }
+                 
               </div>
             </div>
-            <div className="flex items-center">
-              <button
-                // onClick={() => dispatch(decreaseQuantity(item.product.id))}
-                onClick={()=>RemoveItem(item.id)}
-                className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-l-md hover:bg-red-600"
-              >
-                -
-              </button>
-              <span className="px-4 py-1 border-red border-t border-b">
-                {item.Quantity}
-              </span>
-              <button
-                onClick={() => AddItem(item.product.id)}
-                className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600"
-              >
-                +
-              </button>
-              <button
-                onClick={() => RemoveCart(item.id)}
-                className="ml-4 px-3 py-1 bg-black text-yellow rounded-md hover:bg-red"
-              >
-                Remove
-              </button>
-            </div>
+            {item?.product?.AvailableQuantity ? (
+               <div className="flex items-center">
+               <button
+                 // onClick={() => dispatch(decreaseQuantity(item.product.id))}
+                 onClick={()=>RemoveItem(item.id)}
+                 className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-l-md hover:bg-red-600"
+               >
+                 -
+               </button>
+               <span className="px-4 py-1 border-red border-t border-b">
+                 {item.Quantity}
+               </span>
+               <button
+                 onClick={() => {AddItem(item.product.id)}}
+                 disabled={item.product.AvailableQuantity===0 || item.product.AvailableQuantity === null || item.product.AvailableQuantity <= item.Quantity}
+                 className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600"
+               >
+                 +
+               </button>
+               <button
+                 onClick={() => RemoveCart(item.id)}
+                 className="ml-4 px-3 py-1 bg-black text-yellow rounded-md hover:bg-red"
+               >
+                 Remove
+               </button>
+             </div>
+            ) : (
+              <p className="text-red font-bold">Out of Stock</p>
+            )}
+           
           </li>
         ))}
       </ul>

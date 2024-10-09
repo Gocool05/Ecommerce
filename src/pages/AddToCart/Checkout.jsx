@@ -1,5 +1,7 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import React, { useState } from 'react'
+import { useEffect } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { ClearCart, clearCart } from '../../Slice/cartSlice';
@@ -13,11 +15,21 @@ if(localStorage.getItem("RegUserId")){
   UserId = localStorage.getItem("LoginUserId");
 }
 
+let JWT;
+
+if(localStorage.getItem('RegJWT')){
+  JWT = localStorage.getItem('RegJWT');
+}else if(localStorage.getItem('LoginJWT')){
+  JWT = localStorage.getItem('LoginJWT');
+}else {
+  JWT = null;
+}
+
 const GST = 18;
-const Delivery = 100;
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   console.log(cartItems,'proceed to checkout');
   // Form State
@@ -28,6 +40,7 @@ const Checkout = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+  const [Delivery, setDelivery] = useState(0);
   const [zip, setZip] = useState('');
   const [landmark, setLandmark] = useState('');
   const [notes, setNotes] = useState('');
@@ -83,15 +96,46 @@ const indianStates = [
     if(Object.keys(tempErrors).length >= 1)  toast.error('Fill All The Required Information')
     return Object.keys(tempErrors).length === 0;  // If no errors, return true
   };
-
   const handleStateChange = (e) => {
-    setState(e.target.value);
-    if (!e.target.value) {
+    const value = e.target.value;
+    setState(value); // Update the state
+    
+    if (!value) {
       setErrors((prev) => ({ ...prev, state: 'State is required' }));
     } else {
       setErrors((prev) => ({ ...prev, state: '' }));
+      mutate(value); // Pass the updated state value directly to the mutate function
     }
   };
+
+
+  const {mutate} =  useMutation(
+    async (state) => {
+      if (state) {
+        const response = await api.post(`/api/get/delivery/${state}/${UserId}`);
+        console.log('State POsted Response',response.data)
+        setDelivery(response?.data?.deliveryCharge)
+        return response.data;
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate queries that need to be refreshed after the mutation
+        queryClient.invalidateQueries('delivery'); // Replace with your query key
+        console.log('State change successful, queries invalidated');
+      },
+      onError: (error) => {
+        console.log(error, 'Error during state change');
+      },
+    }
+  )
+
+  const option = {
+    headers: {
+    'Authorization':`Bearer ${JWT}`
+    },
+    };
+
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -114,9 +158,12 @@ const indianStates = [
           currency: "INR",
           // order_id: order.id,
           name: "Shriworks",
-          handler: async(Paymentresponse) => {
+          handler: async(Paymentresponse) =>{
+            console.log(Paymentresponse,'Payment response check');
+          console.log(JWT,'JWT Check');
             try {
-              toast.success('Order added successfully');
+              await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
+              toast.success('Order Placed successfully');
               dispatch(ClearCart(UserId));
               setTimeout(() => {
                 window.location.href = '/';
@@ -124,7 +171,6 @@ const indianStates = [
             } catch (error) {
               console.error("Error processing payment: ", error);
             }
-            // await api.post(`/api/contests/${Paymentresponse.razorpay_payment_id}/payment`, {});
           },
         };
         var pay = new window.Razorpay(options);
@@ -150,9 +196,9 @@ const indianStates = [
                   <ul className="text-xs text-yellow space-y-2 mt-2">
                     <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
                     {cart?.product?.Offer ? (
-                      <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number((cart?.product?.OldPrice - ((cart.product?.Offer/100) * cart.product?.OldPrice)))*(cart?.Quantity)}</span></li>
+                      <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number((cart?.product?.Price - ((cart.product?.Offer/100) * cart.product?.Price)))*(cart?.Quantity)}</span></li>
                       ):(
-                        <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.OldPrice)*(cart?.Quantity)}</span></li>
+                        <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.Price)*(cart?.Quantity)}</span></li>
                     )}
                   </ul>
                 </div>
@@ -161,8 +207,32 @@ const indianStates = [
           </div>
           <div className="border-red border-2 bg-yellow w-full p-4">
             <h4 className="flex flex-wrap gap-4 text-base text-red">Total <span className="ml-auto ">&#8377; {totalAmount.toFixed(2)}</span></h4>
-            <h4 className="flex flex-wrap gap-4 text-base text-red">GST ({GST})% <span className="ml-auto ">+ &#8377; {((GST/100)*totalAmount).toFixed(2)}</span></h4>
-            <h4 className="flex flex-wrap gap-4 text-base text-red">Delivery Fee<span className="ml-auto ">+ &#8377; {Delivery.toFixed(2)}</span></h4>
+            <h4 className="flex flex-wrap gap-4 text-base text-red">GST ({GST}%) <span className="ml-auto ">+ &#8377; {((GST/100)*totalAmount).toFixed(2)}</span></h4>
+            <h4 className="flex flex-wrap gap-4   pt-3 text-red uppercase font-bold">Choose a State to know your delivery fee:</h4>
+            <div className="flex flex-row gap-4 justify-center items-center text-red">
+              <span className='flex md:flex-row  md:items-center flex-col md:gap-2'>
+              Delivery Fee
+              <div className='flex items-center gap-1' >
+                <select
+                  value={state}
+                  onChange={handleStateChange}
+                  className="px-2 py-1 my-2 bg-black capitalize flex text-yellow  text-sm rounded-md focus:outline-black"
+                >
+                  <option className='w-fit' value="" disabled>Choose a state</option>
+                  {indianStates.map((stateName) => (
+                    <option key={stateName} value={stateName}>
+                      {stateName}
+                    </option>
+                  ))}
+                </select>
+                {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
+
+                {/* <button className='bg-red text-yellow px-2 py-0.5 rounded'>GET</button> */}
+
+                </div>
+              </span>
+                  {state ? <span className="ml-auto "> + &#8377; {Delivery.toFixed(2)} </span> :  <span className="ml-auto flex justify-center text-justify h-12 font-bold uppercase text-[12px] ">  </span>}
+              </div>
             <hr className='border-red'/>
             <h4 className="flex flex-wrap gap-4 font-bold text-base text-red">Grand Total <span className="ml-auto font-bold">&#8377; {(totalAmount + (GST/100)*totalAmount+Delivery).toFixed(2)}</span></h4>
           </div>
@@ -208,6 +278,14 @@ const indianStates = [
                   <input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
                   {errors.city && <p className="text-white text-xs mt-1">{errors.city}</p>}
                 </div>
+                <div>
+                  <input type="number" placeholder="Pin Code" value={zip} onChange={(e) => setZip(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
+                  {errors.zip && <p className="text-white text-xs mt-1">{errors.zip}</p>}
+                </div>
+
+                <div>
+                  <input type="text" placeholder="Landmark" value={landmark} onChange={(e) => setLandmark(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
+                </div>
 
                 <div>
                 <select
@@ -225,16 +303,9 @@ const indianStates = [
                 {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
                 </div>
 
-                <div>
-                  <input type="number" placeholder="Pin Code" value={zip} onChange={(e) => setZip(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
-                  {errors.zip && <p className="text-white text-xs mt-1">{errors.zip}</p>}
-                </div>
-
-                <div>
-                  <input type="text" placeholder="Landmark" value={landmark} onChange={(e) => setLandmark(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
-                </div>
               </div>
             </div>
+
 
             <div className='mt-8'>
             <h3 className="text-base text-yellow mb-4">Order Notes If Any (Optional)</h3>

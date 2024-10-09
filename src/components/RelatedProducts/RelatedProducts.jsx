@@ -24,7 +24,7 @@ const RelatedProducts = (props) => {
  
   const relatedProduct = products.filter(product=>{
     const {id,material,category} =data;
-    console.log(id,material,category,'ID Material Category')
+    // console.log(id,material,category,'ID Material Category')
 
     if(id!==product.id){
       const materialMatch = material ? product.attributes.Material === material : true;

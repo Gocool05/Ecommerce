@@ -97,7 +97,6 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       bottom: 'auto',
       transform: 'translate(-50%, -50%)',
       padding: '0px',
-      width: 'fit-content',
       margin: 'auto',
       zIndex: 50,
     },
@@ -242,11 +241,11 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       ariaHideApp={false}
     >
       {!isLogin ? (
-      <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
+      <div className="bg-red bg3 shadow-2xl flex lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
       <div className='lg:flex hidden justify-center relative object-cover'>
         <img className='object-cover' src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" alt="" />
       </div>
-      <form onSubmit={handleLogin} className='flex flex-col gap-3 lg:my-5 mx-2 p-2'>
+      <form onSubmit={handleLogin} className='flex w-[300px] md:w-auto flex-col gap-3 lg:my-5 mx-2 p-2'>
         <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Login to Shriworks</h2>
         <div className='flex relative flex-col items-center justify-center'>
           <input
@@ -293,7 +292,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     </div>
       
       ) : (
-        <div className="bg-red bg3 shadow-2xl lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
+        <div className="bg-red bg3 shadow-2xl flex lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
 
         <div className='lg:flex hidden justify-center relative object-cover'>
           <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
@@ -301,7 +300,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
 
             <div className='flex flex-col justify-center'>
 
-        {!userConfirmed ? (<form  className='flex flex-col gap-3 lg:my-5 mx-2 p-2 justify-center '>
+        {!userConfirmed ? (<form  className='flex flex-col w-[300px] md:w-auto gap-3 lg:my-5 mx-2 p-2 justify-center '>
           <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Signup to Shriworks</h2>
           <div className='flex relative flex-col items-center justify-center'>
           {!RegEmail &&

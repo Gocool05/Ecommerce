@@ -69,7 +69,7 @@ const CategorySlider = ({CategoryData}) => {
  
 
   return (
-    <div className=' py-10'>
+    <div className='py-2 '>
 
         <h2 class="flex flex-row flex-nowrap items-center ">
           <span class="flex-grow block border-t border-red"></span>
@@ -80,7 +80,7 @@ const CategorySlider = ({CategoryData}) => {
       </h2>
 
 
-      <Slider className='cateSlider mt-20 ' {...settings}>
+      <Slider className='cateSlider mt-5 md:mt-10 ' {...settings}>
           {category?.map((cate,index) => (
            <div key={index} className='h-48 w-48 relative sm:h-60 sm:w-60 flex justify-center  text-center cursor-pointer  border-red border-4 bg-transparent rounded '  onClick={() => handleMenuItemClick(`${cate?.category?.data?.attributes?.CategoryName}`)}>
            <img className=' object-cover h-full w-full' src={`${baseUrl}${cate?.category?.data?.attributes?.Image?.data?.attributes.url}`} alt={cate?.category?.data?.attributes?.CategoryName}/>

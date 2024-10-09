@@ -23,7 +23,7 @@ const Home = () => {
  
   // Fetch Home Slider Data
   const { data: SliderData } = useQuery('Home-Slider', async () => {
-    const res = await api.get(`api/pages/1?populate[0]=Slider&populate[1]=Slider.Image`);
+    const res = await api.get(`api/pages/1?populate[0]=Slider&populate[1]=Slider.Image&populate[2]=Slider.MobileImage`);
     return res.data.data;
   });
 

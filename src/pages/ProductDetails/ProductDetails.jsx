@@ -62,17 +62,17 @@ const ProductDetails = () => {
       return res.data.data;
   });
   
-  console.log(products,'Details of the product')
+  // console.log(products,'Details of the product')
   
 const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
-  const [selectedImage, setSelectedImage] = useState(products?.attributes?.ProductImage?.data[0]?.attributes?.url || '');
+  const [selectedMedia, setSelectedMedia] = useState(products?.attributes?.ProductImage?.data[0]?.attributes?.url || '');
 
   const productImages = products?.attributes?.ProductImage?.data || [];
 
   useEffect(() => {
     if (productImages.length > 0) {
-      setSelectedImage(productImages[0]?.attributes?.url);
+      setSelectedMedia(productImages[0]?.attributes?.url);
     }
   }, [productImages]);
 
@@ -152,8 +152,8 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   //   window.location.reload();
   // },[location.pathname])
 
-  const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.OldPrice;
-  const OfferPrice = products?.attributes?.OldPrice - discountedPrice;
+  const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.Price;
+  const OfferPrice = products?.attributes?.Price - discountedPrice;
 
   return (
     <section className="relative flex flex-col  overflow-hidden">
@@ -161,52 +161,72 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
 
-        <div className="flex flex-row  gap-2 items-center justify-center">
-
-
+        <div className="flex flex-row gap-2 items-center justify-center">
   {/* Thumbnails Carousel */}
-  <div className=" w-1/4 lg:mb-0 ">
+  <div className="w-1/4 lg:mb-0">
     {productImages.length > 0 ? (
-        <div className="vertical-carousel-container">
+      <div className="vertical-carousel-container">
         <button className="custom-arrow up-arrow" onClick={() => handleScroll('up')}>↑</button>
         <div className="carousel-content" ref={scrollRef}>
-          {productImages.map((image, index) => (
+          {productImages.map((media, index) => (
             <div
               key={index}
               className="carousel-item cursor-pointer"
-              onClick={() => setSelectedImage(image.attributes?.url)}
+              onClick={() => setSelectedMedia(media.attributes?.url)}
             >
-              <img
-                src={`${baseUrl}${image.attributes?.url}`}
-                alt={`Thumbnail ${index}`}
-                className="w-full h-auto border border-gray-300 rounded"
-              />
+              {media.attributes?.url.endsWith('.mp4') ? (
+                <video
+                  src={`${baseUrl}${media.attributes?.url}`}
+                  alt={`Thumbnail Video ${index}`}
+                  className="w-full h-auto border border-gray-300 rounded"
+                  muted
+                  controls={false}
+                />
+              ) : (
+                <img
+                  src={`${baseUrl}${media.attributes?.url}`}
+                  alt={`Thumbnail ${index}`}
+                  className="w-full h-auto border border-gray-300 rounded"
+                />
+              )}
             </div>
           ))}
         </div>
         <button className="custom-arrow down-arrow" onClick={() => handleScroll('down')}>↓</button>
       </div>
     ) : (
-      <p>No images available</p>
+      <p>No media available</p>
     )}
   </div>
 
-  
-  {/* Main Image with Zoom Effect */}
-  <div className=" w-3/4 flex items-center justify-center">
-    {selectedImage ? (
-      <div className="relative h-4/4 cursor-zoom-in  w-4/4 z-50 object-cover">
-        <ReactImageZoom
-          img={`${baseUrl}${selectedImage}`}
-          zoomLensStyle={`opacity:1,background-color:#000`}
-        />
-      </div>
+    {console.log(selectedMedia,'selected media')}
+  {/* Main Media with Zoom or Video */}
+  <div className="w-3/4 flex items-center justify-center">
+    {selectedMedia ? (
+      selectedMedia.endsWith('.mp4') ? (
+        <div className="relative h-auto w-full z-50">
+          <video
+            src={`${baseUrl}${selectedMedia}`}
+            className="w-full h-auto"
+            controls
+            autoPlay
+            muted
+          />
+        </div>
+      ) : (
+        <div className="relative h-full w-full cursor-zoom-in z-50 object-cover">
+          <ReactImageZoom
+            img={`${baseUrl}${selectedMedia}`}
+            zoomLensStyle={`opacity:1,background-color:#000`}
+          />
+        </div>
+      )
     ) : (
-      <p>No image selected</p>
+      <p>No media selected</p>
     )}
   </div>
-
 </div>
+
 
 
           <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
@@ -228,13 +248,13 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   &#8377;{OfferPrice}
                 </h6>
                 <h6 className="font-manrope  font-semibold text-xl line-through leading-9 text-black  sm:border-r border-gray-200">
-                  &#8377;{products?.attributes?.OldPrice}
+                  &#8377;{products?.attributes?.Price}
                 </h6>
                 <span className="text-xl text-red font-bold"> {products?.attributes?.Offer}{" "}% Off</span>
                   </>
                 ):(
                   <h6 className="font-manrope font-semibold text-3xl leading-9 text-green  sm:border-r border-gray-200">
-                  &#8377;{products?.attributes?.OldPrice}
+                  &#8377;{products?.attributes?.Price}
                 </h6>
                 )}
               </div>
@@ -246,11 +266,16 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   <span className="font-bold">Weight -</span> {products?.attributes?.Weight} Kg
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">Dimensions -</span> {products?.attributes?.Dimensions} Inches
+                  <span className="font-bold">Dimensions -</span> {products?.attributes?.Dimensions} 
                 </h6>
               </div>
-
+              <>
               <div className="flex  gap-3 py-2">
+                {products?.attributes?.AvailableQuantity === 0 || products?.attributes?.AvailableQuantity ===null ?
+              (
+                <p className='text-yellow px-2 py-1 rounded font-bold text-2xl bg-red'>Out Of Stock</p>
+              ):(
+                <>
                 <div className="flex sm:items-center gap-3  ">
                   <select
                     aria-label="Select quantity"
@@ -265,6 +290,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                     ))}
                   </select>
                 </div>
+             
                 <button className="group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={addToCartHandler}>
                   <svg
                     className="stroke-yellow font-bold "
@@ -283,7 +309,10 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   </svg>
                   Add to cart
                 </button>
+                </>
+              )}
               </div>
+                </>
 
               <div className="mt-2 flex flex-col gap-2">
                 <h4 className="text-xl text-red font-bold uppercase">
@@ -296,8 +325,8 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   This product is made on order.
                 </p>
                 <p className="text-black text-base font-semibold ">
-                  For ordering out of India please Contact us in Whatsapp.
-                  Website shipment only within India.
+                  (For ordering out of India please Contact us in Whatsapp.
+                  Website shipment only within India.)
                 </p>
               </div>
             </div>
@@ -308,21 +337,18 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       <div className="pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
         <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2> 
 
-        <ul className='text-lg list-disc  list-inside text-black font-bold text-justify '>
-          <li className='mb-2'>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
-          repellat unde accusantium veritatis ipsa id, atque ipsum ea pariatur
-          saepe omnis dolor ducimus repudiandae provident nisi quae aperiam
-          neque tempora.
-          </li>
-          <li className='mb-2'>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium
-          repellat unde accusantium veritatis ipsa id, atque ipsum ea pariatur
-          saepe omnis dolor ducimus repudiandae provident nisi quae aperiam
-          neque tempora.
-          </li>
-        </ul>
-     
+    <ul className='text-lg list-disc list-inside text-black font-bold text-justify'>
+  {products?.attributes?.Description?.length > 0 ? (
+    products.attributes?.Description.map((desc, index) => (
+      <li className='mb-2' key={index}>
+        {desc?.children?.[0]?.children?.[0]?.text || 'No description available'}
+      </li>
+    ))
+  ) : (
+    <li className='mb-2'>No descriptions available.</li>
+  )}
+</ul>
+        
       </div>
 </div>
 

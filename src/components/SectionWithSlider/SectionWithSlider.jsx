@@ -101,7 +101,7 @@ const Section = SectionData;
   return (
     <>
     {Section?.map((section,index)=>(
-    <div className="py-10 overflow-hidden" key={index}>
+    <div className="py-2 md:pt-10 overflow-hidden" key={index}>
 
           <h2 class="flex flex-row flex-nowrap items-center ">
           <span class="flex-grow block border-t border-red"></span>
@@ -111,7 +111,7 @@ const Section = SectionData;
           <span class="flex-grow block border-t border-red"></span>
       </h2>
 
-      <div className='sm:px-16 pt-10 gap-4 '>
+      <div className='sm:px-16 md:pt-10 pt-3 gap-4 '>
       <Slider {...settings}>
           {section?.products?.data?.map((product, index) => (
             <div  className='p-2' key={index}>

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import api from '../Utils/api';
 const initialState = {
   cartItems: [],
@@ -34,7 +35,8 @@ export const AddCartItem = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.log(error)
+      return rejectWithValue(error.response?.data || 'Something went wrong');
     }
   }
 );
@@ -86,6 +88,7 @@ const cartSlice = createSlice({
       state.totalQuantity += newItem.quantity;
       state.totalAmount += newItem.price * newItem.quantity;
     },
+    
     setCartItems: (state, action) => {
       // Set cart items from the action payload
       state.cartItems = action.payload || [];
@@ -96,7 +99,7 @@ const cartSlice = createSlice({
       // Calculate total amount with GST and offer price
       state.totalAmount = state.cartItems.reduce((total, item) => {
         const product = item.product;
-        const basePrice = product.OldPrice || 0; // Old price as base price
+        const basePrice = product.Price || 0; // Old price as base price
         const offerPrice = (basePrice-(product.Offer/100*basePrice)) || basePrice; // Use offer price if available
         const itemPrice = offerPrice * item.Quantity || 0; // Calculate price based on quantity
         return total + itemPrice;
@@ -107,6 +110,7 @@ const cartSlice = createSlice({
         return total + (item.Quantity || 0);
       }, 0);
     },
+
     removeItem(state, action) {
       const id = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === id);
