@@ -32,7 +32,7 @@ const AddToCart = () => {
 
     const {data:cart, isError, isLoading} = useQuery('getCart',async() =>{
     const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
-    console.log(cart,'USSER"S CART')
+    // console.log(cart,'USSER"S CART')
       return res.data
     },{
       onSuccess:(data) =>{

@@ -20,11 +20,11 @@ const Shop = () => {
   });
   const [selectedSort, setSortCategory] = useState("Default");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 15;
 
 
   const { data: productsData, isLoading, isError } = useQuery('Products', async () => {
-    const res = await api.get('/api/Products?populate=*');
+    const res = await api.get(`/api/Products?populate=*&pagination[pageSize]=100`);
     return res.data.data;
   });
 
@@ -66,7 +66,7 @@ const Shop = () => {
 
     // Price filter
     const priceMatch = price ? (
-      product.attributes.NewPrice >= price[0] && product.attributes.NewPrice <= price[1]
+      product.attributes.Price >= price[0] && product.attributes.Price <= price[1]
     ) : true;
 
     return materialMatch && categoryMatch && priceMatch && searchResult;
@@ -99,6 +99,7 @@ const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastPro
 const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
 
 const handlePageChange = (pageNumber) => {
+    window.scrollTo(0,0);
     setCurrentPage(pageNumber);
 };
 
@@ -132,7 +133,7 @@ const handlePageChange = (pageNumber) => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
-              className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? 'bg-white text-red' : 'bg-white/30'} rounded`}
+              className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? 'bg-black text-yellow' : 'bg-white/30'} rounded`}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}

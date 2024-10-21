@@ -11,7 +11,7 @@ export const loginUser = createAsyncThunk(
     try {
       const res = await api.post('/api/auth/local', loginData);
       const { jwt, user } = res.data;
-      console.log(jwt,user,'USER DETAILS');
+      // console.log(jwt,user,'USER DETAILS');
       localStorage.setItem('LoginJWT', jwt);
       localStorage.setItem('UserName', user.username);
       localStorage.setItem('UserEmail', user.email);
@@ -34,7 +34,7 @@ export const registerUser = createAsyncThunk(
     try {
       const res = await api.post('/api/auth/local/register', registerData);
       dispatch(registerSuccess(res.data));
-      console.log(res.data,'user Details')
+      // console.log(res.data,'user Details')
       const isConfirmed = res.data?.user?.confirmed ;
         localStorage.setItem('RegUserId',res.data?.user?.id);
         localStorage.setItem('RegJWT',res.data?.jwt);
@@ -54,7 +54,7 @@ export const verifyOtp = createAsyncThunk(
   async (otpData, { rejectWithValue }) => {
     try {
       const res = await api.post('/api/auth/verifyOTP', otpData);
-      console.log(res.error,'Verify Otp')
+      // console.log(res.error,'Verify Otp')
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -68,7 +68,7 @@ export const resendOtp = createAsyncThunk(
   async (otpData, { rejectWithValue }) => {
     try {
       const res = await api.post('/api/auth/resendOtp', otpData);
-      console.log(res,'Resnd OTP Response');
+      // console.log(res,'Resnd OTP Response');
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -25,7 +25,7 @@ export const RemoveCartItem = createAsyncThunk(
 export const AddCartItem = createAsyncThunk(
   'AddCartItem',
   async (CartData, { rejectWithValue }) => {
-    console.log(CartData,'Add  Cart')
+    // console.log(CartData,'Add  Cart')
     try {
       const res = await api.post('/api/carts', {data:{
         product:CartData.product,
@@ -92,7 +92,7 @@ const cartSlice = createSlice({
     setCartItems: (state, action) => {
       // Set cart items from the action payload
       state.cartItems = action.payload || [];
-      console.log(state.cartItems, 'State cartItems');
+      // console.log(state.cartItems, 'State cartItems');
       
       const GST_RATE = 0.18; // Example GST rate (18%)
     

@@ -81,9 +81,9 @@ const RelatedProducts = (props) => {
     
       const settings = {
         infinite: false,
-        autoplay:false,
+        autoplay:true,
         speed: 500,
-        autoplaySpeed: 2500,
+        autoplaySpeed: 1500,
         slidesToShow: 5,  // 5 columns
         slidesToScroll: 1,
         rows: 1,  // 2 rows    

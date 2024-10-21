@@ -199,7 +199,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
     )}
   </div>
 
-    {console.log(selectedMedia,'selected media')}
+    {/* {console.log(selectedMedia,'selected media')} */}
   {/* Main Media with Zoom or Video */}
   <div className="w-3/4 flex items-center justify-center">
     {selectedMedia ? (
@@ -226,8 +226,6 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
     )}
   </div>
 </div>
-
-
 
           <div className="data w-full lg:pr-8 pr-0 xl:justify-start relative  lg:justify-center flex items-center max-lg:pb-10 xl:my-2 lg:my-5 my-0">
             <div className="data sm:w-full max-w-xl">
@@ -260,13 +258,13 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
               </div>
               <div className="flex flex-col gap-2   mb-6">
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">SKU -</span> {products?.attributes?.SKU}
+                  <span className="font-bold">Code -</span> {products?.attributes?.SKU}
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
                   <span className="font-bold">Weight -</span> {products?.attributes?.Weight} Kg
                 </h6>
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
-                  <span className="font-bold">Dimensions -</span> {products?.attributes?.Dimensions} 
+                  <span className="font-bold">Dimensions <span className='font-semibold text-lg'>(Height x Width)</span> -</span> {products?.attributes?.Dimensions} 
                 </h6>
               </div>
               <>
@@ -341,7 +339,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   {products?.attributes?.Description?.length > 0 ? (
     products.attributes?.Description.map((desc, index) => (
       <li className='mb-2' key={index}>
-        {desc?.children?.[0]?.children?.[0]?.text || 'No description available'}
+        {desc?.children?.[0]?.children?.[0]?.text}
       </li>
     ))
   ) : (

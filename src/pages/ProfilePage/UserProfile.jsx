@@ -79,10 +79,10 @@ const UserProfile = () => {
 
   return (
     <div className="profile-page max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-bold uppercase text-red mb-8">User Profile</h1>
+      {/* <h1 className="text-2xl font-bold uppercase text-red mb-8">User Profile</h1> */}
       
       {/* Profile Info Section */}
-      <div className='flex justify-between sm:flex-row flex-col gap-10'>
+      {/* <div className='flex justify-between sm:flex-row flex-col gap-10'>
       <div className="profile-info text-red mb-12 md:w-1/2">
         <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
         <form onSubmit={handleUpdateUser} className="space-y-4">
@@ -116,8 +116,6 @@ const UserProfile = () => {
           </button>
         </form>
       </div>
-    
-      {/* Password Update Section */}
       <div className="password-update text-red mb-12 md:w-1/2">
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
         <form onSubmit={handleUpdatePassword} className="space-y-4">
@@ -162,7 +160,7 @@ const UserProfile = () => {
           </button>
         </form>
       </div>
-      </div>
+      </div> */}
 
       {/* Order History Section */}
       <div className="order-history  mb-20">

@@ -22,6 +22,7 @@ import StrategicVision from './pages/Insights/StrategicVision';
 import Login from './pages/Auth/Login';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import ForgetPassword from './pages/Auth/ForgetPassword';
 const client = new QueryClient();
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
           <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />
           <Route path="/StrategicVision" element={< StrategicVision/>} />
+          <Route path="/ForgetPassword" element={< ForgetPassword/>} />
         </Routes>
         <Footer />
 

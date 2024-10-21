@@ -10,12 +10,14 @@ import { setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api'
 
 const LoginUserId = localStorage.getItem('LoginUserId');
+const LoginEmail = localStorage.getItem('UserEmail');
 const RegUserId = localStorage.getItem('RegUserId');
 const RegName = localStorage.getItem('RegName');
 const RegEmail = localStorage.getItem('RegEmail');
 const RegNumber = localStorage.getItem('RegNumber');
 let RegConfirmed = localStorage.getItem('RegConfirmed')==="true";
 let UserId;
+let EmailId;
 
 if(LoginUserId){
   UserId = LoginUserId;
@@ -23,6 +25,14 @@ if(LoginUserId){
   UserId = RegUserId;
 }else{
   UserId = null;
+}
+
+if(RegEmail){
+  EmailId = RegEmail;
+}else if(LoginEmail){
+  EmailId = LoginEmail;
+}else{
+  EmailId = null;
 }
 
 const useRegisterQuery = () => {
@@ -52,6 +62,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [timeLeft, setTimeLeft] = useState(30); // Timer countdown (30 seconds)
   const [isDisabled, setIsDisabled] = useState(false);
   const [Error, setError] = useState("");
+  const [mailSent, setMailSent] = useState(false);
 
 
   const useLoginQuery = () => useMutation(
@@ -74,7 +85,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     try {
       // Fetch the user's cart from Strapi backend (ensure the API endpoint and structure are correct)
       const { data } = await api.get(`/api/users/33?populate=cart`);
-      console.log('33 users cart fetched',data);
+      // console.log('33 users cart fetched',data);
       // Assuming the cart data is in 'cart' field in response
       dispatch(setCartItems(data?.cart || [])); // Set cart items in Redux
     } catch (error) {
@@ -106,7 +117,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       async (otpData) => {
         const res = await api.post('/api/auth/verifyOTP', otpData);
         setOtpMessage(res.data.message);
-        console.log(res)
+        // console.log(res)
         return res.data;
       });
   }
@@ -224,9 +235,25 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   };
 
 
-  const handleForgotPassword = () => {
-    alert('Password reset link has been sent to your email');
-    closeModal();
+  const handleForgotPassword = async() => {
+    // alert('Password reset link has been sent to your email');
+    console.log(loginEmail,'loginEmail')
+    if(loginEmail){
+      setMailSent(true);
+      try {
+        const res = await api.post(`api/auth/forgot-password`,{
+          email:loginEmail
+        })
+        console.log(res,'Forget password reset')
+        return res.data
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    else{
+      setError('Please enter your registered email address and click forget password');
+    }
+    // closeModal();
   };
 
 
@@ -273,6 +300,8 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             Forgot Password?
           </p>
         </div>
+          {Error && <p className='text-[#FF0000] font-bold uppercase animate-pulse'>{Error}</p>}
+          {mailSent && <p className='text-white font-bold text-center uppercase animate-pulse'> Password reset link has been sent to your email</p>}
         <div className='flex flex-col'>
           <button
             type="submit"

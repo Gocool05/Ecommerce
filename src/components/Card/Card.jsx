@@ -121,8 +121,8 @@ const Card = ({product}) => {
   {/* </Link> */}
   <div className="p-2 lg:p-4 h-auto flex flex-col justify-between" >
     <Link to={`product/`+product.id} className=''>
-    <h3 className="text-black  flex text-[12px]  h-16 truncate sm:text-sm font-bold text-wrap">{product?.attributes.ProductName}</h3>
-    {/* <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product?.attributes.SubTitle}</h4> */}
+    <h3 className="text-black  flex text-[12px] truncate sm:text-sm font-bold text-wrap">{product?.attributes.ProductName}</h3>
+    <h4 className="text-red hidden sm:flex text-sm sm:text-md font-normal">{product?.attributes.SubTitle}</h4>
     {product?.attributes.Offer ? (
     <div className="flex  items-center sm:mt-2">
       <span className="text-black bottom-0 line-through text-[12px] opacity-50 lg:text-lg">&#8377;{product?.attributes.Price}</span>

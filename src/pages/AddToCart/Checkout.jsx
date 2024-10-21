@@ -31,7 +31,7 @@ const Checkout = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  console.log(cartItems,'proceed to checkout');
+  // console.log(cartItems,'proceed to checkout');
   // Form State
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -122,7 +122,7 @@ const indianStates = [
       onSuccess: () => {
         // Invalidate queries that need to be refreshed after the mutation
         queryClient.invalidateQueries('delivery'); // Replace with your query key
-        console.log('State change successful, queries invalidated');
+        // console.log('State change successful, queries invalidated');
       },
       onError: (error) => {
         console.log(error, 'Error during state change');
@@ -148,7 +148,7 @@ const indianStates = [
       try {
         const response = await api.get(`/api/razorpay`);
         const amount =(totalAmount + (GST/100)*totalAmount+Delivery);
-        console.log(response,'Razorpay rsponse');
+        // console.log(response,'Razorpay rsponse');
         // const { data: order } = await api.post(`/api/contests/${amount}/create-order`, {});
 
         var options = {
@@ -159,8 +159,6 @@ const indianStates = [
           // order_id: order.id,
           name: "Shriworks",
           handler: async(Paymentresponse) =>{
-            console.log(Paymentresponse,'Payment response check');
-          console.log(JWT,'JWT Check');
             try {
               await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
               toast.success('Order Placed successfully');
