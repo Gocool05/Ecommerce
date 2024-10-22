@@ -150,8 +150,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
   // useEffect(()=>{
   //   window.location.reload();
-  // },[location.pathname])
-
+  // },[location.pathname])  
   const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.Price;
   const OfferPrice = products?.attributes?.Price - discountedPrice;
 
@@ -214,7 +213,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
           />
         </div>
       ) : (
-        <div className="relative h-full w-full cursor-zoom-in z-50 object-cover">
+        <div className="relative h-full w-full cursor-zoom-in z-30 object-cover">
           <ReactImageZoom
             img={`${baseUrl}${selectedMedia}`}
             zoomLensStyle={`opacity:1,background-color:#000`}
@@ -335,7 +334,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       <div className="pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
         <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2> 
 
-    <ul className='text-lg list-disc list-inside text-black font-bold text-justify'>
+    <ul className='text-base list-disc list-inside text-black font-semibold text-justify'>
   {products?.attributes?.Description?.length > 0 ? (
     products.attributes?.Description.map((desc, index) => (
       <li className='mb-2' key={index}>
