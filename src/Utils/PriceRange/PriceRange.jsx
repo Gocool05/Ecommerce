@@ -11,7 +11,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
   };
 
   const handleReset = () => {
-    const defaultRange = [0 +`${" "}to${" "}`+ 100000];
+    const defaultRange = [0 , 100000];
     setRange(defaultRange);
     onChange(defaultRange); // Reset in the parent component
   };
@@ -29,7 +29,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
           <input
             type="number"
             min={0}
-            max={10000}
+            max={100000}
             value={range[0]}
             onChange={(e) => handleSliderChange([+e.target.value, range[1]])}
           />
@@ -37,7 +37,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
           <input
             type="number"
             min={0}
-            max={10000}
+            max={100000}
             value={range[1]}
             onChange={(e) => handleSliderChange([range[0], +e.target.value])}
           />

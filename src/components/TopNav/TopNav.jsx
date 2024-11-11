@@ -426,7 +426,7 @@ const TopNav = () => {
                     <a
                       href="https://www.shriworks.com/"
                       target="_blank"
-                      className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
+                      className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Factory
