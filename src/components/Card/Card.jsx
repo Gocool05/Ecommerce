@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Login from "../../pages/Auth/Login";
 import { useState } from "react";
 import Modal from "react-modal";
+import CartSideBar from "../../pages/AddToCart/CartSideBar";
 // const JWT = localStorage.getItem('JwtToken');
 let JWT;
 
@@ -32,6 +33,7 @@ const Card = ({ product }) => {
 
   const baseUrl = api.defaults.baseURL;
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -46,10 +48,6 @@ const Card = ({ product }) => {
             Quantity: 1,
           },
         });
-        toast.success("Product added to cart successfully");
-        navigate("/cart");
-        window.location.reload();
-        window.scrollTo(0, 0);
       } catch (error) {
         // Handle error
         // toast.error('Product ');
@@ -72,11 +70,9 @@ const Card = ({ product }) => {
           image: `${baseUrl}${product?.attributes.ProductImage.data[0]?.attributes.url}`,
           quantity: 1,
         })
-      );
+        );
+        setSidebarOpen(true);
       toast.success("Product added to cart!");
-      navigate("/cart");
-      window.location.reload();
-      window.scrollTo(0, 0);
     } else {
       setIsOpen(true);
       toast.error("Please login to add your product to cart");
@@ -91,13 +87,15 @@ const Card = ({ product }) => {
   const closeModal = () => {
     setIsOpen(false);
   };
-
   const discountedPrice =
     (product.attributes.Offer / 100) * product.attributes.Price;
-  const OfferPrice = product.attributes.Price - discountedPrice;
-
-  return (
+    const OfferPrice = product.attributes.Price - discountedPrice;
+    
+    console.log(isSidebarOpen,'Is Sidebar open')
+    
+    return (
     <>
+    <CartSideBar isCartOpen={isSidebarOpen} onCartClose={()=>setSidebarOpen(false)} />
       <div className="max-w-xs relative sm:max-w-sm  bg-[#fceecf]  shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-95  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
         {product?.attributes.Offer && (
           <span className="text-yellow   py-1 px-3 top-3  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">

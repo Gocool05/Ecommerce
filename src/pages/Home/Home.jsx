@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import Card from '../../components/Card/Card'
 import CategorySlider from '../../components/CategorySlider/CategorySlider'
@@ -9,11 +10,12 @@ import Navbar from '../../components/NavBar/Navbar'
 import SectionWithSlider from '../../components/SectionWithSlider/SectionWithSlider'
 import HomeSlider from '../../components/Slider/Slider'
 import api from '../../Utils/api'
+import CartSideBar from '../AddToCart/CartSideBar'
 import TechError from '../Error/TechError'
 
 const Home = () => {
 
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Fetch Home Page Data
   const { data: Home, isError, isLoading } = useQuery('HomePage', async () => {
@@ -55,13 +57,11 @@ const Home = () => {
     <div className=''>
       <HomeSlider sliderData={SliderData}/>
       <CategorySlider CategoryData={CategoryData} />
-      <SectionWithSlider
-      SectionData={SectionData?.attributes?.Section}
-      />
+      <SectionWithSlider SectionData={SectionData?.attributes?.Section}/>
       <FactoryClips Media={Media?.attributes?.FactoryClips} isLoading={isLoading}/>
+      <CartSideBar isCartOpen={isCartOpen} onCartClose={()=>setIsCartOpen(false)} />
     </div>
     </>
-    
   )
 }
 
