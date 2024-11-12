@@ -91,7 +91,7 @@ const Card = ({ product }) => {
     (product.attributes.Offer / 100) * product.attributes.Price;
     const OfferPrice = product.attributes.Price - discountedPrice;
     
-    console.log(isSidebarOpen,'Is Sidebar open')
+    console.log(product,'Product details')
     
     return (
     <>
@@ -105,14 +105,14 @@ const Card = ({ product }) => {
         {/* <Link to={`product/`+product.id}> */}
         <div className="image-container" onClick={handleProductClick}>
           <img
-            src={`${baseUrl}${product?.attributes?.ProductImage?.data[0]?.attributes.url}`}
-            alt={product?.attributes.ProductImage?.data[0]?.attributes.name}
+            src={`${baseUrl}${product?.attributes?.ProductImage?.data?.[0].attributes.url}`}
+            alt={product?.attributes.ProductImage?.data?.[0].attributes.name}
             loading="lazy"
             className="w-full h-52 sm:h-64 lg:h-96 object-cover main-image"
           />
           <img
-            src={`${baseUrl}${product?.attributes.ProductImage?.data[1]?.attributes.url}`}
-            alt={product?.attributes.ProductImage?.data[1]?.attributes.name}
+            src={`${baseUrl}${product?.attributes.ProductImage?.data?.[1]?.attributes.url}`}
+            alt={product?.attributes.ProductImage?.data?.[1]?.attributes.name}
             loading="lazy"
             className="w-full h-52 sm:h-64 lg:h-96 object-cover hover-image"
           />
