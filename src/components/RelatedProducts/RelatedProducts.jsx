@@ -27,8 +27,8 @@ const RelatedProducts = (props) => {
     // console.log(id,material,category,'ID Material Category')
 
     if(id!==product.id){
-      const materialMatch = material ? product.attributes.Material === material : true;
-      const categoryMatch = category ? product.attributes.category.data.attributes.CategoryName === category : true;
+      const materialMatch = material ? product?.attributes?.Material === material : true;
+      const categoryMatch = category ? product?.attributes?.category?.data?.attributes?.CategoryName === category : true;
       return materialMatch && categoryMatch;
     }
   })
