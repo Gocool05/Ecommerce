@@ -31,8 +31,8 @@ const CategorySlider = ({ CategoryData }) => {
   const settings = {
     infinite: true,
     autoplay: true,
-    speed: 1500,
-    autoplaySpeed: 1000,
+    // speed: 1000,
+    autoplaySpeed: 2500,
     slidesToShow: 5,
     slidesToScroll: 1,
     swipeToSlide: true,
