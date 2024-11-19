@@ -26,9 +26,9 @@ const FactoryClips = ({Media,isLoading}) => {
       {Media?.map((item, index) => (
         <div className={`md:h-56 h-44  relative `} key={index}>
           {item.Type ==='Image' && 
-          <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
+          // <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
           <img src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} alt="item" className="mx-2 bg-red bg1 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
-        </a>
+        // </a>
           }
             
         </div>

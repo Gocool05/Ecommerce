@@ -96,7 +96,7 @@ const CartSidebar = ({ isCartOpen, onCartClose }) => {
               X
             </button>
         </div>
-      {/* {cart?.carts?.length === 0 ? (
+      {cart?.carts?.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <ul >
@@ -151,7 +151,7 @@ const CartSidebar = ({ isCartOpen, onCartClose }) => {
             View cart
           </Link>
         </div>
-      )} */}
+      )}
     </Modal>
   );
 };

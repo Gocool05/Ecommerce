@@ -171,6 +171,7 @@ const indianStates = [
             }
           },
         };
+        
         var pay = new window.Razorpay(options);
         pay.open();
       } catch (error) {
@@ -187,7 +188,7 @@ const indianStates = [
             {cartItems.map((cart, index) => (
               <div className="flex items-start gap-4 border-b-2 rounded-md  border-yellow " key={index}>
                 <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-2 bg3 mb-2 shrink-0 bg-yellow rounded-md">
-                  <img src={`${baseUrl}${cart.product?.ProductImage[0]?.url}`} className="w-full object-cover" />
+                  <img src={`${baseUrl}${cart.product?.ProductImage?.[0]?.url}`} className="w-full object-cover" />
                 </div>
                 <div className="w-full overflow-hidden">
                   <h3 className="text-base text-yellow font-bold uppercase truncate">{cart?.product?.ProductName}</h3>

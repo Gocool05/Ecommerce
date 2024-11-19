@@ -14,6 +14,7 @@ import ReactImageZoom from 'react-image-zoom';
 import { useDispatch } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import { addItem } from '../../Slice/cartSlice';
+import CartSidebar from '../AddToCart/CartSideBar';
 
 let JWT;
 
@@ -36,6 +37,7 @@ const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
   const location = useLocation();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -132,6 +134,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
         quantity: Number(quantity),
       })
     );
+    setSidebarOpen(true);
     toast.success('Product added to cart!', {
       position: "top-right",
       autoClose: 5000,
@@ -143,9 +146,6 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       theme: "light",
       transition: Bounce,
       });
-      navigate('/cart')
-      window.scrollTo(0, 0);
-      window.location.reload();
   }
 
   // useEffect(()=>{
@@ -155,6 +155,8 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   const OfferPrice = products?.attributes?.Price - discountedPrice;
 
   return (
+    <>
+  <CartSidebar isCartOpen={isSidebarOpen} onCartClose={()=>setSidebarOpen(false)} />
     <section className="relative flex flex-col  overflow-hidden">
       <div>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
@@ -351,6 +353,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
       <RelatedProducts category={category} id={products?.id} material={products?.attributes?.Material} />
     </section>
+    </>
   );
 }
 

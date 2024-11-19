@@ -614,10 +614,10 @@ const About = () => {
                 <h2 className="mb-5 text-3xl font-bold text-red  sm:text-[40px]/[48px]">
                   Making our customers happy by giving quality products.
                 </h2>
-                <p className="mb-5 text-lg text-black dark:text-dark-6">
+                <p className="mb-5 text-lg text-black ">
                 Welcome to Shriworks, where tradition and artistry come together in the heart of Kumbakonam, a town renowned for its rich cultural heritage. At Shriworks, we are dedicated to the meticulous craft of traditional temple jewelry and a wide range of temple-oriented products, reflecting the divine artistry and devotion that has been passed down through generations.
                 </p>
-                <p className="mb-8 text-lg text-black dark:text-dark-6">
+                <p className="mb-8 text-lg text-black ">
                 At Shriworks, we specialize in creating exquisite handcrafted temple jewelry and artifacts that embody the essence of South Indian temple traditions. Our skilled artisans, with years of experience, use time-honored techniques to craft each piece, ensuring authenticity and excellence in every creation.
                 </p>
                 <a

@@ -60,14 +60,14 @@ const Shop = () => {
   const filteredProducts = products.filter(product => {
     const { material, price, category, search } = selectedFilters;
 
-    const materialMatch = material ? product.attributes.Material === material : true;
+    const materialMatch = material ? product?.attributes?.Material === material : true;
     const searchResult = search
       ? search.split(' ').every(word =>
-          product.attributes.ProductName.toLowerCase().includes(word.toLowerCase())
+          product?.attributes?.ProductName.toLowerCase().includes(word.toLowerCase())
         )
       : true;
-    const categoryMatch = category ? product.attributes.category.data.attributes.CategoryName === category : true;
-    const priceMatch = price ? product.attributes.Price >= price[0] && product.attributes.Price <= price[1] : true;
+    const categoryMatch = category ? product?.attributes?.category?.data?.attributes?.CategoryName === category : true;
+    const priceMatch = price ? product?.attributes?.Price >= price[0] && product?.attributes?.Price <= price[1] : true;
 
     return materialMatch && categoryMatch && priceMatch && searchResult;
   });
