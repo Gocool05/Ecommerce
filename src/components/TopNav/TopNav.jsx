@@ -124,6 +124,11 @@ const TopNav = () => {
                     placeholder="Search for the product..."
                     id="search-product"
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e)=>{
+                      if (e.key === "Enter") {
+                        handleSearch();
+                      }
+                    }}
                     autoComplete="off"
                   />
 

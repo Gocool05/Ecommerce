@@ -1,5 +1,5 @@
 // CartSidebar.js
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 import { useQuery, useQueryClient } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,12 +28,12 @@ if (localStorage.getItem("RegUserId")) {
 // Set up React Modal's root element (recommended for accessibility)
 Modal.setAppElement("#root");
 
-const CartSidebar = ({ isCartOpen, onCartClose }) => {
+const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled }) => {
   const dispatch = useDispatch();
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const queryClient = useQueryClient();
 
-  const { data: cart, isError, isLoading } = useQuery(
+  const { data: cart, isError, isLoading, refetch } = useQuery(
     "getCart",
     async () => {
       const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`);
@@ -41,11 +41,14 @@ const CartSidebar = ({ isCartOpen, onCartClose }) => {
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries("getCart");
         dispatch(setCartItems(data.carts));
       },
     }
   );
+
+  if(enableRefetch===true){
+  refetch();
+  }
 
   const RemoveItem = async (cartId) => {
     try {
@@ -96,7 +99,7 @@ const CartSidebar = ({ isCartOpen, onCartClose }) => {
               X
             </button>
         </div>
-      {cart?.carts?.length === 0 ? (
+      {cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null ? (
         <p>Your cart is empty.</p>
       ) : (
         <ul >

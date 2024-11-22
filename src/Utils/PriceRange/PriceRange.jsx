@@ -3,7 +3,7 @@ import ReactSlider from 'react-slider';
 import './PriceRange.css';
 
 const PriceRange = ({ onChange, onConfirm }) => {
-  const [range, setRange] = useState([0, 100000]);
+  const [range, setRange] = useState([0, 200000]);
 
   const handleSliderChange = (values) => {
     setRange(values);
@@ -11,7 +11,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
   };
 
   const handleReset = () => {
-    const defaultRange = [0 , 100000];
+    const defaultRange = [0 , 200000];
     setRange(defaultRange);
     onChange(defaultRange); // Reset in the parent component
   };
@@ -29,7 +29,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
           <input
             type="number"
             min={0}
-            max={100000}
+            max={200000}
             value={range[0]}
             onChange={(e) => handleSliderChange([+e.target.value, range[1]])}
           />
@@ -37,7 +37,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
           <input
             type="number"
             min={0}
-            max={100000}
+            max={200000}
             value={range[1]}
             onChange={(e) => handleSliderChange([range[0], +e.target.value])}
           />
@@ -47,7 +47,7 @@ const PriceRange = ({ onChange, onConfirm }) => {
           thumbClassName="thumb"
           trackClassName="track"
           min={0}
-          max={100000}
+          max={200000}
           step={100}
           value={range}
           onChange={handleSliderChange}

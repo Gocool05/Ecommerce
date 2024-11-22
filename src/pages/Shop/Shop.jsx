@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import Card from '../../components/Card/Card';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -11,83 +11,72 @@ const Shop = () => {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
   const categoryFromQuery = queryParams.get('category');
-  const SearchFromQuery = queryParams.get('search');
-  
+  const searchFromQuery = queryParams.get('search');
+
   const [selectedFilters, setSelectedFilters] = useState({
-    material: "",
-    price: "",
-    category: "",
+    material: '',
+    price: '',
+    category: '',
   });
-  const [selectedSort, setSortCategory] = useState("Default");
+  const [selectedSort, setSortCategory] = useState('Default');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
-  // Fetching products based on pagination and other params
+  // Fetching products with filters and sorting applied directly via API
   const { data: PData, isLoading, isError } = useQuery(
-    ['Products', currentPage], // Pass currentPage as a dependency
+    ['Products', selectedFilters, selectedSort, currentPage],
     async () => {
-      const res = await api.get(`/api/Products?populate=*&pagination[page]=${currentPage}&pagination[pageSize]=${itemsPerPage}`);
+      const filters = {
+        ...(selectedFilters.material && { 'filters[Material]': selectedFilters.material }),
+        ...(selectedFilters.category && { 'filters[category][CategoryName]': selectedFilters.category }),
+        ...(selectedFilters.price && {
+          'filters[Price][$gte]': selectedFilters.price[0],
+          'filters[Price][$lte]': selectedFilters.price[1],
+        }),
+        ...(searchFromQuery && { 'filters[ProductName][$containsi]': searchFromQuery }),
+      };
+
+      const sorting = {
+        'Price: Low to High': 'Price:asc',
+        'Price: High to Low': 'Price:desc',
+        'Alphabetically, A-Z': 'ProductName:asc',
+        'Alphabetically, Z-A': 'ProductName:desc',
+        'Latest': 'createdAt:desc',
+      };
+
+      const query = new URLSearchParams({
+        ...filters,
+        ...(selectedSort !== 'Default' && { sort: sorting[selectedSort] }),
+        populate: '*',
+        pagination: {
+          page: currentPage,
+          pageSize: itemsPerPage,
+        },
+      });
+
+      const res = await api.get(`/api/Products?${query.toString()}`);
       return res.data;
     },
-    {
-      keepPreviousData: true, // This keeps the previous page's data while fetching the new page
-    }
+    { keepPreviousData: true }
   );
 
-  const productsData = PData?.data;
-  const pageCount = PData?.meta?.pagination?.pageCount;
+  const productsData = PData?.data || [];
+  const pageCount = PData?.meta?.pagination?.pageCount || 1;
 
   useEffect(() => {
     if (categoryFromQuery) {
-      setSelectedFilters(prevFilters => ({
+      setSelectedFilters((prevFilters) => ({
         ...prevFilters,
         category: categoryFromQuery,
       }));
     }
-    if (SearchFromQuery) {
-      setSelectedFilters(prevFilters => ({
+    if (searchFromQuery) {
+      setSelectedFilters((prevFilters) => ({
         ...prevFilters,
-        search: SearchFromQuery,
+        search: searchFromQuery,
       }));
     }
-  }, [categoryFromQuery, SearchFromQuery]);
-
-  if (isLoading) return <Loading />;
-  if (isError) return <TechError />;
-
-  const products = Array.isArray(productsData) ? productsData : [];
-
-  const filteredProducts = products.filter(product => {
-    const { material, price, category, search } = selectedFilters;
-
-    const materialMatch = material ? product?.attributes?.Material === material : true;
-    const searchResult = search
-      ? search.split(' ').every(word =>
-          product?.attributes?.ProductName.toLowerCase().includes(word.toLowerCase())
-        )
-      : true;
-    const categoryMatch = category ? product?.attributes?.category?.data?.attributes?.CategoryName === category : true;
-    const priceMatch = price ? product?.attributes?.Price >= price[0] && product?.attributes?.Price <= price[1] : true;
-
-    return materialMatch && categoryMatch && priceMatch && searchResult;
-  });
-
-  const sortedProducts = filteredProducts.sort((a, b) => {
-    switch (selectedSort) {
-      case "Price: Low to High":
-        return a.attributes.NewPrice - b.attributes.NewPrice;
-      case "Price: High to Low":
-        return b.attributes.NewPrice - a.attributes.NewPrice;
-      case "Alphabetically, A-Z":
-        return a.attributes.ProductName.localeCompare(b.attributes.ProductName);
-      case "Alphabetically, Z-A":
-        return b.attributes.ProductName.localeCompare(a.attributes.ProductName);
-      case "Latest":
-        return new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt);
-      default:
-        return 0;
-    }
-  });
+  }, [categoryFromQuery, searchFromQuery]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= pageCount) {
@@ -96,19 +85,22 @@ const Shop = () => {
     }
   };
 
+  if (isLoading) return <Loading />;
+  if (isError) return <TechError />;
+
   return (
     <section>
-      <FilterBar 
+      <FilterBar
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
         selectedSort={selectedSort}
         setSortCategory={setSortCategory}
       />
-      {sortedProducts.length !== 0 ? (
+      {productsData.length > 0 ? (
         <>
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6 gap-2 sm:gap-3 p-3 lg:px-10'>
-            {sortedProducts?.map((product, index) => (
-              <div className='sm:p-2' key={index}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6 gap-2 sm:gap-3 p-3 lg:px-10">
+            {productsData.map((product) => (
+              <div className="sm:p-2" key={product.id}>
                 <Card product={product} />
               </div>
             ))}
@@ -142,8 +134,8 @@ const Shop = () => {
         </>
       ) : (
         <div className="text-center p-16">
-          <h2 className='text-red font-bold text-2xl'>No products found matching your filters</h2>
-        </div> 
+          <h2 className="text-red font-bold text-2xl">No products found matching your filters</h2>
+        </div>
       )}
     </section>
   );

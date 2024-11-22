@@ -10,12 +10,12 @@ import {
 } from "@headlessui/react";
 import PriceRange from "../../Utils/PriceRange/PriceRange";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import api from "../../Utils/api";
 
 const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCategory}) => {
-
+  const navigate = useNavigate();
   const handleMenuItemClick = (category) => {
     setSortCategory(category);
   };
@@ -27,13 +27,18 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
     }));
   };
 
+
+  console.log(selectedFilters,'Seklected filters');
+
   const clearFilters = () => {
     setSortCategory("Default");
     setSelectedFilters({
       material: "",
       price: "",
       category: "",
+      search:""
     });
+    navigate('/shop');
   };
   
   const { data: Category } = useQuery('NavCategory', async () => {
@@ -319,8 +324,9 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
         </div>
       </div>
     </section>
+    
 
-{selectedFilters.category || selectedFilters.material || selectedFilters.price ? (
+{selectedFilters.category || selectedFilters.material || selectedFilters.price || selectedFilters.search  ? (
   <div className="mt-4 mx-4 flex flex-col sm:flex-row sm:justify-start sm:gap-5 sm:items-center">
         <p className="text-lg text-red font-bold ">Selected Filters:</p>
         <div className="flex gap-2">

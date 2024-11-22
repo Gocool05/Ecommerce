@@ -34,6 +34,7 @@ const Card = ({ product }) => {
   const baseUrl = api.defaults.baseURL;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [enableRefetch,setEnableRefetch] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -71,12 +72,20 @@ const Card = ({ product }) => {
           quantity: 1,
         })
         );
-        setSidebarOpen(true);
-      toast.success("Product added to cart!");
+          setSidebarOpen(true);
+          setEnableRefetch(true);
+          toast.success("Product added to cart!");
+          setTimeout(()=>{
+            setEnableRefetch(false);
+          },500);
     } else {
       setIsOpen(true);
       toast.error("Please login to add your product to cart");
     }
+  };
+
+  const handleRefetch = () => {
+    setEnableRefetch(false); // Reset after handling
   };
 
   const handleProductClick = () => {
@@ -91,11 +100,11 @@ const Card = ({ product }) => {
     (product.attributes.Offer / 100) * product.attributes.Price;
     const OfferPrice = product.attributes.Price - discountedPrice;
     
-    console.log(product,'Product details')
+    // console.log(product,'Product details')
     
     return (
     <>
-    <CartSideBar isCartOpen={isSidebarOpen} onCartClose={()=>setSidebarOpen(false)} />
+    <CartSideBar isCartOpen={isSidebarOpen}   enableRefetch={enableRefetch} onRefetchHandled={handleRefetch} onCartClose={()=>setSidebarOpen(false)} />
       <div className="max-w-xs relative sm:max-w-sm  bg-[#fceecf]  shadow-red shadow-sm hover:border hover:cursor-pointer hover:scale-95  transition-all duration-400 border-yellow  mx-1 rounded-lg overflow-hidden">
         {product?.attributes.Offer && (
           <span className="text-yellow   py-1 px-3 top-3  bg-black z-30 absolute text-[10px] lg:text-sm font-bold shadow-lg ">
