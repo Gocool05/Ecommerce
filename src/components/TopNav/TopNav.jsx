@@ -98,7 +98,7 @@ const TopNav = () => {
               <a href="/" className="text-xl font-bold text-red">
                 <img
                   className="h-16 sm:h-28"
-                  src="/Assests/logo.png"
+                  src="https://api.shriworks.com/uploads/LOGO_285214dbf8.png"
                   alt="Shriworks Logo"
                 />
               </a>
@@ -429,8 +429,9 @@ const TopNav = () => {
                       Contact
                     </Link>
                     <a
-                      href="https://www.shriworks.com/"
-                      target="_blank"
+                      // href="https://www.shriworkscraft.com/"
+                      href="/"
+                      // target="_blank"
                       className="text-red hover:text-black block px-3 py-2 rounded-md text-base font-bold"
                       onClick={() => setIsMenuOpen(false)}
                     >

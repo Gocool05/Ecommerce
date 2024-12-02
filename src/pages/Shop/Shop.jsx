@@ -9,10 +9,12 @@ import TechError from '../Error/TechError';
 
 const Shop = () => {
   const { search } = useLocation();
+
   const queryParams = new URLSearchParams(search);
   const categoryFromQuery = queryParams.get('category');
   const searchFromQuery = queryParams.get('search');
 
+  
   const [selectedFilters, setSelectedFilters] = useState({
     material: '',
     price: '',
@@ -35,7 +37,7 @@ const Shop = () => {
         }),
         ...(searchFromQuery && { 'filters[ProductName][$containsi]': searchFromQuery }),
       };
-
+  
       const sorting = {
         'Price: Low to High': 'Price:asc',
         'Price: High to Low': 'Price:desc',
@@ -43,17 +45,15 @@ const Shop = () => {
         'Alphabetically, Z-A': 'ProductName:desc',
         'Latest': 'createdAt:desc',
       };
-
+  
       const query = new URLSearchParams({
         ...filters,
         ...(selectedSort !== 'Default' && { sort: sorting[selectedSort] }),
         populate: '*',
-        pagination: {
-          page: currentPage,
-          pageSize: itemsPerPage,
-        },
+        'pagination[page]': currentPage,
+        'pagination[pageSize]': itemsPerPage,
       });
-
+  
       const res = await api.get(`/api/Products?${query.toString()}`);
       return res.data;
     },
@@ -61,6 +61,7 @@ const Shop = () => {
   );
 
   const productsData = PData?.data || [];
+  console.log(productsData,'products data');
   const pageCount = PData?.meta?.pagination?.pageCount || 1;
 
   useEffect(() => {

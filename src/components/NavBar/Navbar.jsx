@@ -91,8 +91,9 @@ const Navbar = () => {
                 Contact
               </Link>
               <a
-                href="https://www.shriworkscraft.com/"
-                target='_blank'
+                href="/"
+                // href="https://www.shriworkscraft.com/"
+                // target='_blank'
                 className="text-yellow hover:bg-yellow hover:-translate-y-1 transition-all duration-300 hover:text-red px-3 py-2 rounded-md text-md font-bold"
               >
                 Factory 

@@ -27,9 +27,6 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
     }));
   };
 
-
-  console.log(selectedFilters,'Seklected filters');
-
   const clearFilters = () => {
     setSortCategory("Default");
     setSelectedFilters({
@@ -81,13 +78,13 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
                 className="hover:bg-red hover:cursor-pointer  px-4 py-2 hover:text-yellow text-black"
                 onClick={() => {handleFilterSelection("material", "Gold");close();}}
               >
-                Gold
+                Gold Plated
               </h6>
               <h6
                 className="hover:bg-red hover:cursor-pointer px-4 py-2 hover:text-yellow text-black"
                 onClick={() => {handleFilterSelection("material", "Silver");close();}}
               >
-                Silver
+                Silver Plated
               </h6>
               <h6
                 className="hover:bg-red hover:cursor-pointer px-4 py-2 hover:text-yellow text-black"

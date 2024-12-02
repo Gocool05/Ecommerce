@@ -9,6 +9,7 @@ import Loading from '../../components/Loading/Loading'
 import Navbar from '../../components/NavBar/Navbar'
 import SectionWithSlider from '../../components/SectionWithSlider/SectionWithSlider'
 import HomeSlider from '../../components/Slider/Slider'
+import Testimonials from '../../components/Testimonials/Testimonials'
 import api from '../../Utils/api'
 import CartSideBar from '../AddToCart/CartSideBar'
 import TechError from '../Error/TechError'
@@ -43,10 +44,16 @@ const Home = () => {
   });
 
     // Fetch FactoryClips Data
-  const {data:Media,  } = useQuery('factoryClips', async()=>{
+  const {data:Media } = useQuery('factoryClips', async()=>{
     const res = await api.get('/api/pages/1?populate[0]=FactoryClips&populate[1]=FactoryClips.Media')
     return res.data.data;
   })
+
+  const {data:Test } = useQuery('Test', async()=>{
+    const res = await api.get('/api/testimonials?populate=*')
+    return res.data.data;
+  })
+
 
   if (isLoading) return <Loading/>;
   if (isError) return <TechError/>;
@@ -59,6 +66,7 @@ const Home = () => {
       <CategorySlider CategoryData={CategoryData} />
       <SectionWithSlider SectionData={SectionData?.attributes?.Section}/>
       <FactoryClips Media={Media?.attributes?.FactoryClips} isLoading={isLoading}/>
+      <Testimonials Test={Test} />
       <CartSideBar isCartOpen={isCartOpen} onCartClose={()=>setIsCartOpen(false)} />
     </div>
     </>

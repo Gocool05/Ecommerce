@@ -103,7 +103,7 @@ const AddToCart = () => {
         <h1 className="text-2xl text-red font-bold"> Your Cart is Empty</h1>
         <Link
           to={"/shop"}
-          className="mt-4 text-sm sm:text-xl cursor-pointer bg-black text-yellow px-3  py-2 rounded-lg"
+          className="mt-4 text-sm sm:text-xl hover:bg-opacity-90 cursor-pointer bg-red text-yellow px-3  py-2 rounded-lg"
         >
           Continue Shopping{" "}
         </Link>

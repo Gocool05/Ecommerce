@@ -15,7 +15,8 @@ import { useDispatch } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import { addItem } from '../../Slice/cartSlice';
 import CartSidebar from '../AddToCart/CartSideBar';
-
+import { FaStar } from "react-icons/fa";
+import Loading from '../../components/Loading/Loading';
 let JWT;
 
 if(localStorage.getItem('RegJWT')){
@@ -41,14 +42,14 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const [modalIsOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    // Check if the path has changed before triggering the reload
-    if (prevPath !== location.pathname) {
-      setPrevPath(location.pathname);
-      // Use window.location.replace to reload without adding an entry in the browser history
-      window.location.replace(location.pathname);
-    }
-  }, [location.pathname, prevPath]);
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [comment, setComment] = useState("");
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [enableRefetch,setEnableRefetch] = useState(false);
+
+
   
   const ProductId = Id.id;
   const scrollRef = useRef(null);
@@ -56,15 +57,24 @@ const ProductDetails = () => {
   const [quantity, setQuantity] =useState(1);
 
   useEffect(() => {
+    setPrevPath(location.pathname);
+    // Scroll to top and reset relevant states if the ProductId changes
+    setSelectedMedia('');
     window.scrollTo(0, 0);
-  }, [ProductId]);
+  }, [location.pathname,Id]);
+  
 
     const { data: products,isLoading, isError } = useQuery('Products', async () => {
       const res = await api.get(`/api/Products/${ProductId}?populate=*`);
       return res.data.data;
   });
+
+    const { data: Review } = useQuery('Reviews', async () => {
+      const res = await api.get(`/api/Products/${ProductId}?populate[0]=reviews&populate[1]=reviews.Image&populate[2]=reviews.users_permissions_user`);
+      return res.data.data;
+  });
   
-  // console.log(products,'Details of the product')
+  console.log(products,'Details of the products')
   
 const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
@@ -73,8 +83,8 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   const productImages = products?.attributes?.ProductImage?.data || [];
 
   useEffect(() => {
-    if (productImages.length > 0) {
-      setSelectedMedia(productImages[0]?.attributes?.url);
+    if (productImages?.length > 0) {
+      setSelectedMedia(productImages[0]?.attributes?.url || '');
     }
   }, [productImages]);
 
@@ -135,6 +145,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       })
     );
     setSidebarOpen(true);
+    setEnableRefetch(true);
     toast.success('Product added to cart!', {
       position: "top-right",
       autoClose: 5000,
@@ -146,17 +157,90 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       theme: "light",
       transition: Bounce,
       });
+      setTimeout(()=>{
+        setEnableRefetch(false);
+      },500);
   }
 
-  // useEffect(()=>{
-  //   window.location.reload();
-  // },[location.pathname])  
+  const handleRefetch = () => {
+    setEnableRefetch(false); // Reset after handling
+  };
+
+
   const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.Price;
   const OfferPrice = products?.attributes?.Price - discountedPrice;
+  
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Submit the review
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!UserId) {
+      toast.error("Please login to review the product");
+      return;
+    }
+  if(rating && comment){
+    try {
+      const response = await api.post(`/api/reviews`, {
+        data: {
+          users_permissions_user: UserId,
+          product: products?.id,
+          Rating: rating,
+          Review: comment,
+        },
+      });
+      // if(image){
+      //   const formData = new FormData();
+      //   if (image) {
+      //     formData.append('files', image); 
+      //     formData.append('field', 'Image'); 
+      //     if (response?.data?.data?.id) {
+      //       formData.append('refId', response?.data?.data?.id);
+      //     } else {
+      //       console.log('No valid ID found in response');
+      //     }
+      //     formData.append('ref','api::review.review')
+      //   }
+      
+      //   await api.post(`/api/upload`,formData,{
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data'
+      //     }
+      //   }); // Upload the profile image if available
+      // }
+        toast.success("Review submitted successfully!");
+        // Clear the form or reset states if needed
+        setRating(0);
+        setComment("");
+        // setImage(null);
+        // setImagePreview(null);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
+  }else {
+    toast.error("Please fill in both fields");
+  }
+ 
+  };
+
+  if(isLoading) return <Loading/>;
+
+  
   return (
     <>
-  <CartSidebar isCartOpen={isSidebarOpen} onCartClose={()=>setSidebarOpen(false)} />
+  <CartSidebar isCartOpen={isSidebarOpen}   enableRefetch={enableRefetch} onRefetchHandled={handleRefetch} onCartClose={()=>setSidebarOpen(false)} />
     <section className="relative flex flex-col  overflow-hidden">
       <div>
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
@@ -351,7 +435,127 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       </div>
 </div>
 
-      <RelatedProducts category={category} id={products?.id} material={products?.attributes?.Material} />
+
+{/* REview section */}
+<section className='flex gap-10 px-5 md:px-20 py-10 md:flex-row flex-col-reverse  mb-20 justify-between items-center bg-black'>
+
+<div className="md:w-1/2 w-full bg-yellow mx-auto p-6 shadow rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
+      {/* Star Rating */}
+      <div className="flex space-x-1 mb-4">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <FaStar
+            key={star}
+            className={`cursor-pointer ${
+              (hover || rating) >= star ? "text-[#FFD700]" : "text-gray-300"
+            }`}
+            onClick={() => setRating(star)}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+          />
+        ))}
+      </div>
+
+      {/* Comment Section */}
+      <textarea
+        className="w-full p-3 border rounded-md focus:ring focus:ring-indigo-200 mb-4"
+        rows="4"
+        placeholder="Write your comment..."
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
+
+      {/* Image Upload
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">Upload Image (Optional)</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-md file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+        />
+        {imagePreview && (
+          <div className="mt-4">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-md border"
+            />
+          </div>
+        )}
+      </div> */}
+
+      {/* Submit Button */}
+      <button
+        onClick={handleSubmit}
+        className="w-full py-2 px-4 bg-red text-white font-semibold rounded-md hover:bg-black transition"
+      >
+        Submit Review
+      </button>
+    </div>
+
+{/* Customers review section */}
+
+    <div className="md:w-1/2 w-full bg-yellow p-5 mx-auto mt-8 rounded-lg">
+      <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
+      {Review?.attributes?.reviews?.data?.length > 0 ? (
+        <div className="space-y-6 h-96 overflow-y-scroll auto">
+          {Review?.attributes?.reviews?.data?.map((review) => (
+            <div
+              key={review.id}
+              className="p-4 bg-black text-yellow rounded-md shadow-sm"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-medium text-lg">{review.attributes.users_permissions_user.data.attributes.username}</h3>
+                <span className="text-sm text-white">
+                  {new Date(review.attributes.updatedAt).toLocaleDateString()}
+                </span>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center mb-2">
+                {[...Array(5)].map((_, index) => (
+                  <FaStar
+                    key={index}
+                    className={`${
+                      index < review.attributes.Rating
+                        ? "text-[#FFD700]"
+                        : "text-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Comment */}
+              <p className="text-white mb-4">{review.attributes.Review}</p>
+              {/* Image (if available) */}
+              {/* {review?.attributes?.Image?.data ? (
+                <div className='grid grid-cols-3 lg:grid-cols-5 items-center gap-2'>
+             {review.attributes?.Image?.data.map((img, index) => (
+                <div className="" key={index}>
+                  <img
+                    src={`https://api.shriworks.com${img.attributes.url}`}
+                    alt="Customer Review"
+                    className="w-32 h-32  object-cover rounded-md border"
+                  />
+                </div>
+              ))}
+                </div>
+              ): (
+                <div></div>
+              ) } */}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+      )}
+    </div>
+</section>
+
+
+<RelatedProducts category={category} id={products?.id} material={products?.attributes?.Material} />
     </section>
     </>
   );

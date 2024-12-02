@@ -147,10 +147,10 @@ const handleSubmit = (e) => {
                         Working hours
                       </h3>
                       <p className="text-red opacity-90 ">
-                        Monday - Friday: 08:00 - 17:00
+                        Monday - Saturday: 10:00 AM - 8:30 PM
                       </p>
                       <p className="text-red opacity-90 ">
-                        Saturday &amp; Sunday: 08:00 - 12:00
+                        Sunday: 10:00 AM - 2:30 PM
                       </p>
                     </div>
                   </li>

@@ -1,5 +1,5 @@
 .custom-slider .carousel img{
-    height:auto;
+    height:fit-content;
     object-fit: cover;
 }
 .custom-slider{

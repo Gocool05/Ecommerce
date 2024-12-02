@@ -28,6 +28,45 @@ const CategorySlider = ({ CategoryData }) => {
     }
   };
 
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+        className='Next'
+        onClick={onClick}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="#FFEEA9" // Icon color
+          width="24px"
+          height="24px"
+        >
+          <path d="M10 6l6 6-6 6V6z" />
+        </svg>
+      </div>
+    );
+  };
+
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div
+     className='Prev'
+        onClick={onClick}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="#FFEEA9" // Icon color
+          width="24px"
+          height="24px"
+        >
+          <path d="M14 18l-6-6 6-6v12z" />
+        </svg>
+      </div>
+    );
+  };
   const settings = {
     infinite: true,
     autoplay: true,
@@ -36,10 +75,12 @@ const CategorySlider = ({ CategoryData }) => {
     slidesToShow: 5,
     slidesToScroll: 1,
     swipeToSlide: true,
-    arrows: false,
+    // arrows: false,
     easing: 'easeOut',
     rows: 1,
     centerMode: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1220,
@@ -90,7 +131,7 @@ const CategorySlider = ({ CategoryData }) => {
             onMouseUp={() => handleMouseUp(cate?.category?.data?.attributes?.CategoryName)}
           >
             <img
-              className="object-cover h-full w-full"
+              className="object-fill h-full w-full"
               src={`${baseUrl}${cate?.category?.data?.attributes?.Image?.data?.attributes.url}`}
               alt={cate?.category?.data?.attributes?.CategoryName}
             />

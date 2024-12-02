@@ -621,7 +621,7 @@ const About = () => {
                 At Shriworks, we specialize in creating exquisite handcrafted temple jewelry and artifacts that embody the essence of South Indian temple traditions. Our skilled artisans, with years of experience, use time-honored techniques to craft each piece, ensuring authenticity and excellence in every creation.
                 </p>
                 <a
-                  href="https://www.shriworks.com/"
+                  href="https://www.shriworkscraft.com/"
                   target={'_blank'}
                   className="inline-flex items-center justify-center py-3 text-lg font-medium text-center text-yellow border border-transparent rounded-md px-7 bg-black hover:bg-opacity-90"
                 >

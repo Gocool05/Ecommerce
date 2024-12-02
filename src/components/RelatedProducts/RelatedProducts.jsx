@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import Slider from 'react-slick'
 import api from '../../Utils/api'
@@ -8,33 +8,40 @@ import Card from '../Card/Card'
 
 const RelatedProducts = (props) => {
   const baseUrl = api.defaults.baseURL;
+  const queryClient = useQueryClient();
 
   const data = props;
   const Id = props.id;
+  const {id,material,category} = data; 
 
-  const { data: productsData } = useQuery('RelatedProducts', async () => {
-    const res = await api.get(`/api/Products?populate=* `);
+  const { data: productsData } = useQuery(['RelatedProducts',material], async () => {
+    const res = await api.get(`/api/Products?populate=*&filters[Material][$eq]=${material}`);
     return res.data.data;
   },
+  {
+    enabled:!!material,
+  }
   );
 
 
-
   const products = Array.isArray(productsData) ? productsData : [];
- 
+ console.log(products,'products')
   const relatedProduct = products.filter(product=>{
-    const {id,material,category} =data;
-    // console.log(id,material,category,'ID Material Category')
+    console.log(id,material,category,'ID Material Category')
 
-    if(id!==product.id){
+    if(id!==product.id){ 
       const materialMatch = material ? product?.attributes?.Material === material : true;
+      // console.log(material ,'Material')
+      console.log(product?.attributes?.Material,'product.attributes')
       const categoryMatch = category ? product?.attributes?.category?.data?.attributes?.CategoryName === category : true;
+      console.log(materialMatch,'Material matches');
+      console.log(categoryMatch,'category matches');
       return materialMatch && categoryMatch;
     }
   })
-  
 
-  // console.log(relatedProduct,'Relatedd Product')
+
+  console.log(relatedProduct,'Relatedd Product')
 
 
 

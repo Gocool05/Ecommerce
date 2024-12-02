@@ -1,6 +1,40 @@
+.Next{
+  display:block;
+  background-color: #4e2a1b;
+  border-radius: 50%;
+  right: -25px;
+  top: 50%;
+  transform: translate(0,-50%);
+  z-index: 2;
+  position: absolute;
+  padding: 10px;
+}
+.Prev{
+  display:block;
+  background-color: #4e2a1b;
+  border-radius: 50%;
+  left: -25px;
+  top: 50%;
+  transform: translate(0,-50%);
+  z-index: 2;
+  position: absolute;
+  padding: 10px;
+}
 
+.Next:hover, .Prev:hover {
+  transform: translate(0, -50%) scale(1.1);
+  background-color: #560000; /* Slightly lighter shade */
+  cursor: pointer;
+}
 
-
+    .Prev{
+   margin-left: 3%;
+      padding: 5px;
+  } 
+  .Next{
+      margin-right: 3%;
+      padding: 5px;
+  }
 
   
   .cateSlider .slick-track {
@@ -10,11 +44,11 @@
 
 
 @media screen and (max-width: 450px) {
-    .PrevArrow{
+    .Prev{
         left: -5px;
         padding: 5px;
     } 
-    .NextArrows{
+    .Next{
         right: -5px;
         padding: 5px;
     }
