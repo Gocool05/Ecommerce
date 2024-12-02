@@ -1,41 +1,44 @@
 import React from 'react'
-import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 import api from '../../Utils/api';
 
 const baseUrl = api.defaults.baseURL;
 
-const useSendContact = () =>{
-  return useMutation(async(sendContact) =>{
-    const res = await api.post('/api/contact')
-    return res.data
-  })
-}
-
 const ContactUs = () => {
 
   const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [emailId, setEmail] = React.useState('');
   const [message, setMessage] = React.useState('');
 
-const {mutate} = useSendContact();
 
-const handleSubmit = (e) => {
+
+const handleSubmit = async (e) => {
   e.preventDefault();
-  if(name && email && message){
+  console.log(name, emailId, message);
+
+  if (name && emailId && message) {
     try {
-      mutate({
-        name:name,
-        email:email,
-        message:message,
-      })
+      // Normal POST request using axios
+      const res = await api.post('/api/contacts', {
+        data:{
+          Name: name,
+          Email: emailId,
+          Message: message,
+        }
+      });
+      toast.success('Your message has been sent successfully!');
+      setTimeout(()=>{
+        window.location.href='/';
+      },3000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      // Handle error (e.g., show error message)
+      toast.error('Something went wrong, please try again later!');
     }
-  }else{
-    toast.error('Please fill all the required fields')
+  } else {
+    toast.error('Please fill all the required fields');
   }
-}
+};
   return (
     <section className="" id="contact">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -185,12 +188,10 @@ const handleSubmit = (e) => {
                         ></label>
                         <input
                           type="email"
-                          id="email"
-                          autocomplete="email"
                           placeholder="Your email address"
                           className="mb-2 w-full rounded-md border bg-white border-gray-400 py-2 pl-2 pr-4 shadow-md text-red sm:mb-0"
                           name="email"
-                          onchange={(e)=>setEmail(e.target.value)}
+                          onChange={(e) => setEmail(e.target.value)} 
                         />
                       </div>
                     </div>
