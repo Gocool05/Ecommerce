@@ -48,8 +48,14 @@ const ProductDetails = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [enableRefetch,setEnableRefetch] = useState(false);
-
-
+  useEffect(() => {
+    // Check if the path has changed before triggering the reload
+    if (prevPath !== location.pathname) {
+      setPrevPath(location.pathname);
+      // Use window.location.replace to reload without adding an entry in the browser history
+      window.location.replace(location.pathname);
+    }
+  }, [location.pathname, prevPath]);
   
   const ProductId = Id.id;
   const scrollRef = useRef(null);
@@ -61,7 +67,7 @@ const ProductDetails = () => {
     // Scroll to top and reset relevant states if the ProductId changes
     setSelectedMedia('');
     window.scrollTo(0, 0);
-  }, [location.pathname,Id]);
+  }, [location.pathname]);
   
 
     const { data: products,isLoading, isError } = useQuery('Products', async () => {
@@ -74,7 +80,7 @@ const ProductDetails = () => {
       return res.data.data;
   });
   
-  console.log(products,'Details of the products')
+  // console.log(Review,'Details of the Review')
   
 const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
@@ -235,7 +241,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
  
   };
 
-  if(isLoading) return <Loading/>;
+  if(isLoading) return <Loading/>
 
   
   return (
