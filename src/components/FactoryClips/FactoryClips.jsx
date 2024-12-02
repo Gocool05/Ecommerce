@@ -38,7 +38,7 @@ const FactoryClips = ({Media,isLoading}) => {
     <div className=''>
       <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0}>
       {Media.map((item, index) => (
-        <div className={`h-72 relative   gap-5`} key={index}>
+        <div className={`md:h-72 relative   gap-5`} key={index}>
              {item.Type ==='Video' && 
          <div className="mx-2 md:mx-5 md:w-96 w-72 h-48 md:h-60 transition-all bg-red  bg1 border-4 border-red rounded-md duration-500 hover:scale-95 overflow-hidden">
          <iframe
