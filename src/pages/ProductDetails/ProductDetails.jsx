@@ -48,14 +48,8 @@ const ProductDetails = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [enableRefetch,setEnableRefetch] = useState(false);
-  useEffect(() => {
-    // Check if the path has changed before triggering the reload
-    if (prevPath !== location.pathname) {
-      setPrevPath(location.pathname);
-      // Use window.location.replace to reload without adding an entry in the browser history
-      window.location.replace(location.pathname);
-    }
-  }, [location.pathname, prevPath]);
+
+  
   
   const ProductId = Id.id;
   const scrollRef = useRef(null);
@@ -63,17 +57,16 @@ const ProductDetails = () => {
   const [quantity, setQuantity] =useState(1);
 
   useEffect(() => {
-    setPrevPath(location.pathname);
-    // Scroll to top and reset relevant states if the ProductId changes
-    setSelectedMedia('');
     window.scrollTo(0, 0);
   }, [location.pathname]);
-  
 
-    const { data: products,isLoading, isError } = useQuery('Products', async () => {
+    const { data: products,isLoading, isError } = useQuery(['Products',Id], async () => {
       const res = await api.get(`/api/Products/${ProductId}?populate=*`);
       return res.data.data;
-  });
+  },{
+    enabled:!!Id
+  }
+  );
 
     const { data: Review } = useQuery('Reviews', async () => {
       const res = await api.get(`/api/Products/${ProductId}?populate[0]=reviews&populate[1]=reviews.Image&populate[2]=reviews.users_permissions_user`);
@@ -197,6 +190,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       toast.error("Please login to review the product");
       return;
     }
+    
   if(rating && comment){
     try {
       const response = await api.post(`/api/reviews`, {
@@ -241,7 +235,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
  
   };
 
-  if(isLoading) return <Loading/>
+  if(isLoading) return <Loading/>;
 
   
   return (

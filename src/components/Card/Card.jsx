@@ -90,8 +90,8 @@ const Card = ({ product }) => {
 
   const handleProductClick = () => {
     const productId = product.id;
-    const newPath = `/shop/product/${productId}`;
-    navigate(newPath, { replace: true }); // Use `replace: false` to push instead
+    const newPath = `/product/${productId}`;
+    navigate(newPath); 
   };
   const closeModal = () => {
     setIsOpen(false);
@@ -101,6 +101,7 @@ const Card = ({ product }) => {
     const OfferPrice = product.attributes.Price - discountedPrice;
     
     // console.log(product,'Product details')
+    
     
     return (
     <>
@@ -128,7 +129,7 @@ const Card = ({ product }) => {
         </div>
         {/* </Link> */}
         <div className="p-2 lg:p-4 h-auto flex flex-col justify-between">
-          <Link to={`product/` + product.id} className="">
+          <Link to={`/product/` + product.id} className="">
             <h3 className="text-black  flex text-[12px] truncate sm:text-sm font-bold text-wrap">
               {product?.attributes.ProductName}
             </h3>

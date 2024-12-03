@@ -3,7 +3,7 @@ import Marquee from 'react-fast-marquee'
 import api from '../../Utils/api';
 const baseUrl = api.defaults.baseURL;
 const Testimonials = (Test) => {
-    console.log(Test,'Checking Testinomials...')
+    // console.log(Test,'Checking Testinomials...')
   return (
     <div className='mb-20 py-10 px-2 bg-black bg5 '>
     <h2 class="flex flex-row flex-nowrap py-3 md:pt-10 items-center ">

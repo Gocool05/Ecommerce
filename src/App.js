@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
+import { Routes,Route } from 'react-router-dom';
 import './App.css';
 import Footer from './components/Footer/Footer';
 import Navbar from './components/NavBar/Navbar';
@@ -38,18 +38,18 @@ function App() {
     setIsOpen(false);
   };
 
+// console.log(window.history);
   return (
     <QueryClientProvider client={client}>
-      <Router>
         <ToastContainer/>
         <TopNav />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="shop/product/:id" element={< ProductDetails/>} />
           <Route path="/shop" element={<Shop />} />
-          {/* <Route path="/product/:id" element={< ProductDetails/>} /> */}
+          <Route path="/product/:id" element={< ProductDetails/>} />
+          {/* <Route path="shop/product/:id" element={< ProductDetails/>} /> */}
           <Route path="/about" element={< About/>} />
           <Route path="/contact" element={< ContactUs/>} />
           <Route path="/cart" element={< AddToCart/>} />
@@ -63,9 +63,7 @@ function App() {
           <Route path="/ForgetPassword" element={< ForgetPassword/>} />
         </Routes>
         <Footer />
-
         <Login modalIsOpen={modalIsOpen} closeModal={closeModal} />
-      </Router>
     </QueryClientProvider>
 
   );

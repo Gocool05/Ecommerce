@@ -9,12 +9,11 @@ import TechError from '../Error/TechError';
 
 const Shop = () => {
   const { search } = useLocation();
-
+  
   const queryParams = new URLSearchParams(search);
   const categoryFromQuery = queryParams.get('category');
   const searchFromQuery = queryParams.get('search');
 
-  
   const [selectedFilters, setSelectedFilters] = useState({
     material: '',
     price: '',
@@ -61,7 +60,7 @@ const Shop = () => {
   );
 
   const productsData = PData?.data || [];
-  console.log(productsData,'products data');
+  // console.log(productsData,'products data');
   const pageCount = PData?.meta?.pagination?.pageCount || 1;
 
   useEffect(() => {

@@ -25,23 +25,23 @@ const RelatedProducts = (props) => {
 
 
   const products = Array.isArray(productsData) ? productsData : [];
- console.log(products,'products')
+//  console.log(products,'products')
   const relatedProduct = products.filter(product=>{
-    console.log(id,material,category,'ID Material Category')
+    // console.log(id,material,category,'ID Material Category')
 
     if(id!==product.id){ 
       const materialMatch = material ? product?.attributes?.Material === material : true;
       // console.log(material ,'Material')
-      console.log(product?.attributes?.Material,'product.attributes')
+      // console.log(product?.attributes?.Material,'product.attributes')
       const categoryMatch = category ? product?.attributes?.category?.data?.attributes?.CategoryName === category : true;
-      console.log(materialMatch,'Material matches');
-      console.log(categoryMatch,'category matches');
+      // console.log(materialMatch,'Material matches');
+      // console.log(categoryMatch,'category matches');
       return materialMatch && categoryMatch;
     }
   })
 
 
-  console.log(relatedProduct,'Relatedd Product')
+  // console.log(relatedProduct,'Relatedd Product')
 
 
 
