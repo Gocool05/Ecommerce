@@ -4,7 +4,7 @@ const Footer = () => {
 
   return (
 <footer
-  className="bg-red sm:text-center bg2 text-surface/75  lg:text-left">
+  className="bg-red sm:text-center text-surface/75  lg:text-left">
 
   <div className="mx-6 py-10 sm:text-center text-yellow md:text-left">
     <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -24,16 +24,16 @@ const Footer = () => {
           className="mb-4 flex  sm:justify-center font-semibold uppercase md:justify-start">
           Insights
         </h6>
-        <p className="mb-4">
+        <p className="mb-4 hover:underline">
           <a href="ReplacementPolicy">Replacement Policy</a>
         </p>
-        <p className="mb-4">
+        <p className="mb-4 hover:underline">
           <a href="ShippingPolicy">Shipping Policy</a>
         </p>
-        <p className="mb-4">
+        <p className="mb-4 hover:underline">
           <a href="CancellationPolicy">Cancellation Policy</a>
         </p>
-        <p>
+        <p className='hover:underline'>
           <a href="StrategicVision">Strategic Vision</a>
         </p>
     
@@ -212,11 +212,11 @@ const Footer = () => {
   <div className="text-yellow p-6 mx-[5%] text-center flex justify-between">
     <div>
     <span className='opacity-50'>© 2024 Copyright : </span>
-    <a className="font-semibold uppercase" target='_blank' href="https://shriworks.com/">ShriWorks</a>
+    <a className="font-semibold uppercase hover:underline  hover:decoration-double" target='_blank' href="https://shriworks.com/">ShriWorks</a>
     </div>
     <div>
     <span className='opacity-50'>Developed by : </span>
-    <a className="font-semibold uppercase" target='_blank' href="https://www.jgntechnologies.com/"
+    <a className="font-semibold uppercase hover:underline  hover:decoration-double" target='_blank' href="https://www.jgntechnologies.com/"
       >JGN TECHNOLOGIES</a>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
@@ -24,6 +24,11 @@ if(localStorage.getItem("RegUserId")){
   UserId = localStorage.getItem("LoginUserId");
 }
 const AddToCart = () => {
+
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
+
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);

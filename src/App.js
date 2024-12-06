@@ -23,6 +23,7 @@ import Login from './pages/Auth/Login';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ForgetPassword from './pages/Auth/ForgetPassword';
+import OrderSuccess from './pages/AddToCart/OrderSuccess';
 const client = new QueryClient();
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           <Route path="/checkout" element={< Checkout/>} />
           <Route path="/blog" element={< Blog/>} />
           <Route path="/profile" element={< UserProfile/>} />
+          <Route path="/orderSuccess" element={< OrderSuccess/>} />
           <Route path="/CancellationPolicy" element={< CancellationPolicy/>} />
           <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
           <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />

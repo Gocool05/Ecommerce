@@ -5,7 +5,7 @@ const baseUrl = api.defaults.baseURL;
 const Testimonials = (Test) => {
     // console.log(Test,'Checking Testinomials...')
   return (
-    <div className='mb-20 py-10 px-2 bg-black bg5 '>
+    <div className='mb-20 py-3 px-2 bg-red '>
     <h2 class="flex flex-row flex-nowrap py-3 md:pt-10 items-center ">
               <span class="flex-grow block border-t border-yellow"></span>
               <span class="flex-none block mx-4 px-4 py-2.5 lg:text-xl rounded leading-none uppercase font-bold bg-yellow text-black">

@@ -1,10 +1,11 @@
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import React, { useState } from 'react'
 import { useEffect } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import { ClearCart, clearCart } from '../../Slice/cartSlice';
+import Loading from '../../components/Loading/Loading';
+import { ClearCart, clearCart, setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api';
 const baseUrl = api.defaults.baseURL;
 
@@ -25,7 +26,6 @@ if(localStorage.getItem('RegJWT')){
   JWT = null;
 }
 
-const GST = 18;
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
@@ -45,7 +45,11 @@ const Checkout = () => {
   const [landmark, setLandmark] = useState('');
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
 
 const indianStates = [
   "Andhra Pradesh",
@@ -78,6 +82,22 @@ const indianStates = [
   "Uttarakhand",
   "West Bengal"
 ];
+
+const {data:cart, isError} = useQuery('getCart',async() =>{
+  const res = await api.get(`/api/users/${UserId}?populate=carts.product.ProductImage`)
+  // console.log(cart,'USSER"S CART')
+    return res.data
+  },{
+    onSuccess:(data) =>{
+      // console.log(data,'SetCartItems')
+      dispatch(setCartItems(data.carts))
+    }
+  })
+
+// console.log(cart,'Cart checkout')
+// console.log(cartItems,'cartItems checkout') 
+
+
   // Validate form inputs
   const validateForm = () => {
     let tempErrors = {};
@@ -113,7 +133,7 @@ const indianStates = [
     async (state) => {
       if (state) {
         const response = await api.post(`/api/get/delivery/${state}/${UserId}`);
-        console.log('State POsted Response',response.data)
+        // console.log('State POsted Response',response.data)
         setDelivery(response?.data?.deliveryCharge)
         return response.data;
       }
@@ -136,6 +156,7 @@ const indianStates = [
     },
     };
 
+if(isLoading) return <Loading/>;
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -147,7 +168,7 @@ const indianStates = [
     if (validateForm()) {
       try {
         const response = await api.get(`/api/razorpay`);
-        const amount =(totalAmount + (GST/100)*totalAmount+Delivery);
+        const amount =(totalAmount+Delivery);
         // console.log(response,'Razorpay rsponse');
         // const { data: order } = await api.post(`/api/contests/${amount}/create-order`, {});
 
@@ -162,9 +183,10 @@ const indianStates = [
             try {
               await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
               toast.success('Order Placed successfully');
+              setIsLoading(true);
               dispatch(ClearCart(UserId));
               setTimeout(() => {
-                window.location.href = '/';
+                window.location.href = '/orderSuccess';
               }, 1000);
             } catch (error) {
               console.error("Error processing payment: ", error);
@@ -179,13 +201,14 @@ const indianStates = [
       }
     }
   };
+  // console.log(typeof Delivery, Delivery);
 
   return (
     <div className="lg:p-10 p-5">
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 ">
         <div className="bg-gradient-to-r from-red via-black sm:h-fit to-black sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px]">
           <div className="px-4 py-8 sm:overflow-auto  space-y-4">
-            {cartItems.map((cart, index) => (
+            {cart?.carts?.map((cart, index) => (
               <div className="flex items-start gap-4 border-b-2 rounded-md  border-yellow " key={index}>
                 <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-2 bg3 mb-2 shrink-0 bg-yellow rounded-md">
                   <img src={`${baseUrl}${cart.product?.ProductImage?.[0]?.url}`} className="w-full object-cover" />
@@ -205,9 +228,9 @@ const indianStates = [
             ))}
           </div>
           <div className="border-red border-2 bg-yellow w-full p-4">
-            <h4 className="flex flex-wrap gap-4 text-base text-red">Total <span className="ml-auto ">&#8377; {totalAmount.toFixed(2)}</span></h4>
-            <h4 className="flex flex-wrap gap-4 text-base text-red">GST ({GST}%) <span className="ml-auto ">+ &#8377; {((GST/100)*totalAmount).toFixed(2)}</span></h4>
-            <h4 className="flex flex-wrap gap-4   pt-3 text-red uppercase font-bold">Choose a State to know your delivery fee:</h4>
+            <h4 className="flex flex-wrap gap-4 text-base text-red">Total <span className="ml-auto ">&#8377; {totalAmount?.toFixed(2)}</span></h4>
+            {/* <h4 className="flex flex-wrap gap-4 text-base text-red">GST ({GST}%) <span className="ml-auto ">+ &#8377; {((GST/100)*totalAmount)?.toFixed(2)}</span></h4> */}
+            <h4 className="flex flex-wrap gap-4   pt-3 text-red  font-bold">Choose a State to know your delivery fee:</h4>
             <div className="flex flex-row gap-4 justify-center items-center text-red">
               <span className='flex md:flex-row  md:items-center flex-col md:gap-2'>
               Delivery Fee
@@ -230,10 +253,10 @@ const indianStates = [
 
                 </div>
               </span>
-                  {state ? <span className="ml-auto "> + &#8377; {Delivery.toFixed(2)} </span> :  <span className="ml-auto flex justify-center text-justify h-12 font-bold uppercase text-[12px] ">  </span>}
+                  {state ? <span className="ml-auto "> + &#8377; {(Number(Delivery) || 0).toFixed(2)} </span> :  <span className="ml-auto flex justify-center text-justify h-12 font-bold uppercase text-[12px] "> </span>}
               </div>
             <hr className='border-red'/>
-            <h4 className="flex flex-wrap gap-4 font-bold text-base text-red">Grand Total <span className="ml-auto font-bold">&#8377; {(totalAmount + (GST/100)*totalAmount+Delivery).toFixed(2)}</span></h4>
+            <h4 className="flex flex-wrap items-center text-xl mt-2 gap-4 font-extrabold text-red">Grand Total <span className="ml-auto text-black  font-extrabold ">&#8377; {(totalAmount+(Number(Delivery) || 0).toFixed(2))}</span></h4>
           </div>
         </div>
 
@@ -320,7 +343,6 @@ const indianStates = [
           <p>By clicking the "Pay Now" button, you agree to our <a href="#" className="text-blue">Terms & Conditions</a> and <a href="#" className="text-blue">Privacy Policy</a> </p>
          </div>
         </div>
-
             <button type="button" onClick={handlePayment} className="mt-6 w-full bg-yellow text-red font-semibold rounded-md px-6 py-3">
               <LockClosedIcon className="h-5 w-5 text-red-700 inline-block" aria-hidden="true" />
               Pay Now

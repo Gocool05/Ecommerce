@@ -42,6 +42,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
@@ -60,7 +61,7 @@ const ProductDetails = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-    const { data: products,isLoading, isError } = useQuery(['Products',Id], async () => {
+    const { data: products, isError } = useQuery(['Products',Id], async () => {
       const res = await api.get(`/api/Products/${ProductId}?populate=*`);
       return res.data.data;
   },{
@@ -169,18 +170,24 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   const discountedPrice = (products?.attributes?.Offer / 100) * products?.attributes?.Price;
   const OfferPrice = products?.attributes?.Price - discountedPrice;
   
+  const handleBuyNow =  () =>{
+    sendCartToStrapi();
+    dispatch(
+      addItem({
+        id: products?.id,
+        name: products.attributes.ProductName,
+        price: products.attributes.NewPrice,
+        image: `${baseUrl}${products?.attributes.ProductImage.data[0]?.attributes.url}`,
+        quantity: Number(quantity),
+      })
+    );
+    setIsLoading(true);
+    setTimeout(()=>{
+      navigate('/checkout');
+    },2000)
+  }
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+if(isLoading) return <Loading/>;
 
   // Submit the review
   const handleSubmit = async (e) => {
@@ -190,7 +197,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
       toast.error("Please login to review the product");
       return;
     }
-    
+
   if(rating && comment){
     try {
       const response = await api.post(`/api/reviews`, {
@@ -201,31 +208,11 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
           Review: comment,
         },
       });
-      // if(image){
-      //   const formData = new FormData();
-      //   if (image) {
-      //     formData.append('files', image); 
-      //     formData.append('field', 'Image'); 
-      //     if (response?.data?.data?.id) {
-      //       formData.append('refId', response?.data?.data?.id);
-      //     } else {
-      //       console.log('No valid ID found in response');
-      //     }
-      //     formData.append('ref','api::review.review')
-      //   }
-      
-      //   await api.post(`/api/upload`,formData,{
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     }
-      //   }); // Upload the profile image if available
-      // }
+     
         toast.success("Review submitted successfully!");
         // Clear the form or reset states if needed
         setRating(0);
         setComment("");
-        // setImage(null);
-        // setImagePreview(null);
     } catch (error) {
       console.error("Error submitting review:", error);
     }
@@ -243,7 +230,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
   <CartSidebar isCartOpen={isSidebarOpen}   enableRefetch={enableRefetch} onRefetchHandled={handleRefetch} onCartClose={()=>setSidebarOpen(false)} />
     <section className="relative flex flex-col  overflow-hidden">
       <div>
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-0">
+      <div className="w-full mx-auto px-4 mt-5 sm:mt-0 sm:px-6 lg:px-0">
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-2 lg:gap-16 lg:mx-10 lg:mt-10  ">
 
         <div className="flex flex-row gap-2 items-center justify-center">
@@ -373,7 +360,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                     ))}
                   </select>
                 </div>
-             
+                <div className='flex flex-col sm:pl-0 pl-10 sm:flex-row gap-1'>
                 <button className="group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={addToCartHandler}>
                   <svg
                     className="stroke-yellow font-bold "
@@ -392,6 +379,10 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
                   </svg>
                   Add to cart
                 </button>
+                <button className="group py-2  rounded-full bg-black text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={handleBuyNow}>
+                  Buy Now
+                </button>
+                </div>
                 </>
               )}
               </div>
@@ -417,7 +408,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
         </div>
       </div>
 
-      <div className="pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
+      <div className="md:pt-5 pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
         <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2> 
 
     <ul className='text-base list-disc list-inside text-black font-semibold text-justify'>
@@ -437,7 +428,7 @@ const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
 
 {/* REview section */}
-<section className='flex gap-10 px-5 md:px-20 py-10 md:flex-row flex-col-reverse  mb-20 justify-between items-center bg-black'>
+<section className='flex gap-10 px-5 md:px-20 py-10 md:flex-row flex-col-reverse  mb-20 justify-between items-center bg-red'>
 
 <div className="md:w-1/2 w-full bg-yellow mx-auto p-6 shadow rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>

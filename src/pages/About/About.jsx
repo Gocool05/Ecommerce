@@ -11,26 +11,26 @@ const About = () => {
           <div className="flex gap-10 flex-col lg:flex-row items-center justify-between -mx-4">
             <div className="w-full px-4 lg:w-1/2">
               <div className="flex items-center -mx-3 sm:-mx-4">
-                <div className="w-full px-3 sm:px-4 ">
+                <div className="w-full px-3 sm:px-10 ">
                   <div className="py-3 sm:py-4">
                     <img
-                      src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp"
+                      src="https://api.shriworks.com/uploads/2021_08_17_19bc500967.jpg"
                       alt=""
-                      className="w-full rounded-2xl"
+                      className="w-full border-4 border-red border-inset rounded-2xl"
                     />
                   </div>
                   <div className="py-3 sm:py-4">
                     <img
-                      src="https://api.shriworkscraft.com/uploads/Taajoo_df1916308c.png"
+                      src="https://api.shriworks.com/uploads/2020_10_31_f3e421dc45.jpg"
                       alt=""
-                      className="w-full rounded-2xl"
+                      className="w-full border-4 border-red border-inset rounded-2xl"
                     />
                   </div>
                 </div>
-                <div className="w-full px-3 sm:px-4 ">
+                {/* <div className="w-full px-3 sm:px-4 ">
                   <div className="relative z-10 my-4">
                     <img
-                      src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg"
+                      src="https://api.shriworks.com/uploads/2020_10_31_f3e421dc45.jpg"
                       alt=""
                       className="w-full rounded-2xl"
                     />
@@ -605,7 +605,7 @@ const About = () => {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

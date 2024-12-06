@@ -87,9 +87,11 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
     <Modal
       isOpen={isCartOpen}
       onRequestClose={onCartClose}
-      className="absolute right-0 top-0 h-full w-80 bg-white  p-4 overflow-y-auto shadow-lg"
+      className="absolute flex flex-col justify-between right-0 top-0 h-full w-80 bg-white  p-4 overflow-y-hidden shadow-lg"
       overlayClassName="fixed inset-0 z-[9999] bg-gray-900 bg-opacity-50"
     >
+      {/* <div className="flex flex-col justify-items-end"> */}
+      <div>
         <div className="flex justify-between">
             <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
             <button
@@ -102,7 +104,7 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
       {cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul >
+        <ul className="overflow-y-scroll max-h-80 lg:max-h-[30rem]" >
           {cart?.carts?.map((item) => (
             <li key={item.id} className="flex gap-2 mb-4 rounded-md shadow-red shadow-sm p-2" >
               <img
@@ -145,16 +147,21 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
           ))}
         </ul>
       )}
+      </div>
       {cart?.carts?.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-6 ">
           <div className="font-bold">
             Total Amount: &#8377; {totalAmount.toFixed(2)}
           </div>
           <Link to="/cart" className="block mt-4 text-center bg-red text-white py-2 rounded">
             View cart
           </Link>
+          <Link to="/checkout" className="block mt-1 text-center bg-black text-white py-2 rounded">
+            Checkout
+          </Link>
         </div>
       )}
+      {/* </div> */}
     </Modal>
   );
 };

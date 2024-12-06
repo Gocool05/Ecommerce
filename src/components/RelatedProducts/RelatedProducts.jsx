@@ -129,7 +129,8 @@ const RelatedProducts = (props) => {
     
 
   return (
-    <div className='px-4 sm:px-16 pb-16'>
+    <>
+    {relatedProduct.length > 0 &&  <div className='px-4 sm:px-16 pb-16'>
        <h2 class="flex flex-row flex-nowrap mb-10 items-center ">
           <span class="flex-grow block border-t border-red"></span>
           <span class="flex-none block mx-4 px-4 py-2.5 lg:text-xl rounded leading-none uppercase font-bold bg-red text-yellow">
@@ -144,7 +145,9 @@ const RelatedProducts = (props) => {
     </div>
       ))}
   </Slider>
-  </div>
+  </div> }
+   
+    </>
   )
 }
 

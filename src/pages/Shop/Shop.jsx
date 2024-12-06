@@ -21,7 +21,7 @@ const Shop = () => {
   });
   const [selectedSort, setSortCategory] = useState('Default');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 24;
 
   // Fetching products with filters and sorting applied directly via API
   const { data: PData, isLoading, isError } = useQuery(
