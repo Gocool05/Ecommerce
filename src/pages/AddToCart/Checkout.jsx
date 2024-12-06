@@ -156,7 +156,8 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
     },
     };
 
-if(isLoading) return <Loading/>;
+    if(isLoading) return <Loading/>;
+    // console.log(totalAmount,'total amout')
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -256,7 +257,7 @@ if(isLoading) return <Loading/>;
                   {state ? <span className="ml-auto "> + &#8377; {(Number(Delivery) || 0).toFixed(2)} </span> :  <span className="ml-auto flex justify-center text-justify h-12 font-bold uppercase text-[12px] "> </span>}
               </div>
             <hr className='border-red'/>
-            <h4 className="flex flex-wrap items-center text-xl mt-2 gap-4 font-extrabold text-red">Grand Total <span className="ml-auto text-black  font-extrabold ">&#8377; {(totalAmount+(Number(Delivery) || 0).toFixed(2))}</span></h4>
+            <h4 className="flex flex-wrap items-center text-xl mt-2 gap-4 font-extrabold text-red">Grand Total <span className="ml-auto text-black  font-extrabold ">&#8377; {(totalAmount+Delivery || 0).toFixed(2)}</span></h4>
           </div>
         </div>
 

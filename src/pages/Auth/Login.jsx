@@ -237,14 +237,14 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
 
   const handleForgotPassword = async() => {
     // alert('Password reset link has been sent to your email');
-    console.log(loginEmail,'loginEmail')
+    // console.log(loginEmail,'loginEmail')
     if(loginEmail){
       setMailSent(true);
       try {
         const res = await api.post(`api/auth/forgot-password`,{
           email:loginEmail
         })
-        console.log(res,'Forget password reset')
+        // console.log(res,'Forget password reset')
         return res.data
       } catch (error) {
         console.log(error)

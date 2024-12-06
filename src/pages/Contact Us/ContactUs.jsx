@@ -14,7 +14,7 @@ const ContactUs = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log(name, emailId, message);
+  // console.log(name, emailId, message);
 
   if (name && emailId && message) {
     try {

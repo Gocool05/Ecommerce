@@ -23,14 +23,14 @@ const ForgetPassword = () => {
       return;
     }else{
         if (code) {
-            console.log(code,newPassword,confirmNewPassword,'Forget Password');
+            // console.log(code,newPassword,confirmNewPassword,'Forget Password');
             try {
               const res = await api.post(`api/auth/reset-password`, {
                 code: code,
                 password: newPassword,
                 passwordConfirmation: confirmNewPassword,
               });
-              console.log(res, 'Forget password reset');
+              // console.log(res, 'Forget password reset');
               alert('Password has been successfully reset!');
               window.location.href = '/';
             } catch (error) {
