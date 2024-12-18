@@ -116,6 +116,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
     if(Object.keys(tempErrors).length >= 1)  toast.error('Fill All The Required Information')
     return Object.keys(tempErrors).length === 0;  // If no errors, return true
   };
+  
   const handleStateChange = (e) => {
     const value = e.target.value;
     setState(value); // Update the state
@@ -166,6 +167,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
     //           setTimeout(() => {
     //               window.location.href = '/';
     //             }, 1000);
+    // console.log(response.data.data.attributes.KeyId,response.data.data.attributes.KeySecret,'RAZORKEY')
     if (validateForm()) {
       try {
         const response = await api.get(`/api/razorpay`);
@@ -182,13 +184,14 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
           name: "Shriworks",
           handler: async(Paymentresponse) =>{
             try {
-              await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
+              const res = await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
               toast.success('Order Placed successfully');
-              setIsLoading(true);
               dispatch(ClearCart(UserId));
+              setIsLoading(true);
               setTimeout(() => {
                 window.location.href = '/orderSuccess';
               }, 1000);
+              // console.log(res, 'paymentId')
             } catch (error) {
               console.error("Error processing payment: ", error);
             }
@@ -217,11 +220,11 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
                 <div className="w-full overflow-hidden">
                   <h3 className="text-base text-yellow font-bold uppercase truncate">{cart?.product?.ProductName}</h3>
                   <ul className="text-xs text-yellow space-y-2 mt-2">
-                    <li className="flex flex-wrap gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
+                    <li className="flex flex-wrap text-lg gap-4">Quantity <span className="ml-auto text-white">{cart?.Quantity}</span></li>
                     {cart?.product?.Offer ? (
                       <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number((cart?.product?.Price - ((cart.product?.Offer/100) * cart.product?.Price)))*(cart?.Quantity)}</span></li>
                       ):(
-                        <li className="flex flex-wrap gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.Price)*(cart?.Quantity)}</span></li>
+                        <li className="flex flex-wrap text-lg gap-4">Total Price <span className="ml-auto text-white">&#8377; {Number(cart?.product?.Price)*(cart?.Quantity)}</span></li>
                     )}
                   </ul>
                 </div>
@@ -265,7 +268,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
           <h2 className="text-2xl font-bold text-yellow">Complete your order</h2>
           <form className="mt-8" >
             <div>
-              <h3 className="text-base text-yellow mb-4">Personal Details</h3>
+              <h3 className="text-base text-yellow mb-4">Personal Details <span className='text-[#F72C5B] text-lg'>*</span></h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />
@@ -290,7 +293,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
             </div>
 
             <div className="mt-8">
-              <h3 className="text-base text-yellow mb-4">Shipping Address</h3>
+              <h3 className="text-base text-yellow mb-4">Shipping Address <span className='text-[#F72C5B] text-lg'>*</span></h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <input type="text" placeholder="Address Line" value={address} onChange={(e) => setAddress(e.target.value)} className="px-4 py-3 bg-white text-black w-full text-sm rounded-md focus:outline-black" />

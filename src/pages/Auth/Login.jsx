@@ -8,7 +8,7 @@ import { loginSuccess } from '../../Slice/authSlice';
 import { loginUser, registerUser, resendOtp, verifyOtp } from '../../Slice/authThunk';
 import { setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api'
-
+import './style.css'
 const LoginUserId = localStorage.getItem('LoginUserId');
 const LoginEmail = localStorage.getItem('UserEmail');
 const RegUserId = localStorage.getItem('RegUserId');
@@ -62,6 +62,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [timeLeft, setTimeLeft] = useState(30); // Timer countdown (30 seconds)
   const [isDisabled, setIsDisabled] = useState(false);
   const [Error, setError] = useState("");
+  const [resendLoading, setResendLoading] = useState(false)
   const [mailSent, setMailSent] = useState(false);
 
 
@@ -164,6 +165,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     e.preventDefault();
     if (registerMobile && registerEmail && registerPassword && registerName) {
       setIsDisabled(true);
+      setResendLoading(true);
       try {
         await dispatch(registerUser({
           PhoneNumber: registerMobile,
@@ -173,6 +175,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
         })).unwrap();
         toast.success('OTP has been sent to you.');
         setIsOtpSent(true);
+        setResendLoading(false);
       } catch (error) {
         setError("Registration failed. Please try again");
         setTimeout(setError,3000);
@@ -186,6 +189,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   };
 
   const handleVerifyOtp = async () => {
+
     let Email;
       if( registerEmail){
         Email = registerEmail;
@@ -211,6 +215,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   // console.log(userConfirmed,'userConfirmed')
 
   const handleResendOtp = async () => {
+    setResendLoading(true);
     let Email;
     if( registerEmail){
       Email = registerEmail;
@@ -219,14 +224,15 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       }
     try {
       await dispatch(resendOtp(
-        {emailId: Email }
+        {emailId: Email,name:RegName }
         )).unwrap();
         setTimeout(()=>{
           setIsDisabled(true);
         },1000)
         setIsDisabled(false);
       toast.success("New OTP has been sent.");
-      setTimeLeft(60); // Reset the timer
+      setResendLoading(false);
+      setTimeLeft(30); // Reset the timer
     } catch (error) {
       setError("Failed to resend OTP. Please try again.");
       setTimeout(setError,3000);
@@ -269,8 +275,8 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
     >
       {!isLogin ? (
       <div className="bg-red bg3 shadow-2xl flex lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
-      <div className='lg:flex hidden justify-center relative object-cover'>
-        <img className='object-cover' src="https://api.shriworkscraft.com/uploads/ganesha_statue_cf533b6df9.webp" alt="" />
+      <div className='lg:flex hidden items-center justify-center relative object-cover'>
+        <img className='object-contain p-3 h-64 w-64 animate-pulse' src="https://api.shriworks.com/uploads/signup_logo_png_199e983019.png" alt="" />
       </div>
       <form onSubmit={handleLogin} className='flex w-[300px] md:w-auto flex-col gap-3 lg:my-5 mx-2 p-2'>
         <h2 className='text-2xl text-yellow uppercase text-center font-bold'>Login to Shriworks</h2>
@@ -323,8 +329,8 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
       ) : (
         <div className="bg-red bg3 shadow-2xl flex lg:grid grid-cols-2 w-full mx-auto transition duration-1000 ease-out">
 
-        <div className='lg:flex hidden justify-center relative object-cover'>
-          <img className='object-cover' src="https://api.shriworkscraft.com/uploads/91724_VLJH_0_L_221baac9a2.jpg" alt="" />
+        <div className='lg:flex hidden justify-center items-center relative object-cover'>
+          <img className='object-contain p-3 h-72 w-72 animate-pulse' src="https://api.shriworks.com/uploads/signup_logo_png_199e983019.png" alt="" />
         </div>
 
             <div className='flex flex-col justify-center'>
@@ -383,13 +389,26 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             maxLength={6}
             minLength={6}
             onChange={(e)=>{setOtp(e.target.value)}}
-            required
+        
           />
           {Error && <p className='text-center text-[#FF0000] font-bold uppercase animate-pulse'>{Error}</p>}
           <p className='text-center py-2 text-yellow'>
                   {timeLeft > 0
                     ? `You can resend OTP in ${timeLeft}s`
-                    : <button onClick={handleResendOtp} disabled={timeLeft > 0}>Resend OTP</button>}
+                    : <div className='hover:cursor-pointer' onClick={handleResendOtp} disabled={timeLeft > 0}> {!resendLoading ? <span>Resend OTP</span> : <span className='flex items-center justify-center bg-white'><div class="load">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                    <div class="bar4"></div>
+                    <div class="bar5"></div>
+                    <div class="bar6"></div>
+                    <div class="bar7"></div>
+                    <div class="bar8"></div>
+                    <div class="bar9"></div>
+                    <div class="bar10"></div>
+                    <div class="bar11"></div>
+                    <div class="bar12"></div>
+                </div></span>}</div>}
                 </p>
           <button
             type="button"
@@ -410,7 +429,20 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             onClick={handleRegister}
             disabled={isDisabled}
           >
-            Register
+            {!resendLoading ? <span>Register</span> : <span className='flex items-center justify-center'><div class="load">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+    <div class="bar4"></div>
+    <div class="bar5"></div>
+    <div class="bar6"></div>
+    <div class="bar7"></div>
+    <div class="bar8"></div>
+    <div class="bar9"></div>
+    <div class="bar10"></div>
+    <div class="bar11"></div>
+    <div class="bar12"></div>
+</div></span>}
           </button>
           </>
         )}

@@ -14,6 +14,7 @@ const Navbar = () => {
     const res = await api.get(`api/categories?populate=*`);
     return res.data.data;
   });
+  // console.log(Category,'Category');
 
   return (
     <>
@@ -36,7 +37,7 @@ const Navbar = () => {
               </PopoverButton>
 
                
-              <PopoverPanel anchor="bottom"  className="flex relative flex-col mt-2 z-50   text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg5 bg-[#fceecf] bg-cover   rounded-xl">
+              <PopoverPanel anchor="bottom"  className="flex relative  flex-col mt-2 z-50   text-yellow font-semibold  border-red border-solid border-2 border-t-0 border-b-4 bg5 bg-[#fceecf] bg-cover   rounded-xl">
                 <div className='flex justify-center p-3 items-center bg-black w-full'> <h3 className='text-yellow uppercase '>All Categories</h3></div>
                 <div className='grid grid-cols-5 m-4'>
                   
