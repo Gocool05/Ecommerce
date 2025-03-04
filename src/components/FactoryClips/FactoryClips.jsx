@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import Slider from 'react-slick';
+import Modal from "react-modal";
 import api from '../../Utils/api';
 import Loading from '../Loading/Loading';
 import './FactoryClips.css'
 const baseUrl = api.defaults.baseURL;
-const FactoryClips = ({Media,isLoading}) => {
+const FactoryClips = ({Media,isLoading}) => {  
   
+
+  const [openModal, setOpenModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   if (isLoading) return <Loading />;
   if (!Media) return null;
-
   return (
 <div className='mb-10 px-2'>
 
@@ -27,7 +35,11 @@ const FactoryClips = ({Media,isLoading}) => {
         <div className={`md:h-56 h-44  relative `} key={index}>
           {item.Type ==='Image' && 
           // <a href={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} target={'_blank'}>
-          <img src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} alt="item" className="mx-2 bg-red bg1 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
+          <img src={`${baseUrl}/${item?.Media?.data?.attributes?.url}`} alt="item" 
+          onClick={()=>{
+            setModalData(`${baseUrl}/${item?.Media?.data?.attributes?.url}`) 
+          setOpenModal(true)
+        }} className="mx-2 bg-red bg1 md:mx-5 md:w-96 h-full transition-all border-4 border-red rounded-md   duration-500 hover:scale-95 overflow-hidden object-cover" />
         // </a>
           }
             
@@ -57,6 +69,15 @@ const FactoryClips = ({Media,isLoading}) => {
       ))}
     </Marquee>
     </div>
+
+    <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      className="flex items-center focus:outline-none select-none justify-center lg:w-[60%] sm:w-[80%] w-[90%] bg-red p-1 overflow-y-hidden shadow-lg"
+      overlayClassName="fixed inset-0 z-[9999] bg-red bg-opacity-70 flex items-center justify-center"
+    >
+      <img src={modalData} alt="Factory images" className=' rounded ' />
+    </Modal>
 
 </div>
   )

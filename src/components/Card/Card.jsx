@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Bounce, toast } from "react-toastify";
 import { addItem } from "../../Slice/cartSlice";
 import api from "../../Utils/api";
@@ -10,6 +10,7 @@ import Login from "../../pages/Auth/Login";
 import { useState } from "react";
 import Modal from "react-modal";
 import CartSideBar from "../../pages/AddToCart/CartSideBar";
+import { useEffect } from "react";
 // const JWT = localStorage.getItem('JwtToken');
 let JWT;
 
@@ -35,11 +36,34 @@ const Card = ({ product }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [enableRefetch,setEnableRefetch] = useState(false);
+  const [disableCart, setDisableCart] = useState(false);
   const navigate = useNavigate();
-
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  // console.log(cartItems,'items in the cart');
+  // console.log(product,'Products');
+
+
+
+  useEffect(() => {
+    const isDisabled = cartItems.some((item) => {
+      if(item?.product?.id === product?.id){
+        return (
+          item?.Quantity >= item?.product?.AvailableQuantity
+        );
+      }
+    });
+    setDisableCart(!!isDisabled);
+    // console.log(isDisabled,'able disable');
+  }, [cartItems, product]);
+
+
+
+  
+  // console.log(disableCart,'disableCart');
 
   const sendCartToStrapi = async () => {
+
     if (JWT) {
       try {
         const response = await api.post("/api/carts", {
@@ -153,7 +177,7 @@ const Card = ({ product }) => {
               </div>
             )}
           </Link>
-          {product?.attributes?.AvailableQuantity ? (
+          {!disableCart ? (
             <button className="CartBtn  hidden hover:flex w-full">
               <span className="IconContainer">
                 <svg

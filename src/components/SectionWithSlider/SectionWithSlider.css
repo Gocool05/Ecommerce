@@ -38,11 +38,11 @@
 
 @media screen and (max-width: 450px) {
     .PrevArrow{
-        left: -5px;
+        left: 10px;
         padding: 5px;
     } 
     .NextArrows{
-        right: -5px;
+        right: 10px;
         padding: 5px;
     }
 }

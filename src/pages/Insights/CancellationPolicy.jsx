@@ -68,7 +68,18 @@ const CancellationPolicy = () => {
       {/* Contact Information */}
       <section className="mb-8">
         <p className="text-lg leading-relaxed">
-          For any questions or to request a cancellation, please contact us at [your contact information].
+        For any questions or to request a cancellation, please reach out to us at:
+          {" "}
+          <a href="mailto:info@shriworks.com" className="hover:underline font-bold">
+          info@shriworks.com
+          </a>
+          {" "}
+          call us at 
+          {" "}
+          <a href="tel:+919176554626" className="hover:underline font-bold">
+          (+91) 91765 54626
+        </a>
+          {" "}
         </p>
       </section>
     </div>

@@ -8,6 +8,7 @@ import { loginSuccess } from '../../Slice/authSlice';
 import { loginUser, registerUser, resendOtp, verifyOtp } from '../../Slice/authThunk';
 import { setCartItems } from '../../Slice/cartSlice';
 import api from '../../Utils/api'
+
 import './style.css'
 const LoginUserId = localStorage.getItem('LoginUserId');
 const LoginEmail = localStorage.getItem('UserEmail');
@@ -64,6 +65,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
   const [Error, setError] = useState("");
   const [resendLoading, setResendLoading] = useState(false)
   const [mailSent, setMailSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const useLoginQuery = () => useMutation(
@@ -289,15 +291,27 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
             onChange={(e) => setLoginEmail(e.target.value)}
             autoComplete='Email'
           />
-          <input
-            type="password"
-            className='rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
-            placeholder='Password'
-            value={loginPassword}
-            onChange={(e) => setLoginPassword(e.target.value)}
-            autoComplete='current-password'
-          />
+         <input
+        type={showPassword ? "text" : "password"}
+        className="rounded-sm px-2 py-2 w-full border-[1px] bg-white border-red m-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0"
+        placeholder="Password"
+        value={loginPassword}
+        onChange={(e) => setLoginPassword(e.target.value)}
+        autoComplete="current-password"
+      />
         </div>
+      <div className=" left-0 flex ">
+        <input
+          type="checkbox"
+          id="showPassword"
+          checked={showPassword}
+          onChange={() => setShowPassword(!showPassword)}
+          className="mr-2"
+        />
+        <label htmlFor="showPassword" className="text-sm text-white">
+          Show Password
+        </label>
+      </div>
         <div className='w-full'>
           <p
             className='text-white float-end mr-1 font-bold cursor-pointer text-sm'
@@ -367,7 +381,7 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
               required={true}
             />
             <input
-              type="password"
+             type={showPassword ? "text" : "password"}
               className='rounded-sm px-2 py-2 w-full border-[1px]  bg-white border-red my-1 focus:shadow-md focus:border-black focus:outline-none focus:ring-0'
               placeholder='Password'
               value={registerPassword}
@@ -375,8 +389,21 @@ const Login = ({ setIsOpen, modalIsOpen }) => {
               required={true}
             />
             </div>
+            
           }
           </div>
+          <div className=" left-0 flex ">
+        <input
+          type="checkbox"
+          id="showPassword"
+          checked={showPassword}
+          onChange={() => setShowPassword(!showPassword)}
+          className="mr-2"
+        />
+        <label htmlFor="showPassword" className="text-sm text-white">
+          Show Password
+        </label>
+      </div>
           <div className='flex flex-col'>
              
           {isOtpSent || RegEmail? (

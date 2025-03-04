@@ -52,7 +52,7 @@ const HomeSlider = ({sliderData}) => {
         src={
           isMobile ? `${baseUrl}${images?.MobileImage?.data?.attributes?.url}`:`${baseUrl}${images?.Image?.data?.attributes?.url}`}
         alt={images?.Image?.data?.attributes?.name}
-        loading='eager'
+        loading='lazy'
       />
     </div>
   ))}

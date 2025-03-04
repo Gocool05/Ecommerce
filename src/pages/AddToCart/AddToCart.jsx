@@ -171,7 +171,7 @@ const AddToCart = () => {
                <button
                  onClick={() => {AddItem(item.product.id)}}
                  disabled={item.product.AvailableQuantity===0 || item.product.AvailableQuantity === null || item.product.AvailableQuantity <= item.Quantity}
-                 className="px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600"
+                 className={`px-3 py-1 bg-red border-red border-t border-b text-white rounded-r-md hover:bg-green-600 disabled:opacity-35 disabled:cursor-not-allowed`}
                >
                  +
                </button>

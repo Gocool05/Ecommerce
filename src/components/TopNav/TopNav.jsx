@@ -335,7 +335,7 @@ const TopNav = () => {
                     <a href="/" className="text-xl font-bold text-red">
                       <img
                         className="h-16"
-                        src="/Assests/logo.png"
+                        src="https://api.shriworks.com/uploads/logoo_d8327e38ee.png"
                         alt="Shriworks Logo"
                       />
                     </a>

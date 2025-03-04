@@ -106,25 +106,28 @@ const Shop = () => {
             ))}
           </div>
 
-          <div className="w-full flex py-10 justify-center items-center mx-auto">
+          <div className="w-full flex py-10 justify-center overflow-x-auto items-center mx-auto">
             <button
-              className="px-3 py-1 mx-1 bg-red text-yellow rounded"
+              className="px-3 py-3 mx-1 bg-red text-yellow rounded"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               {'<'}
             </button>
+                <div className='flex max-w-52 sm:max-w-96 overflow-x-scroll'>
             {Array.from({ length: pageCount }, (_, index) => (
               <button
                 key={index + 1}
-                className={`px-3 py-1 mx-1 ${currentPage === index + 1 ? 'bg-black text-yellow' : 'bg-white/30'} rounded`}
+                className={`px-3 py-1 mx-1 w-full  ${currentPage === index + 1 ? 'bg-black text-yellow' : 'bg-white/30'} rounded`}
                 onClick={() => handlePageChange(index + 1)}
               >
                 {index + 1}
               </button>
             ))}
+                </div>
+
             <button
-              className="px-3 py-1 mx-1 bg-red text-yellow rounded"
+              className="px-3 py-3 mx-1 bg-red text-yellow rounded"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === pageCount}
             >

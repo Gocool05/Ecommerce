@@ -131,7 +131,8 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
                   <span>{item?.Quantity}</span>
                   <button
                     onClick={() => AddItem(item?.product?.id)}
-                    className="px-2 py-1 bg-red text-white rounded"
+                    className={`px-2 py-1 bg-red text-white rounded disabled:opacity-35 disabled:cursor-not-allowed`}
+                    disabled={item.product.AvailableQuantity===0 || item.product.AvailableQuantity === null || item.product.AvailableQuantity <= item.Quantity}
                   >
                     +
                   </button>

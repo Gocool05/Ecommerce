@@ -52,7 +52,7 @@ const Navbar = () => {
                       <div className='flex flex-col justify-center items-center gap-2'>
                         <img
                           className='h-20 w-20 rounded-lg shadow-lg shadow-black object-cover'
-                          src={`${baseUrl}${category?.attributes?.Image?.data.attributes.url}`}
+                          src={`${baseUrl}${category?.attributes?.Image?.data?.attributes?.url}`}
                           alt={category?.attributes?.CategoryName}
                         />
                         <span className='font-bold w-24 text-center'>{category?.attributes?.CategoryName}</span>

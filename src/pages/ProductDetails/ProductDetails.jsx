@@ -11,7 +11,7 @@ import RelatedProducts from '../../components/RelatedProducts/RelatedProducts';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import ReactImageZoom from 'react-image-zoom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import { addItem } from '../../Slice/cartSlice';
 import CartSidebar from '../AddToCart/CartSideBar';
@@ -37,6 +37,7 @@ if(localStorage.getItem("RegUserId")){
 const ProductDetails = () => {
   const baseUrl = api.defaults.baseURL;
   const Id = useParams();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -55,7 +56,25 @@ const ProductDetails = () => {
   const ProductId = Id.id;
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
+  const [disableCart, setDisableCart] = useState(false);
   const [quantity, setQuantity] =useState(1);
+  // console.log(cartItems,'items in the cart');
+
+  useEffect(() => {
+    const isDisabled = cartItems.some((item) => {
+      // console.log(Number(ProductId),item?.product?.id,"IDS")
+      if(item?.product?.id === Number(ProductId)){
+          return item?.Quantity >= item?.product?.AvailableQuantity;
+      }
+
+    });
+    setDisableCart(isDisabled);
+    // console.log(isDisabled,'able dis-able');
+  }, [cartItems, ProductId]);
+  
+  
+  // console.log(disableCart,'DIsabling cart');
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -74,7 +93,7 @@ const ProductDetails = () => {
       return res.data.data;
   });
   
-  // console.log(Review,'Details of the Review')
+  // console.log(products,'Details of the Products')
   
 const category = products?.attributes?.category?.data?.attributes?.CategoryName;
 
@@ -249,7 +268,7 @@ if(isLoading) return <Loading/>;
               {media.attributes?.url.endsWith('.mp4') ? (
                 <video
                   src={`${baseUrl}${media.attributes?.url}`}
-                  alt={`Thumbnail Video ${index}`}
+                  alt={`Thumbnail Video ${index}`} 
                   className="w-full h-auto border border-gray-300 rounded"
                   muted
                   controls={false}
@@ -338,10 +357,15 @@ if(isLoading) return <Loading/>;
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
                   <span className="font-bold">Dimensions <span className='font-semibold text-lg'>(Height x Width)</span> -</span> {products?.attributes?.Dimensions} 
                 </h6>
+                {
+                  products?.attributes?.AvailableQuantity === 0 || disableCart || products?.attributes?.AvailableQuantity ===null ? null : ( <h6 className="font-manrope font-normal text-2xl  text-black  sm:border-r border-gray-200 ">
+                  <span className="font-bold text-red text-xl">Available Quantity -</span> Only {products?.attributes?.AvailableQuantity} left
+                </h6>)
+                }
               </div>
               <>
               <div className="flex  gap-3 py-2">
-                {products?.attributes?.AvailableQuantity === 0 || products?.attributes?.AvailableQuantity ===null ?
+                {products?.attributes?.AvailableQuantity === 0 || disableCart || products?.attributes?.AvailableQuantity ===null ? 
               (
                 <p className='text-yellow px-2 py-1 rounded font-bold text-2xl bg-red'>Out Of Stock</p>
               ):(
@@ -353,15 +377,17 @@ if(isLoading) return <Loading/>;
                     onChange={(e) => setQuantity(e.target.value)}
                     value={quantity}
                   >
-                     {Array.from({ length: 9 }, (_, i) => (
+                     {Array.from({length:products?.attributes?.AvailableQuantity }, (_, i) => (
                       <option key={i} value={i + 1}>
                         {i + 1}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div className='flex flex-col sm:pl-0 pl-10 sm:flex-row gap-1'>
-                <button className="group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={addToCartHandler}>
+                <div className='flex flex-col sm:pl-0 pl-10 sm:flex-row gap-2'>
+                <button className={`group py-2  rounded-full bg-red text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 disabled:opacity-45 disabled:cursor-not-allowed`}
+                disabled={products?.attributes?.AvailableQuantity===0 || products?.attributes?.AvailableQuantity === null}
+                onClick={addToCartHandler}>
                   <svg
                     className="stroke-yellow font-bold "
                     width="24"
@@ -379,7 +405,9 @@ if(isLoading) return <Loading/>;
                   </svg>
                   Add to cart
                 </button>
-                <button className="group py-2  rounded-full bg-black text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 " onClick={handleBuyNow}>
+                <button className={`group py-2  rounded-full bg-black text-yellow font-semibold text-lg px-10 flex items-center justify-center gap-2 transition-all hover:scale-105 duration-500 disabled:opacity-45 disabled:cursor-not-allowed `}
+                 disabled={products?.attributes?.AvailableQuantity===0 || products?.attributes?.AvailableQuantity === null }
+                onClick={handleBuyNow}>
                   Buy Now
                 </button>
                 </div>

@@ -31,7 +31,7 @@ const Checkout = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  // console.log(cartItems,'proceed to checkout');
+  // console.log(cartItems,'items in the cart');
   // Form State
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -142,7 +142,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
     {
       onSuccess: () => {
         // Invalidate queries that need to be refreshed after the mutation
-        queryClient.invalidateQueries('delivery'); // Replace with your query key
+        queryClient.invalidateQueries('delivery'); // your query key
         // console.log('State change successful, queries invalidated');
       },
       onError: (error) => {
@@ -150,6 +150,23 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
       },
     }
   )
+
+  const SendAddress = async () =>{
+    if(address && phone && city && state && zip){
+      // console.log(" Address",address , phone ,city , state, zip)
+      const res = await api.put(`api/users/${UserId}`, {
+          Address : address,
+          Mobile:phone,
+          City : city,
+          State : state,
+          Pincode : zip,
+          Landmark:landmark,
+      });
+      // console.log("Address update",res.data);
+      return res.data;
+    }
+  }
+
 
   const option = {
     headers: {
@@ -162,37 +179,43 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    // dispatch(ClearCart(UserId));
-
-    //           setTimeout(() => {
-    //               window.location.href = '/';
-    //             }, 1000);
-    // console.log(response.data.data.attributes.KeyId,response.data.data.attributes.KeySecret,'RAZORKEY')
+    SendAddress();
     if (validateForm()) {
       try {
         const response = await api.get(`/api/razorpay`);
         const amount =(totalAmount+Delivery);
-        // console.log(response,'Razorpay rsponse');
-        // const { data: order } = await api.post(`/api/contests/${amount}/create-order`, {});
-
+        const orderResponse = await api.post(`/api/contests/${amount}/create-order`, {}, option);
+        const order = orderResponse.data;
+        // console.log(orderResponse,'orderResponse')
+        // console.log(response.data.data.attributes.KeyId,'API KEY')
+        // console.log(response.data.data.attributes.KeySecret,'SECRET KEY')
         var options = {
           key: `${response.data.data.attributes.KeyId}`,
           key_secret: `${response.data.data.attributes.KeySecret}`,
-          amount: amount *100,
+          amount: order.amount,
           currency: "INR",
-          // order_id: order.id,
+          order_id: order.id,
           name: "Shriworks",
+          method: {
+            netbanking: true,
+            card: true,
+            upi: true, // Enable UPI but exclude QR-based UPI payments
+            wallet: true,
+            QR: true,
+          },
           handler: async(Paymentresponse) =>{
             try {
               const res = await api.post(`/api/product/${Paymentresponse.razorpay_payment_id}/payment`,{},option);
+              // console.log(res,'PayemtnResponse')
               toast.success('Order Placed successfully');
-              dispatch(ClearCart(UserId));
               setIsLoading(true);
+              dispatch(ClearCart(UserId));
               setTimeout(() => {
                 window.location.href = '/orderSuccess';
-              }, 1000);
+              }, 500);
+            }
               // console.log(res, 'paymentId')
-            } catch (error) {
+             catch (error) {
               console.error("Error processing payment: ", error);
             }
           },
@@ -252,6 +275,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
                   ))}
                 </select>
                 {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
+             
 
                 {/* <button className='bg-red text-yellow px-2 py-0.5 rounded'>GET</button> */}
 
@@ -327,6 +351,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
                   ))}
                 </select>
                 {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
+                {errors.state && <></>}
                 </div>
 
               </div>
