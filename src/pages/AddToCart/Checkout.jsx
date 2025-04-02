@@ -214,7 +214,7 @@ const {data:cart, isError} = useQuery('getCart',async() =>{
                 window.location.href = '/orderSuccess';
               }, 500);
             }
-              // console.log(res, 'paymentId')
+              // console.log(res, 'paymentId');
              catch (error) {
               console.error("Error processing payment: ", error);
             }

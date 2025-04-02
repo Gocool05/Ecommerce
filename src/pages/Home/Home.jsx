@@ -53,7 +53,7 @@ const Home = () => {
     const res = await api.get('/api/testimonials?populate=*')
     return res.data.data;
   })
-
+// console.log(Test,'Testimonials')
 
   if (isLoading) return <Loading/>;
   if (isError) return <TechError/>;
@@ -65,8 +65,11 @@ const Home = () => {
       <HomeSlider sliderData={SliderData}/>
       <CategorySlider CategoryData={CategoryData} />
       <SectionWithSlider SectionData={SectionData?.attributes?.Section}/>
+
       <FactoryClips Media={Media?.attributes?.FactoryClips} isLoading={isLoading}/>
-      <Testimonials Test={Test} />
+
+      {Test?.length > 0 && <Testimonials Test={Test} />}
+
       <CartSideBar isCartOpen={isCartOpen} onCartClose={()=>setIsCartOpen(false)} />
     </div>
     </>

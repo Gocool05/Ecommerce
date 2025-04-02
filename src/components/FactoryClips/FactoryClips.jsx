@@ -47,6 +47,7 @@ const FactoryClips = ({Media,isLoading}) => {
       ))}
     </Marquee>
     </div>
+    
     <div className=''>
       <Marquee play={true} direction={'left'} pauseOnHover={true} loop={0}>
       {Media.map((item, index) => (
@@ -69,6 +70,7 @@ const FactoryClips = ({Media,isLoading}) => {
       ))}
     </Marquee>
     </div>
+    
 
     <Modal
       isOpen={openModal}

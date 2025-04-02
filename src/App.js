@@ -24,6 +24,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import ForgetPassword from './pages/Auth/ForgetPassword';
 import OrderSuccess from './pages/AddToCart/OrderSuccess';
+import TermsAndConditions from './pages/Insights/TermsAndCondition';
+import PrivacyPolicy from './pages/Insights/PrivacyPolicy';
 const client = new QueryClient();
 
 function App() {
@@ -61,6 +63,8 @@ function App() {
           <Route path="/CancellationPolicy" element={< CancellationPolicy/>} />
           <Route path="/ReplacementPolicy" element={< ReplacementPolicy/>} />
           <Route path="/ShippingPolicy" element={< ShippingPolicy/>} />
+          <Route path="/terms-and-conditions" element={< TermsAndConditions/>} />
+          <Route path="/PrivacyPolicy" element={< PrivacyPolicy/>} />
           <Route path="/StrategicVision" element={< StrategicVision/>} />
           <Route path="/ForgetPassword" element={< ForgetPassword/>} />
         </Routes>

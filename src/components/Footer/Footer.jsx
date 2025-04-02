@@ -24,20 +24,27 @@ const Footer = () => {
           className="mb-4 flex  sm:justify-center font-semibold uppercase md:justify-start">
           Insights
         </h6>
-        <p className="mb-4 hover:underline">
+        <p className="mb-2 hover:underline">
           <a href="ReplacementPolicy">Replacement Policy</a>
         </p>
-        <p className="mb-4 hover:underline">
+        <p className="mb-2 hover:underline">
           <a href="ShippingPolicy">Shipping Policy</a>
         </p>
-        <p className="mb-4 hover:underline">
+        <p className="mb-2 hover:underline">
           <a href="CancellationPolicy">Cancellation Policy</a>
         </p>
-        <p className='hover:underline'>
+        <p className='mb-2 hover:underline'>
           <a href="StrategicVision">Strategic Vision</a>
         </p>
-    
+        <p className="mb-2 hover:underline">
+          <a href="PrivacyPolicy">Privacy Policy</a>
+        </p>
+        <p className="mb-2 hover:underline">
+          <a href="terms-and-conditions">Terms And Conditions</a>
+        </p>
       </div>
+
+
       <div className='flex  flex-col  '>
         <h6
           className="mb-4 flex sm:justify-center font-semibold uppercase md:justify-start">

@@ -421,10 +421,9 @@ if(isLoading) return <Loading/>;
                   Shipping Info{" "}
                 </h4>
                 <p className="text-black text-base font-normal ">
-                  Dispatched in a maximum of 7-10 business days. This item is
-                  not eligible for return. Cancellation requests will be
-                  accepted strictly within 24 hours of placing the order only.
-                  This product is made on order.
+                Delivered within a minimum of 3 to a maximum of 7 business days. This item is not eligible for return. 
+                Cancellation requests will be accepted strictly within 24 hours of placing the order only.
+                 This product is made on order.
                 </p>
                 <p className="text-black text-base font-semibold ">
                   (For ordering out of India please Contact us in Whatsapp.
