@@ -25,50 +25,50 @@ const Home = () => {
   });
  
   // Fetch Home Slider Data
-  const { data: SliderData } = useQuery('Home-Slider', async () => {
+  const { data: SliderData,isLoading:sliderLoading } = useQuery('Home-Slider', async () => {
     const res = await api.get(`api/pages/1?populate[0]=Slider&populate[1]=Slider.Image&populate[2]=Slider.MobileImage`);
     return res.data.data;
   });
 
 
   // Fetch Category Data
-  const { data: CategoryData } = useQuery('Home-Category', async () => {
+  const { data: CategoryData,isLoading:categoryLoading } = useQuery('Home-Category', async () => {
     const res = await api.get(`api/pages/1?populate[0]=Category&populate[1]=Category.category&populate[2]=Category.category.Image`);
     return res.data.data;
   });
 
   // Fetch Section Data
-  const { data: SectionData } = useQuery('Home-Section', async () => {
+  const { data: SectionData,isLoading:sectionLoading } = useQuery('Home-Section', async () => {
     const res = await api.get(`api/pages/1?populate[0]=Section&populate[1]=Section.products&populate[2]=Section.products.ProductImage`);
     return res.data.data;
   });
 
     // Fetch FactoryClips Data
-  const {data:Media } = useQuery('factoryClips', async()=>{
+  const {data:Media,isLoading:mediaLoading } = useQuery('factoryClips', async()=>{
     const res = await api.get('/api/pages/1?populate[0]=FactoryClips&populate[1]=FactoryClips.Media')
     return res.data.data;
   })
 
-  const {data:Test } = useQuery('Test', async()=>{
+  const {data:Test,isLoading:testLoading } = useQuery('Test', async()=>{
     const res = await api.get('/api/testimonials?populate=*')
     return res.data.data;
   })
 // console.log(Test,'Testimonials')
 
-  if (isLoading) return <Loading/>;
+  if (isLoading && sectionLoading && sliderLoading && categoryLoading && mediaLoading && testLoading) return <Loading/>;
   if (isError) return <TechError/>;
 
 
   return (
     <>
     <div className=''>
-      <HomeSlider sliderData={SliderData}/>
-      <CategorySlider CategoryData={CategoryData} />
-      <SectionWithSlider SectionData={SectionData?.attributes?.Section}/>
+      <HomeSlider sliderData={SliderData} />
+      <CategorySlider CategoryData={CategoryData}  />
+      <SectionWithSlider SectionData={SectionData?.attributes?.Section} />
 
-      <FactoryClips Media={Media?.attributes?.FactoryClips} isLoading={isLoading}/>
+      <FactoryClips Media={Media?.attributes?.FactoryClips}/>
 
-      {Test?.length > 0 && <Testimonials Test={Test} />}
+      {Test?.length > 0 && <Testimonials Test={Test}  />}
 
       <CartSideBar isCartOpen={isCartOpen} onCartClose={()=>setIsCartOpen(false)} />
     </div>

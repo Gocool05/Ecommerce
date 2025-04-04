@@ -7,13 +7,11 @@ const PriceRange = ({ onChange, onConfirm }) => {
 
   const handleSliderChange = (values) => {
     setRange(values);
-    onChange(values); // Send the values to the parent component
   };
 
   const handleReset = () => {
     const defaultRange = [0 , 200000];
     setRange(defaultRange);
-    onChange(defaultRange); // Reset in the parent component
   };
 
   const handleConfirm = () => {

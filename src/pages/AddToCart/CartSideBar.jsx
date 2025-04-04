@@ -104,16 +104,16 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
       {cart?.carts?.length === 0 || cart?.carts === undefined || cart?.carts === null ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul className="overflow-y-scroll max-h-80 lg:max-h-[30rem]" >
+        <ul className="overflow-y-scroll  max-h-80 lg:max-h-[30rem]" >
           {cart?.carts?.map((item) => (
-            <li key={item.id} className="flex gap-2 mb-4 rounded-md shadow-red shadow-sm p-2" >
+            <li key={item.id} className="flex items-center gap-2 mb-4 rounded-md shadow-red shadow-sm p-2" >
               <img
                 className="w-16 h-16 object-cover rounded-md"
                 src={`${baseUrl}${item?.product?.ProductImage[0]?.url}`}
                 alt={item?.product?.ProductName}
               />
               <div className="flex-1">
-                <h3 className="text-sm font-semibold truncate">
+                <h3 className="text-sm font-semibold">
                   {item?.product?.ProductName}
                 </h3>
                 <p>
@@ -121,7 +121,7 @@ const CartSidebar = ({ isCartOpen, onCartClose,enableRefetch,onRefetchHandled })
                   {item?.product?.Price} x {item.Quantity} = &#8377;
                   {(item?.product?.Price * item.Quantity).toFixed(2)}
                 </p>
-                <div className="flex justify-center items-center gap-2 mt-1">
+                <div className="flex justify-between max-w-44 items-center gap-2 mt-1">
                   <button
                     onClick={() => RemoveItem(item.id)}
                     className="px-2 py-1 bg-red text-white rounded"

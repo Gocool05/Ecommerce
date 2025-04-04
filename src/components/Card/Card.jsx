@@ -44,7 +44,7 @@ const Card = ({ product }) => {
   // console.log(product,'Products');
 
 
-
+  // console.log(product,'Cartitems')
   useEffect(() => {
     const isDisabled = cartItems.some((item) => {
       if(item?.product?.id === product?.id){
@@ -56,6 +56,7 @@ const Card = ({ product }) => {
     setDisableCart(!!isDisabled);
     // console.log(isDisabled,'able disable');
   }, [cartItems, product]);
+  
 
 
 
@@ -96,12 +97,12 @@ const Card = ({ product }) => {
           quantity: 1,
         })
         );
-          setSidebarOpen(true);
-          setEnableRefetch(true);
+        setEnableRefetch(true);
+        setTimeout(()=>{
+          setEnableRefetch(false);
+        },500);
+        setSidebarOpen(true);
           toast.success("Product added to cart!");
-          setTimeout(()=>{
-            setEnableRefetch(false);
-          },500);
     } else {
       setIsOpen(true);
       toast.error("Please login to add your product to cart");
@@ -177,7 +178,7 @@ const Card = ({ product }) => {
               </div>
             )}
           </Link>
-          {!disableCart ? (
+          {!disableCart && product?.attributes?.AvailableQuantity !==0 ? (
             <button className="CartBtn  hidden hover:flex w-full">
               <span className="IconContainer">
                 <svg

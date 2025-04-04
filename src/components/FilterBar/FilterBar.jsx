@@ -137,12 +137,12 @@ const FilterBar = ({selectedFilters,setSelectedFilters,selectedSort,setSortCateg
                 <p className="text-red text-center p-2">Pick A Range :</p>
               </div>
               <div>
-                <PriceRange
-                onConfirm={close}
-                 onChange={(range) => {
-                  handleFilterSelection("price", range);
-                }}
-                />
+              <PriceRange
+              onConfirm={(range) => {
+                handleFilterSelection("price", range); // Apply filter when "Okay" is clicked
+                close(); // Close the filter panel
+              }}
+            />
               </div>
             </PopoverPanel>
             </>

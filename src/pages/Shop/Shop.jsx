@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useInfiniteQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import Card from '../../components/Card/Card';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -9,7 +9,6 @@ import TechError from '../Error/TechError';
 
 const Shop = () => {
   const { search } = useLocation();
-  
   const queryParams = new URLSearchParams(search);
   const categoryFromQuery = queryParams.get('category');
   const searchFromQuery = queryParams.get('search');
@@ -19,14 +18,22 @@ const Shop = () => {
     price: '',
     category: '',
   });
-  const [selectedSort, setSortCategory] = useState('Default');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 24;
 
-  // Fetching products with filters and sorting applied directly via API
-  const { data: PData, isLoading, isError } = useQuery(
-    ['Products', selectedFilters, selectedSort, currentPage],
-    async () => {
+  const [selectedSort, setSortCategory] = useState('Default');
+  const itemsPerPage = 24;
+  const observerRef = useRef(null); // Reference for intersection observer
+
+  // Fetch products with infinite scrolling
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(
+    ['Products', selectedFilters, selectedSort],
+    async ({ pageParam = 1 }) => {
       const filters = {
         ...(selectedFilters.material && { 'filters[Material]': selectedFilters.material }),
         ...(selectedFilters.category && { 'filters[category][CategoryName]': selectedFilters.category }),
@@ -36,7 +43,7 @@ const Shop = () => {
         }),
         ...(searchFromQuery && { 'filters[ProductName][$containsi]': searchFromQuery }),
       };
-  
+
       const sorting = {
         'Price: Low to High': 'Price:asc',
         'Price: High to Low': 'Price:desc',
@@ -44,24 +51,27 @@ const Shop = () => {
         'Alphabetically, Z-A': 'ProductName:desc',
         'Latest': 'createdAt:desc',
       };
-  
+
       const query = new URLSearchParams({
         ...filters,
         ...(selectedSort !== 'Default' && { sort: sorting[selectedSort] }),
         populate: '*',
-        'pagination[page]': currentPage,
+        'pagination[page]': pageParam,
         'pagination[pageSize]': itemsPerPage,
       });
-  
+
       const res = await api.get(`/api/Products?${query.toString()}`);
       return res.data;
     },
-    { keepPreviousData: true }
+    {
+      getNextPageParam: (lastPage) => {
+        const nextPage = lastPage?.meta?.pagination?.page + 1;
+        return nextPage <= lastPage?.meta?.pagination?.pageCount ? nextPage : undefined;
+      },
+    }
   );
 
-  const productsData = PData?.data || [];
-  // console.log(productsData,'products data');
-  const pageCount = PData?.meta?.pagination?.pageCount || 1;
+  const productsData = data?.pages.flatMap((page) => page.data) || [];
 
   useEffect(() => {
     if (categoryFromQuery) {
@@ -78,12 +88,22 @@ const Shop = () => {
     }
   }, [categoryFromQuery, searchFromQuery]);
 
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= pageCount) {
-      window.scrollTo(0, 0); // Scroll to top on page change
-      setCurrentPage(pageNumber);
-    }
-  };
+   // Infinite scroll observer
+   const lastProductRef = useCallback(
+    (node) => {
+      if (isFetchingNextPage || !hasNextPage) return;
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
+  );
 
   if (isLoading) return <Loading />;
   if (isError) return <TechError />;
@@ -96,50 +116,42 @@ const Shop = () => {
         selectedSort={selectedSort}
         setSortCategory={setSortCategory}
       />
+
       {productsData.length > 0 ? (
-        <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6 gap-2 sm:gap-3 p-3 lg:px-10">
-            {productsData.map((product) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6 gap-2 sm:gap-3 p-3 lg:px-10">
+          {productsData.map((product, index) => {
+            if (index === productsData.length - 1) {
+              return (
+                <div className="sm:p-2" key={product.id} ref={lastProductRef}>
+                  <Card product={product} />
+                </div>
+              );
+            }
+            return (
               <div className="sm:p-2" key={product.id}>
                 <Card product={product} />
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
-          <div className="w-full flex py-10 justify-center overflow-x-auto items-center mx-auto">
-            <button
-              className="px-3 py-3 mx-1 bg-red text-yellow rounded"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              {'<'}
-            </button>
-                <div className='flex max-w-52 sm:max-w-96 overflow-x-scroll'>
-            {Array.from({ length: pageCount }, (_, index) => (
-              <button
-                key={index + 1}
-                className={`px-3 py-1 mx-1 w-full  ${currentPage === index + 1 ? 'bg-black text-yellow' : 'bg-white/30'} rounded`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-                </div>
-
-            <button
-              className="px-3 py-3 mx-1 bg-red text-yellow rounded"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === pageCount}
-            >
-              {'>'}
-            </button>
-          </div>
-        </>
       ) : (
         <div className="text-center p-16">
           <h2 className="text-red font-bold text-2xl">No products found matching your filters</h2>
         </div>
       )}
+
+      {isFetchingNextPage && 
+    <div class="flex-col gap-4 w-full my-10 flex items-center justify-center">
+      <div
+        class="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-black rounded-full"
+      >
+        <div
+          class="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red rounded-full"
+        ></div>
+      </div>
+    </div>
+}
     </section>
   );
 };

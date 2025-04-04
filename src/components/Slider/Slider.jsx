@@ -35,11 +35,13 @@ const HomeSlider = ({sliderData}) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  
  
-
+// console.log(slider,'slider')
   return (
   <Carousel
   autoPlay={true}
+  interval={3000}
   infiniteLoop={true}
   showThumbs={false}
   showStatus={false}
@@ -48,12 +50,14 @@ const HomeSlider = ({sliderData}) => {
 >
   {slider?.map((images, index) => (
     <div className="" key={index}>
-      <img
-        src={
-          isMobile ? `${baseUrl}${images?.MobileImage?.data?.attributes?.url}`:`${baseUrl}${images?.Image?.data?.attributes?.url}`}
-        alt={images?.Image?.data?.attributes?.name}
-        loading='lazy'
-      />
+  <img 
+  src={
+    isMobile 
+      ? `${baseUrl}${images?.MobileImage?.data?.attributes?.url}` 
+      : `${baseUrl}${images?.Image?.data?.attributes?.url}`
+  } 
+  alt={images?.Image?.data?.attributes?.name} 
+/>
     </div>
   ))}
 </Carousel>

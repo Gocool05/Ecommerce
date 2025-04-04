@@ -15,7 +15,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Bounce, toast } from 'react-toastify';
 import { addItem } from '../../Slice/cartSlice';
 import CartSidebar from '../AddToCart/CartSideBar';
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaTelegramPlane } from "react-icons/fa";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, TelegramShareButton } from 'react-share';
+import { FaFacebook,FaLink,FaCheck, FaTwitter, FaWhatsapp,  } from 'react-icons/fa';
+import { FaXTwitter  } from 'react-icons/fa6';
 import Loading from '../../components/Loading/Loading';
 let JWT;
 
@@ -50,7 +53,7 @@ const ProductDetails = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [enableRefetch,setEnableRefetch] = useState(false);
-
+  const [copied, setCopied] = useState(false);
   
   
   const ProductId = Id.id;
@@ -72,7 +75,7 @@ const ProductDetails = () => {
     // console.log(isDisabled,'able dis-able');
   }, [cartItems, ProductId]);
   
-  
+  const productUrl = window.location.href;
   // console.log(disableCart,'DIsabling cart');
 
 
@@ -241,6 +244,15 @@ if(isLoading) return <Loading/>;
  
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(productUrl);
+    setCopied(true);
+
+    // Reset "Copied" state after 2 seconds
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+
   if(isLoading) return <Loading/>;
 
   
@@ -330,7 +342,7 @@ if(isLoading) return <Loading/>;
               {products?.attributes?.SubTitle}
               </h3>
 
-              <div className="flex flex-row gap-2 sm:flex-row  sm:items-center mb-6">
+              <div className="flex flex-row gap-2 sm:flex-row  sm:items-center ">
                 {products?.attributes?.Offer ? (
                   <>
                 <h6 className="font-manrope font-semibold text-3xl leading-9 text-green  sm:border-r border-gray-200 ">
@@ -347,6 +359,38 @@ if(isLoading) return <Loading/>;
                 </h6>
                 )}
               </div>
+
+                {/* share button */}
+                <div className="flex space-x-4 my-5">
+                    {/* Copy Link Button */}
+        <button onClick={handleCopyLink} className="relative">
+          {copied ? (
+            <FaCheck className="text-red text-2xl cursor-pointer transition" />
+          ) : (
+            <FaLink className="text-black text-2xl cursor-pointer hover:scale-110 transition" />
+          )}
+        </button>
+        {copied && <p className="text-green-600 text-sm mt-2">Link copied!</p>}
+        <WhatsappShareButton url={productUrl} title={products?.attributes?.ProductName}>
+          <FaWhatsapp className="text-black  text-2xl cursor-pointer hover:scale-110 transition" />
+        </WhatsappShareButton>
+
+        <TelegramShareButton url={productUrl} title={products?.attributes?.ProductName}>
+          <FaTelegramPlane className='text-black  text-2xl cursor-pointer hover:scale-110 transition' />
+        </TelegramShareButton>
+
+        <FacebookShareButton url={productUrl} quote={products?.attributes?.ProductName}>
+          <FaFacebook className="text-black  text-2xl cursor-pointer hover:scale-110 transition" />
+        </FacebookShareButton>
+
+        <TwitterShareButton url={productUrl} title={products?.attributes?.ProductName}>
+          <FaXTwitter className="text-black  text-2xl cursor-pointer hover:scale-110 transition" />
+        </TwitterShareButton>
+
+      </div>
+
+
+
               <div className="flex flex-col gap-2   mb-6">
                 <h6 className="font-manrope font-normal text-xl  text-red  sm:border-r border-gray-200 ">
                   <span className="font-bold">Code -</span> {products?.attributes?.SKU}
@@ -416,6 +460,10 @@ if(isLoading) return <Loading/>;
               </div>
                 </>
 
+    
+
+
+
               <div className="mt-2 flex flex-col gap-2">
                 <h4 className="text-xl text-red font-bold uppercase">
                   Shipping Info{" "}
@@ -435,22 +483,26 @@ if(isLoading) return <Loading/>;
         </div>
       </div>
 
-      <div className="md:pt-5 pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
-        <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2> 
+<div className="md:pt-5 pt-0 mb-10 px-4 lg:px-16 flex flex-col gap-3">
+  <h2 className="text-xl text-red font-bold uppercase"> Highlights</h2>
 
-    <ul className='text-base list-disc list-inside text-black font-semibold text-justify'>
-  {products?.attributes?.Description?.length > 0 ? (
-    products.attributes?.Description.map((desc, index) => (
-      <li className='mb-2' key={index}>
-        {desc?.children?.[0]?.children?.[0]?.text}
-      </li>
-    ))
-  ) : (
-    <li className='mb-2'>No descriptions available.</li>
-  )}
-</ul>
-        
-      </div>
+  <ul className="text-base list-disc list-inside text-black font-semibold text-justify">
+    {products?.attributes?.Description?.filter(
+      (desc) => desc?.children?.[0]?.children?.[0]?.text?.trim() // Remove empty or whitespace-only items
+    ).length > 0 ? (
+      products.attributes.Description
+        .filter((desc) => desc?.children?.[0]?.children?.[0]?.text?.trim()) // Filter before mapping
+        .map((desc, index) => (
+          <li className="mb-2" key={index}>
+            {desc.children[0].children[0].text}
+          </li>
+        ))
+    ) : (
+      <li className="mb-2">No descriptions available.</li>
+    )}
+  </ul>
+</div>
+
 </div>
 
 
